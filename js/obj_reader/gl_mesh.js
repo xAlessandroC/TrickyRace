@@ -64,13 +64,13 @@ class GL_Mesh{
     webglUtils.setBuffersAndAttributes(gl, program.attribSetters, this.buffers)
   }
 
-  draw(gl, uniforms){
+  draw(gl, uniforms, mode){
     if(Object.keys(this.materials).length == 0){
         uniforms["u_texture"] = this.material_idx["default"]["texture"]
         webglUtils.setUniforms(program.uniformSetters, uniforms)
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers["indices"]);
-        gl.drawElements(this.mode, this.indices.length, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(mode || this.mode, this.indices.length, gl.UNSIGNED_SHORT, 0);
     }
     else{
       for (const property in this.materials) {
@@ -80,7 +80,7 @@ class GL_Mesh{
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers["indices"]);
         var start = this.material_idx[property][0]
         var len = this.material_idx[property][1]
-        gl.drawElements(this.mode, len, gl.UNSIGNED_SHORT, start * 2);
+        gl.drawElements(mode || this.mode, len, gl.UNSIGNED_SHORT, start * 2);
         // gl.drawElements(this.mode, this.indices.length, gl.UNSIGNED_SHORT, 0);
       }
     }

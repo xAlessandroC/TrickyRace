@@ -59,7 +59,7 @@ function init_gl(){
 }
 
 function init_param(){
-  phi = degToRad(1); theta = degToRad(1); radius = 100
+  phi = degToRad(1); theta = degToRad(1); radius = 50
   cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                     radius*Math.sin(phi)*Math.sin(theta),
                     radius*Math.cos(phi)]
@@ -68,7 +68,7 @@ function init_param(){
 
   ar = canvas.clientWidth/canvas.clientHeight
   angle = 50
-  near = 20
+  near = 1
   far = 1000
 }
 
