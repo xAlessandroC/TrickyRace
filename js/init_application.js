@@ -1,4 +1,4 @@
-var canvas, gl
+var canvas, gl, program
 
 var phi, theta, radius
 var cameraPosition, up, target
@@ -7,33 +7,38 @@ var angle, ar, near, far
 var game_env
 
 function loadTrack(){
-  readMesh('track.obj', 'track')
+  readMesh('track/track.obj')
+  .then((mesh)=>{
+    initialize_position_track(mesh)
+    game_env['track'] = new Track(mesh)
+    render()
+  })
+}
+function loadCar(){
+  readMesh('car/car.obj', 'car')
+  .then((mesh)=>{ game_env['car'] = mesh; return readMesh('car/w0.obj', 'w0') })
+  .then((mesh)=>{ game_env['w0'] = mesh; return readMesh('car/w1.obj', 'w0') })
+  .then((mesh)=>{ game_env['w1'] = mesh; return readMesh('car/w3.obj', 'w0') })
+  .then((mesh)=>{ game_env['w3'] = mesh; return readMesh('car/w4.obj', 'w0') })
+  .then((mesh)=>{ game_env['w4'] = mesh;
+   initialize_position_car([game_env['car'],game_env['w0'],game_env['w1'],game_env['w3'],game_env['w4']]);
+   render() })
 }
 
 function render(){
   clear()
 
   for (const [type, mesh] of Object.entries(game_env)) {
-    console.log(`Rendering ${type}`);
-
-    mesh.bindAttributes(gl, program)
 
     cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                       radius*Math.sin(phi)*Math.sin(theta),
                       radius*Math.cos(phi)]
     var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
-    matrix = m4.multiply(matrix, mesh.getMatrix())
     var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
-    var res = m4.multiply(projectionMatrix, matrix)
 
-    var uniforms = {
-      u_matrix: res,
-      u_texture: mesh.texture[0]
-    };
-    // webglUtils.setUniforms(program.uniformSetters, uniforms)
-
-    mesh.draw(gl, uniforms)
+    mesh.draw(matrix, projectionMatrix)
   }
+  // window.requestAnimationFrame(render)
 }
 
 function clear(){
@@ -59,7 +64,7 @@ function init_gl(){
 }
 
 function init_param(){
-  phi = degToRad(1); theta = degToRad(1); radius = 50
+  phi = degToRad(1); theta = degToRad(1); radius = 15
   cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                     radius*Math.sin(phi)*Math.sin(theta),
                     radius*Math.cos(phi)]
@@ -88,3 +93,5 @@ init_canvas()
 init_param()
 init_gl()
 loadTrack()
+loadCar()
+render()

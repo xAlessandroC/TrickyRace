@@ -42,7 +42,7 @@ class GL_Mesh{
       var t = gl.createTexture();
       this.material_idx[property]["texture"] = t
       gl.bindTexture(gl.TEXTURE_2D, this.material_idx[property]["texture"]);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]));
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, Math.floor(Math.random(1231) * 256), Math.floor(Math.random(879) * 256), Math.floor(Math.random(35632) * 256)]));
       // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255]));
 
       if( property !== "None"){// || Object.keys(this.materials).length !== 0){
@@ -64,7 +64,23 @@ class GL_Mesh{
     webglUtils.setBuffersAndAttributes(gl, program.attribSetters, this.buffers)
   }
 
-  draw(gl, uniforms, mode){
+  getUniforms(view_mtx, projection_matrix){
+    this.bindAttributes(gl, program)
+
+    view_mtx = m4.multiply(view_mtx, this.getMatrix())
+    var res = m4.multiply(projection_matrix, view_mtx)
+
+    var uniforms = {
+      u_matrix: res,
+      u_texture: this.texture[0]
+    };
+
+    return uniforms
+  }
+
+  draw(view_mtx, projection_matrix, mode){
+    var uniforms = this.getUniforms(view_mtx, projection_matrix)
+
     if(Object.keys(this.materials).length == 0){
         uniforms["u_texture"] = this.material_idx["default"]["texture"]
         webglUtils.setUniforms(program.uniformSetters, uniforms)

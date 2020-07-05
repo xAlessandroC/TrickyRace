@@ -6,7 +6,7 @@ var canvas, gl
 // la callback sul testo
 function readFile(filename, callback){
   return new Promise((res, rej)=>{
-    path = "resources/models/track/"+filename
+    path = "resources/models/"+filename
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -24,26 +24,25 @@ function readFile(filename, callback){
 
 // Legge in sequenza prima l'obj e poi il file mtllib
 // La lettura asincrona avviene attraverso le promise
-function readMesh(file, entry){
-  var mesh = {}
-  readFile(file, parseObj) //file.name
-  .then((obj_str)=>{
-    mesh = obj_str
-    return readFile(obj_str["mtl"], parseMaterial)
-  })
-  .then((obj_str2)=>{
-    mesh["materials"] = obj_str2
+function readMesh(file){
+  return new Promise((res, rej)=>{
+    var mesh = {}
+    readFile(file, parseObj) //file.name
+    .then((obj_str)=>{
+      mesh = obj_str
+      prefix = file.split('/')[0]
+      console.log("prefix:", prefix)
+      return readFile(prefix+'/'+obj_str["mtl"], parseMaterial)
+    })
+    .then((obj_str2)=>{
+      mesh["materials"] = obj_str2
 
-    // costruisco mesh
-    var temp = new GL_Mesh(mesh["vertices"],mesh["texcoord"],mesh["normals"],
-                            mesh["faces"],mesh["materials"],mesh["gl"],mesh["mode"])
+      // costruisco mesh
+      var temp = new GL_Mesh(mesh["vertices"],mesh["texcoord"],mesh["normals"],
+                              mesh["faces"],mesh["materials"],mesh["gl"],mesh["mode"])
 
-    if (entry === 'track')
-      initialize_position_track(temp)
-
-    game_env[entry] = temp
-
-    render()
+      res(temp)
+    })
   })
 }
 
@@ -175,7 +174,7 @@ function parseObj(text){
   if(max===2){
     mode = gl.LINES
   }
-  if(max===4){
+  if(max>=4){
     mode = gl.TRIANGLES
     triang = 1
   }
@@ -224,7 +223,7 @@ function parseObj(text){
 // dopodichè setta la texture giusta e infine invoca la callback
 function readImage(src, texture, callback){
   var image = new Image();
-  image.src = "resources/models/track/" + src
+  image.src = "resources/models/" + src
   image.addEventListener('load', function() {
     console.log("loaded " + image.src)
     gl.bindTexture(gl.TEXTURE_2D, texture);
