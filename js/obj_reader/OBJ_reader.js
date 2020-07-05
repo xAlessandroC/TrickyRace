@@ -31,7 +31,6 @@ function readMesh(file){
     .then((obj_str)=>{
       mesh = obj_str
       prefix = file.split('/')[0]
-      console.log("prefix:", prefix)
       return readFile(prefix+'/'+obj_str["mtl"], parseMaterial)
     })
     .then((obj_str2)=>{

@@ -9,19 +9,20 @@ var game_env
 function loadTrack(){
   readMesh('track/track.obj')
   .then((mesh)=>{
-    initialize_position_track(mesh)
     game_env['track'] = new Track(mesh)
     render()
   })
 }
 function loadCar(){
+  var temp = []
   readMesh('car/car.obj', 'car')
-  .then((mesh)=>{ game_env['car'] = mesh; return readMesh('car/w0.obj', 'w0') })
-  .then((mesh)=>{ game_env['w0'] = mesh; return readMesh('car/w1.obj', 'w0') })
-  .then((mesh)=>{ game_env['w1'] = mesh; return readMesh('car/w3.obj', 'w0') })
-  .then((mesh)=>{ game_env['w3'] = mesh; return readMesh('car/w4.obj', 'w0') })
-  .then((mesh)=>{ game_env['w4'] = mesh;
-   initialize_position_car([game_env['car'],game_env['w0'],game_env['w1'],game_env['w3'],game_env['w4']]);
+  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w0.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w1.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w3.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w4.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh);
+   game_env['car'] = new Car(temp)
+
    render() })
 }
 

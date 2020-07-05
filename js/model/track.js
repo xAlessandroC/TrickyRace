@@ -2,7 +2,9 @@ class Track {
   constructor(mesh) {
     this.track = mesh
 
-    this.center = [0,0,0]
+    initialize_position_track(this.track)
+
+    this.center = [0,0,0,1]
     var i = 0
     this.track.vertices.forEach((vertex)=>{
       this.center[i] = this.center[i] + vertex
@@ -11,6 +13,8 @@ class Track {
     this.center[0] = this.center[0]/(this.track.vertices.length/3)
     this.center[1] = this.center[1]/(this.track.vertices.length/3)
     this.center[2] = this.center[2]/(this.track.vertices.length/3)
+
+    this.center = (m4.multiply(this.track.getMatrix(), this.center)).slice(0, 3);
   }
 
   draw(view_mtx, projection_matrix, mode){
