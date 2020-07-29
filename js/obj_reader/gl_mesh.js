@@ -6,6 +6,7 @@ class GL_Mesh{
     this.mode = mode
     this.materials = materials
     this.texture = []
+    this.wireframe_text = []
     this.matrix = [1,0,0,0,
       0,1,0,0,
       0,0,1,0,
@@ -50,6 +51,11 @@ class GL_Mesh{
       }
     }
 
+    //black texture for wireframe
+    var w = gl.createTexture();
+    this.wireframe_text = w
+    gl.bindTexture(gl.TEXTURE_2D, this.wireframe_text);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
   }
 
   getMatrix(){
@@ -97,7 +103,12 @@ class GL_Mesh{
         var start = this.material_idx[property][0]
         var len = this.material_idx[property][1]
         gl.drawElements(mode || this.mode, len, gl.UNSIGNED_SHORT, start * 2);
-        // gl.drawElements(this.mode, this.indices.length, gl.UNSIGNED_SHORT, 0);
+
+        //draw wire
+        uniforms["u_texture"] = this.wireframe_text
+        webglUtils.setUniforms(program.uniformSetters, uniforms)
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers["indices"]);
+        gl.drawElements(gl.LINES, this.indices.length, gl.UNSIGNED_SHORT, 0);
       }
     }
   }

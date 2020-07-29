@@ -23,6 +23,8 @@ function loadCar(){
   .then((mesh)=>{ temp.push(mesh);
    game_env['car'] = new Car(temp)
 
+   // target = game_env['car'].center
+
    render() })
 }
 
@@ -31,9 +33,9 @@ function render(){
 
   for (const [type, mesh] of Object.entries(game_env)) {
 
-    cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
-                      radius*Math.sin(phi)*Math.sin(theta),
-                      radius*Math.cos(phi)]
+    // cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
+    //                   radius*Math.sin(phi)*Math.sin(theta),
+    //                   radius*Math.cos(phi)]
     var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
     var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
 
@@ -65,11 +67,11 @@ function init_gl(){
 }
 
 function init_param(){
-  phi = degToRad(1); theta = degToRad(1); radius = 15
+  phi = degToRad(0); theta = degToRad(0); radius = 100
   cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                     radius*Math.sin(phi)*Math.sin(theta),
                     radius*Math.cos(phi)]
-  up = [0, 0, 1]
+  up = [0, 1, 0]
   target = [0, 0, 0]
 
   ar = canvas.clientWidth/canvas.clientHeight
@@ -94,5 +96,5 @@ init_canvas()
 init_param()
 init_gl()
 loadTrack()
-loadCar()
+// loadCar()
 render()
