@@ -43,7 +43,7 @@ class GL_Mesh{
       var t = gl.createTexture();
       this.material_idx[property]["texture"] = t
       gl.bindTexture(gl.TEXTURE_2D, this.material_idx[property]["texture"]);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, Math.floor(Math.random(1231) * 256), Math.floor(Math.random(879) * 256), Math.floor(Math.random(35632) * 256)]));
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([Math.floor(Math.random(1231) * 256), Math.floor(Math.random(1231) * 256), Math.floor(Math.random(879) * 256), 255]));
       // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255]));
 
       if( property !== "None"){// || Object.keys(this.materials).length !== 0){
@@ -105,10 +105,10 @@ class GL_Mesh{
         gl.drawElements(mode || this.mode, len, gl.UNSIGNED_SHORT, start * 2);
 
         //draw wire
-        uniforms["u_texture"] = this.wireframe_text
-        webglUtils.setUniforms(program.uniformSetters, uniforms)
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers["indices"]);
-        gl.drawElements(gl.LINES, this.indices.length, gl.UNSIGNED_SHORT, 0);
+        // uniforms["u_texture"] = this.wireframe_text
+        // webglUtils.setUniforms(program.uniformSetters, uniforms)
+        // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers["indices"]);
+        // gl.drawElements(gl.LINES, this.indices.length, gl.UNSIGNED_SHORT, 0);
       }
     }
   }
