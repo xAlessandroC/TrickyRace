@@ -6,7 +6,9 @@ var angle, ar, near, far
 
 var game_env
 
-var a=-15,b=116,c=18
+// var a=-15,b=116,c=18
+var a=-5,b=24,c=6
+// -40/24/6
 //b=116
 
 // settings
@@ -85,7 +87,7 @@ function init_gl(){
 }
 
 function init_param(){
-  phi = degToRad(0); theta = degToRad(0); radius = 150
+  phi = degToRad(0); theta = degToRad(0); radius = 75
   cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                     radius*Math.sin(phi)*Math.sin(theta),
                     radius*Math.cos(phi)]

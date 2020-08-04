@@ -18,13 +18,25 @@ class Car {
     this.center[1] = this.center[1]/(this.chassis.vertices.length/3)
     this.center[2] = this.center[2]/(this.chassis.vertices.length/3)
 
+    this.centerw0 = [0,0,0,1]
+    this.w0.vertices.forEach((vertex)=>{
+      this.centerw0[i] = this.centerw0[i] + vertex
+      i = (i + 1) % 3
+    })
+    this.centerw0[0] = this.centerw0[0]/(this.w0.vertices.length/3)
+    this.centerw0[1] = this.centerw0[1]/(this.w0.vertices.length/3)
+    this.centerw0[2] = this.centerw0[2]/(this.w0.vertices.length/3)
+
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
+    this.centerw0 = (m4.multiply(this.w0.getMatrix(), this.centerw0)).slice(0, 3);
 
     this.acceleration = 0.6
     this.attritoZ = 0.991; this.attritoX = 0.8; this.attritoY = 1.0
     this.vx = 0; this.vy = 0; this.vz = 0
     this.facing = 0; this.grip = 0.45
     this.sterzo = 0; this.vsterzo = 1.4; this.rsterzo = 0.75
+    this.mozzo = 0;
+    this.raggio = 0.5
   }
 
   carStep(){
@@ -35,9 +47,9 @@ class Car {
       this.vx += this.acceleration
 
     if (key_left === true)
-      this.sterzo += this.vsterzo;
-    if (key_right === true)
       this.sterzo -= this.vsterzo;
+    if (key_right === true)
+      this.sterzo += this.vsterzo;
     this.sterzo *= this.rsterzo;
     if(Math.abs(this.sterzo) < 0.0001) this.sterzo = 0
 
@@ -47,7 +59,12 @@ class Car {
 
     this.facing = (this.vx*this.grip)*this.sterzo;
 
-    // console.log("[CAR STEP]: position ["+this.vx+","+this.vy+","+this.vz+","+this.facing+"]")
+    var da ;
+    da = (180.0*this.vx)/(Math.PI*this.raggio);
+    this.mozzo+=da;
+
+    // console.log("[CAR STEP]: position ["+this.vx+","+this.vy+","+this.vz+","+this.sterzo+"]")
+    document.getElementById("sterzo").innerHTML = "sterzo " + this.sterzo
     this.updatePosition()
   }
 
@@ -56,29 +73,51 @@ class Car {
 
     // chassis
     var mtx_c = m4.copy(mtx)
-    mtx_c=m4.zRotate(mtx_c, degToRad(this.facing));
+    mtx_c = m4.zRotate(mtx_c, degToRad(this.facing));
     this.chassis.setMatrix(mtx_c)
 
-    // this.center = [this.center[0], this.center[1], this.center[2], 1]
-    // // this.center = m4.translate(this.center, this.vx, this.vy, this.vz)
-    // temp = m4.translation(this.vx, this.vy, this.vz)
-    // this.center = m4.multiply(temp, this.center)
-    // this.center = this.center.slice(0,3)
     this.center = [0,0,0,1]
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
-    console.log("[CAR STEP]: new center ", this.center)
 
     // wheel 1
-    this.w0.setMatrix(m4.copy(mtx))
+    // var mtx_w0 = m4.identity()
+    var mtx_w0 = m4.copy(this.chassis.getMatrix())
+    // mtx_w0 = m4.zRotate(mtx_w0, degToRad(this.facing));
+    // mtx_w0 = m4.translate(mtx_w0, -this.center[0], -this.center[1], 0)
+    mtx_w0 = m4.translate(mtx_w0, -5.65785, 3.09398, 0.437695)
+    // mtx_w0 = m4.yRotate(mtx_w0, degToRad(this.mozzo));
+    mtx_w0 = m4.zRotate(mtx_w0, degToRad(-this.sterzo));
+    mtx_w0 = m4.translate(mtx_w0, 5.65785, -3.09398, -0.437695)
+    this.w0.setMatrix(m4.copy(mtx_w0))
+
+    // this.centerw0 = [this.centerw0[0],this.centerw0[1],this.centerw0[2],1]
+    // this.centerw0 = (m4.multiply(this.w0.getMatrix(), this.centerw0)).slice(0, 3);
 
     // wheel 2
-    this.w1.setMatrix(m4.copy(mtx))
+    var mtx_w1 = m4.copy(this.chassis.getMatrix())
+    // mtx_w1 = m4.translate(mtx_w1, this.vx, this.vy, this.vz)
+    // mtx_w1 = m4.zRotate(mtx_w1, degToRad(this.facing));
+    // // mtx_w1 = m4.zRotate(mtx_w1, degToRad(this.sterzo));
+    // // mtx_w1 = m4.yRotate(mtx_w1, degToRad(this.mozzo));
+    this.w1.setMatrix(m4.copy(mtx_w1))
 
     // wheel 3
-    this.w2.setMatrix(m4.copy(mtx))
+    var mtx_w2 = m4.copy(this.chassis.getMatrix())
+    // mtx_w2 = m4.translate(mtx_w2, this.vx, this.vy, this.vz)
+    // mtx_w2 = m4.zRotate(mtx_w2, degToRad(this.facing));
+    // // mtx_w2 = m4.zRotate(mtx_w2, degToRad(this.sterzo));
+    // // mtx_w2 = m4.yRotate(mtx_w2, degToRad(this.mozzo));
+    this.w2.setMatrix(m4.copy(mtx_w2))
 
     // wheel 4
-    this.w3.setMatrix(m4.copy(mtx))
+    var mtx_w3 = m4.copy(this.chassis.getMatrix())
+    // mtx_w3 = m4.translate(mtx_w3, this.vx, this.vy, this.vz)
+    // mtx_w3 = m4.zRotate(mtx_w3, degToRad(this.facing));
+    mtx_w3 = m4.translate(mtx_w3, -5.65785, -3.09398, 0.437695)
+    mtx_w3 = m4.zRotate(mtx_w3, degToRad(-this.sterzo));
+    mtx_w3 = m4.translate(mtx_w3, 5.65785, 3.09398, -0.437695)
+    // mtx_w3 = m4.yRotate(mtx_w3, degToRad(this.mozzo));
+    this.w3.setMatrix(m4.copy(mtx_w3))
   }
 
   draw(view_mtx, projection_matrix, mode){
