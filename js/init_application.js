@@ -10,7 +10,7 @@ var a=-15,b=116,c=18
 //b=116
 
 // settings
-var free_view = true
+var free_view = false
 
 function loadTrack(){
   readMesh('track/cube.obj')
@@ -47,8 +47,10 @@ function render(){
                         radius*Math.sin(phi)*Math.sin(theta),
                         radius*Math.cos(phi)]
     }else{
-      if(game_env['car'] !== undefined)
+      if(game_env['car'] !== undefined){
+        target = game_env['car'].center
         cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
+      }
     }
 
     var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))

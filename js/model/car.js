@@ -47,12 +47,8 @@ class Car {
 
     this.facing = (this.vx*this.grip)*this.sterzo;
 
-    console.log("[CAR STEP]: position ["+this.vx+","+this.vy+","+this.vz+","+this.facing+"]")
+    // console.log("[CAR STEP]: position ["+this.vx+","+this.vy+","+this.vz+","+this.facing+"]")
     this.updatePosition()
-
-    // px += vx
-    // py += vy
-    // pz += vz
   }
 
   updatePosition(){
@@ -62,6 +58,15 @@ class Car {
     var mtx_c = m4.copy(mtx)
     mtx_c=m4.zRotate(mtx_c, degToRad(this.facing));
     this.chassis.setMatrix(mtx_c)
+
+    // this.center = [this.center[0], this.center[1], this.center[2], 1]
+    // // this.center = m4.translate(this.center, this.vx, this.vy, this.vz)
+    // temp = m4.translation(this.vx, this.vy, this.vz)
+    // this.center = m4.multiply(temp, this.center)
+    // this.center = this.center.slice(0,3)
+    this.center = [0,0,0,1]
+    this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
+    console.log("[CAR STEP]: new center ", this.center)
 
     // wheel 1
     this.w0.setMatrix(m4.copy(mtx))
