@@ -8,27 +8,13 @@ class Car {
 
     initialize_position_car(components);
 
-    this.center = [0,0,0,1]
-    var i = 0
-    this.chassis.vertices.forEach((vertex)=>{
-      this.center[i] = this.center[i] + vertex
-      i = (i + 1) % 3
-    })
-    this.center[0] = this.center[0]/(this.chassis.vertices.length/3)
-    this.center[1] = this.center[1]/(this.chassis.vertices.length/3)
-    this.center[2] = this.center[2]/(this.chassis.vertices.length/3)
-
-    this.centerw0 = [0,0,0,1]
-    this.w0.vertices.forEach((vertex)=>{
-      this.centerw0[i] = this.centerw0[i] + vertex
-      i = (i + 1) % 3
-    })
-    this.centerw0[0] = this.centerw0[0]/(this.w0.vertices.length/3)
-    this.centerw0[1] = this.centerw0[1]/(this.w0.vertices.length/3)
-    this.centerw0[2] = this.centerw0[2]/(this.w0.vertices.length/3)
+    this.center = computeCenter(this.chassis.vertices)
+    this.centerw0 = computeCenter(this.w0.vertices)
+    this.centerw1 = computeCenter(this.w1.vertices)
+    this.centerw2 = computeCenter(this.w2.vertices)
+    this.centerw3 = computeCenter(this.w3.vertices)
 
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
-    this.centerw0 = (m4.multiply(this.w0.getMatrix(), this.centerw0)).slice(0, 3);
 
     this.acceleration = 0.6
     this.attritoZ = 0.991; this.attritoX = 0.8; this.attritoY = 1.0
@@ -70,6 +56,7 @@ class Car {
 
   updatePosition(){
     var mtx = m4.translate(this.chassis.getMatrix(), this.vx, this.vy, this.vz)
+    var sterzo_multiplier = 30/4.2
 
     // chassis
     var mtx_c = m4.copy(mtx)
@@ -80,43 +67,33 @@ class Car {
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
 
     // wheel 1
-    // var mtx_w0 = m4.identity()
     var mtx_w0 = m4.copy(this.chassis.getMatrix())
-    // mtx_w0 = m4.zRotate(mtx_w0, degToRad(this.facing));
-    // mtx_w0 = m4.translate(mtx_w0, -this.center[0], -this.center[1], 0)
-    mtx_w0 = m4.translate(mtx_w0, -5.65785, 3.09398, 0.437695)
-    // mtx_w0 = m4.yRotate(mtx_w0, degToRad(this.mozzo));
-    mtx_w0 = m4.zRotate(mtx_w0, degToRad(-this.sterzo));
-    mtx_w0 = m4.translate(mtx_w0, 5.65785, -3.09398, -0.437695)
+    mtx_w0 = m4.translate(mtx_w0, this.centerw0[0],this.centerw0[1],this.centerw0[2])
+    mtx_w0 = m4.zRotate(mtx_w0, degToRad(-this.sterzo*sterzo_multiplier));
+    mtx_w0 = m4.yRotate(mtx_w0, degToRad(this.mozzo));
+    mtx_w0 = m4.translate(mtx_w0, -this.centerw0[0],-this.centerw0[1],-this.centerw0[2])
     this.w0.setMatrix(m4.copy(mtx_w0))
-
-    // this.centerw0 = [this.centerw0[0],this.centerw0[1],this.centerw0[2],1]
-    // this.centerw0 = (m4.multiply(this.w0.getMatrix(), this.centerw0)).slice(0, 3);
 
     // wheel 2
     var mtx_w1 = m4.copy(this.chassis.getMatrix())
-    // mtx_w1 = m4.translate(mtx_w1, this.vx, this.vy, this.vz)
-    // mtx_w1 = m4.zRotate(mtx_w1, degToRad(this.facing));
-    // // mtx_w1 = m4.zRotate(mtx_w1, degToRad(this.sterzo));
-    // // mtx_w1 = m4.yRotate(mtx_w1, degToRad(this.mozzo));
+    mtx_w1 = m4.translate(mtx_w1, this.centerw1[0],this.centerw1[1],this.centerw1[2])
+    mtx_w1 = m4.yRotate(mtx_w1, degToRad(this.mozzo));
+    mtx_w1 = m4.translate(mtx_w1, -this.centerw1[0],-this.centerw1[1],-this.centerw1[2])
     this.w1.setMatrix(m4.copy(mtx_w1))
 
     // wheel 3
     var mtx_w2 = m4.copy(this.chassis.getMatrix())
-    // mtx_w2 = m4.translate(mtx_w2, this.vx, this.vy, this.vz)
-    // mtx_w2 = m4.zRotate(mtx_w2, degToRad(this.facing));
-    // // mtx_w2 = m4.zRotate(mtx_w2, degToRad(this.sterzo));
-    // // mtx_w2 = m4.yRotate(mtx_w2, degToRad(this.mozzo));
+    mtx_w2 = m4.translate(mtx_w2, this.centerw2[0],this.centerw2[1],this.centerw2[2])
+    mtx_w2 = m4.yRotate(mtx_w2, degToRad(this.mozzo));
+    mtx_w2 = m4.translate(mtx_w2, -this.centerw2[0],-this.centerw2[1],-this.centerw2[2])
     this.w2.setMatrix(m4.copy(mtx_w2))
 
     // wheel 4
     var mtx_w3 = m4.copy(this.chassis.getMatrix())
-    // mtx_w3 = m4.translate(mtx_w3, this.vx, this.vy, this.vz)
-    // mtx_w3 = m4.zRotate(mtx_w3, degToRad(this.facing));
-    mtx_w3 = m4.translate(mtx_w3, -5.65785, -3.09398, 0.437695)
-    mtx_w3 = m4.zRotate(mtx_w3, degToRad(-this.sterzo));
-    mtx_w3 = m4.translate(mtx_w3, 5.65785, 3.09398, -0.437695)
-    // mtx_w3 = m4.yRotate(mtx_w3, degToRad(this.mozzo));
+    mtx_w3 = m4.translate(mtx_w3, this.centerw3[0],this.centerw3[1],this.centerw3[2])
+    mtx_w3 = m4.zRotate(mtx_w3, degToRad(-this.sterzo*sterzo_multiplier));
+    mtx_w3 = m4.yRotate(mtx_w3, degToRad(this.mozzo));
+    mtx_w3 = m4.translate(mtx_w3, -this.centerw3[0],-this.centerw3[1],-this.centerw3[2])
     this.w3.setMatrix(m4.copy(mtx_w3))
   }
 

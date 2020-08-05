@@ -36,3 +36,17 @@ function distinct_edges(faces){
 
   return res
 }
+
+function computeCenter(vertices){
+  var center = [0,0,0,1]
+  var i = 0
+  vertices.forEach((vertex)=>{
+    center[i] = center[i] + vertex
+    i = (i + 1) % 3
+  })
+  center[0] = center[0]/(vertices.length/3)
+  center[1] = center[1]/(vertices.length/3)
+  center[2] = center[2]/(vertices.length/3)
+
+  return center
+}
