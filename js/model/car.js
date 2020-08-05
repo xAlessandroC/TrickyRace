@@ -101,10 +101,17 @@ class Car {
 
     // collision box
     if (this.collisionBox !== undefined){
-      var mtx_b = m4.copy(this.collisionBox.box.getMatrix())
-      mtx_b = m4.translate(mtx_b, this.vx, this.vy, this.vz)
-      mtx_b = m4.zRotate(mtx_b, degToRad(this.facing));
-      this.collisionBox.box.setMatrix(mtx_b)
+
+      var mtx = m4.identity()
+      mtx = m4.multiply(mtx, m4.copy(this.chassis.getMatrix()))
+      mtx = m4.translate(mtx, 0.0,0.0,1.0)
+      mtx = m4.scale(mtx, this.collisionBox.width/1.8, this.collisionBox.length/1.8, this.collisionBox.height/1.8)
+      this.collisionBox.box.setMatrix(mtx)
+
+      // var mtx_b = m4.copy(this.collisionBox.box.getMatrix())
+      // mtx_b = m4.translate(mtx_b, this.vx, this.vy, this.vz)
+      // mtx_b = m4.zRotate(mtx_b, degToRad(this.facing));
+      // this.collisionBox.box.setMatrix(mtx_b)
     }
   }
 
