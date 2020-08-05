@@ -7,7 +7,7 @@ var angle, ar, near, far
 var game_env
 
 // var a=-15,b=116,c=18
-var a=-5,b=24,c=6
+var a=-40,b=24,c=6
 // -40/24/6
 //b=116
 

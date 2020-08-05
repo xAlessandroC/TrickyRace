@@ -29,11 +29,12 @@ class GL_Mesh{
       this.material_idx[property] = [idx, temp.length]
     }
     this.indices = indices.flat()
+    var n_indices = ((mode === gl.LINES)?2:3)
     var arrays = {
       "position": { numComponents: 3, data: this.vertices },
       "texcoord": { numComponents: 2, data : this.textcoords},
       "normal": { numComponents: 3, data : this.normals},
-      "indices":  { numComponents: 3, data: this.indices }
+      "indices":  { numComponents: n_indices, data: this.indices }
     }
 
     this.buffers = webglUtils.createBufferInfoFromArrays(gl, arrays)

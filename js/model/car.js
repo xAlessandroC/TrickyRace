@@ -6,13 +6,15 @@ class Car {
     this.w2 = components[3]
     this.w3 = components[4]
 
+    this.collisionBox = undefined
+
     initialize_position_car(components);
 
-    this.center = computeCenter(this.chassis.vertices)
-    this.centerw0 = computeCenter(this.w0.vertices)
-    this.centerw1 = computeCenter(this.w1.vertices)
-    this.centerw2 = computeCenter(this.w2.vertices)
-    this.centerw3 = computeCenter(this.w3.vertices)
+    this.center = computeCenter(this.chassis, this, this.chassis.getMatrix())
+    this.centerw0 = computeCenter(this.w0)
+    this.centerw1 = computeCenter(this.w1)
+    this.centerw2 = computeCenter(this.w2)
+    this.centerw3 = computeCenter(this.w3)
 
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
 
@@ -65,6 +67,7 @@ class Car {
 
     this.center = [0,0,0,1]
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
+    // this.collisionBox.center = this.center
 
     // wheel 1
     var mtx_w0 = m4.copy(this.chassis.getMatrix())
@@ -95,6 +98,14 @@ class Car {
     mtx_w3 = m4.yRotate(mtx_w3, degToRad(this.mozzo));
     mtx_w3 = m4.translate(mtx_w3, -this.centerw3[0],-this.centerw3[1],-this.centerw3[2])
     this.w3.setMatrix(m4.copy(mtx_w3))
+
+    // collision box
+    if (this.collisionBox !== undefined){
+      var mtx_b = m4.copy(this.collisionBox.box.getMatrix())
+      mtx_b = m4.translate(mtx_b, this.vx, this.vy, this.vz)
+      mtx_b = m4.zRotate(mtx_b, degToRad(this.facing));
+      this.collisionBox.box.setMatrix(mtx_b)
+    }
   }
 
   draw(view_mtx, projection_matrix, mode){
@@ -103,5 +114,8 @@ class Car {
     this.w1.draw(view_mtx, projection_matrix, mode)
     this.w2.draw(view_mtx, projection_matrix, mode)
     this.w3.draw(view_mtx, projection_matrix, mode)
+
+    if (this.collisionBox!== undefined)
+      this.collisionBox.draw(view_mtx, projection_matrix, gl.LINES)
   }
 }
