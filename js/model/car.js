@@ -16,6 +16,7 @@ class Car {
     this.centerw2 = computeCenter(this.w2)
     this.centerw3 = computeCenter(this.w3)
 
+    this.shift_chassis = -this.center[0]
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
 
     this.acceleration = 0.6
@@ -101,17 +102,16 @@ class Car {
 
     // collision box
     if (this.collisionBox !== undefined){
+      this.collisionBox.center = [this.center[0]+this.shift_chassis,this.center[1],this.center[2]]
 
       var mtx = m4.identity()
       mtx = m4.multiply(mtx, m4.copy(this.chassis.getMatrix()))
-      mtx = m4.translate(mtx, 0.0,0.0,1.0)
-      mtx = m4.scale(mtx, this.collisionBox.width/1.8, this.collisionBox.length/1.8, this.collisionBox.height/1.8)
+      mtx = m4.translate(mtx, 0.0,0.0,0.0)
+      mtx = m4.scale(mtx, 1.0, 1.0, 1.0)
+      mtx = m4.translate(mtx, this.shift_chassis, 0.0, 0.0)
       this.collisionBox.box.setMatrix(mtx)
 
-      // var mtx_b = m4.copy(this.collisionBox.box.getMatrix())
-      // mtx_b = m4.translate(mtx_b, this.vx, this.vy, this.vz)
-      // mtx_b = m4.zRotate(mtx_b, degToRad(this.facing));
-      // this.collisionBox.box.setMatrix(mtx_b)
+      this.collisionBox.updateVertices(mtx)
     }
   }
 

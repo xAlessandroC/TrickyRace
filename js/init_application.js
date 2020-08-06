@@ -22,6 +22,20 @@ function loadTrack(){
     console.log("track caricato")
   })
 }
+
+function loadCar2(){
+  var temp = []
+  readMesh('car/car.obj', 'car')
+  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w0.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w1.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w3.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w4.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh);
+   game_env['car2'] = new Car(temp)
+
+   render() })
+}
+
 function loadCar(){
   var temp = []
   readMesh('car/car.obj', 'car')
@@ -87,7 +101,7 @@ function init_gl(){
 }
 
 function init_param(){
-  phi = degToRad(0); theta = degToRad(0); radius = 75
+  phi = degToRad(0); theta = degToRad(0); radius = 150
   cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                     radius*Math.sin(phi)*Math.sin(theta),
                     radius*Math.cos(phi)]
@@ -130,8 +144,11 @@ const FRAME_MIN_TIME = (1000/60) * (60 / FRAMES_PER_SECOND) - (1000/60) * 0.5;
 var lastFrameTime = 0;
 function update(time){
     if(time-lastFrameTime < FRAME_MIN_TIME){
-      if(game_env['car']!==undefined)
+      if(game_env['car']!==undefined){
         (game_env['car']).carStep();
+        // if(game_env['car2'].collisionBox!==undefined)
+          // (game_env['car']).collisionBox.hasCollided(game_env['car2'].collisionBox)
+      }
       window.requestAnimationFrame(update);
       return;
     }
@@ -146,5 +163,6 @@ init_param()
 init_gl()
 loadTrack()
 loadCar()
+// loadCar2()
 render()
 window.requestAnimationFrame(update);

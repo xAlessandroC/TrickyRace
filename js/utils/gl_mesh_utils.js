@@ -52,6 +52,7 @@ function computeCenter(mesh, injectCollisionBox, initMatrix){
   center[0] = center[0]/(vertices.length/3)
   center[1] = center[1]/(vertices.length/3)
   center[2] = center[2]/(vertices.length/3)
+  center[3] = 1
 
   //collisionbox
   var width = max[0] - min[0]
@@ -63,6 +64,7 @@ function computeCenter(mesh, injectCollisionBox, initMatrix){
     .then((mesh)=>{
       var w1 = width;   var l1 = length;   var h1 = height; var c1 = center
       cbox = new CollisionBox(c1, w1, l1, h1, mesh, injectCollisionBox, initMatrix)
+      cbox.updateVertices(initMatrix)
       injectCollisionBox.collisionBox = cbox
       console.log("collision box loaded")
     })
