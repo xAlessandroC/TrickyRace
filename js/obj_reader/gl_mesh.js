@@ -47,7 +47,7 @@ class GL_Mesh{
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([Math.floor(Math.random(1231) * 256), Math.floor(Math.random(1231) * 256), Math.floor(Math.random(879) * 256), 255]));
       // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255]));
 
-      if( property !== "None"){// || Object.keys(this.materials).length !== 0){
+      if( property !== "None" && property !== "default"){// || Object.keys(this.materials).length !== 0){
         readImage(this.materials[property]["image"], this.material_idx[property]["texture"], render)
       }
     }

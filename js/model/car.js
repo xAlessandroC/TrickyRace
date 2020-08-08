@@ -1,5 +1,6 @@
 class Car {
-  constructor(components) {
+  constructor(components, name) {
+    this.id = name
     this.chassis = components[0]
     this.w0 = components[1]
     this.w1 = components[2]
@@ -31,14 +32,14 @@ class Car {
   carStep(){
     // console.log("[CAR STEP]:\nFORWARD:" + key_forward + "\nBACKWARD:" + key_backward + "\nLEFT:" + key_left + "\nRIGHT:" + key_right)
     if (key_forward === true)
-      this.vx -= this.acceleration
-    if (key_backward === true)
       this.vx += this.acceleration
+    if (key_backward === true)
+      this.vx -= this.acceleration
 
     if (key_left === true)
-      this.sterzo -= this.vsterzo;
-    if (key_right === true)
       this.sterzo += this.vsterzo;
+    if (key_right === true)
+      this.sterzo -= this.vsterzo;
     this.sterzo *= this.rsterzo;
     if(Math.abs(this.sterzo) < 0.0001) this.sterzo = 0
 
@@ -73,7 +74,7 @@ class Car {
     // wheel 1
     var mtx_w0 = m4.copy(this.chassis.getMatrix())
     mtx_w0 = m4.translate(mtx_w0, this.centerw0[0],this.centerw0[1],this.centerw0[2])
-    mtx_w0 = m4.zRotate(mtx_w0, degToRad(-this.sterzo*sterzo_multiplier));
+    mtx_w0 = m4.zRotate(mtx_w0, degToRad(this.sterzo*sterzo_multiplier));
     mtx_w0 = m4.yRotate(mtx_w0, degToRad(this.mozzo));
     mtx_w0 = m4.translate(mtx_w0, -this.centerw0[0],-this.centerw0[1],-this.centerw0[2])
     this.w0.setMatrix(m4.copy(mtx_w0))
@@ -95,7 +96,7 @@ class Car {
     // wheel 4
     var mtx_w3 = m4.copy(this.chassis.getMatrix())
     mtx_w3 = m4.translate(mtx_w3, this.centerw3[0],this.centerw3[1],this.centerw3[2])
-    mtx_w3 = m4.zRotate(mtx_w3, degToRad(-this.sterzo*sterzo_multiplier));
+    mtx_w3 = m4.zRotate(mtx_w3, degToRad(this.sterzo*sterzo_multiplier));
     mtx_w3 = m4.yRotate(mtx_w3, degToRad(this.mozzo));
     mtx_w3 = m4.translate(mtx_w3, -this.centerw3[0],-this.centerw3[1],-this.centerw3[2])
     this.w3.setMatrix(m4.copy(mtx_w3))
@@ -114,6 +115,22 @@ class Car {
       this.collisionBox.updateVertices(mtx)
     }
   }
+
+  // setCollisionBox(component){
+  //   var temp = computeDimensions(component.vertices)
+  //   var width = temp[0]
+  //   var length = temp[1]
+  //   var heigth = temp[2]
+  //
+  //   readMesh('collisionBox/box.obj')
+  //   .then((mesh)=>{
+  //     var w1 = width;   var l1 = length;   var h1 = heigth; var c1 = this.center
+  //     var cbox = new CollisionBox(c1, w1, l1, h1, component.getMatrix())
+  //     // cbox.updateVertices(initMatrix)
+  //     this.collisionBox = cbox
+  //     console.log("collision box loaded")
+  //   })
+  // }
 
   draw(view_mtx, projection_matrix, mode){
     this.chassis.draw(view_mtx, projection_matrix, mode)

@@ -31,7 +31,7 @@ function loadCar2(){
   .then((mesh)=>{ temp.push(mesh); return readMesh('car/w3.obj', 'w0') })
   .then((mesh)=>{ temp.push(mesh); return readMesh('car/w4.obj', 'w0') })
   .then((mesh)=>{ temp.push(mesh);
-   game_env['car2'] = new Car(temp)
+   game_env['car2'] = new Car(temp, "car2")
 
    render() })
 }
@@ -44,11 +44,32 @@ function loadCar(){
   .then((mesh)=>{ temp.push(mesh); return readMesh('car/w3.obj', 'w0') })
   .then((mesh)=>{ temp.push(mesh); return readMesh('car/w4.obj', 'w0') })
   .then((mesh)=>{ temp.push(mesh);
-   game_env['car'] = new Car(temp)
+   game_env['car'] = new Car(temp, "car1")
 
    target = game_env['car'].center
 
    cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
+
+   // game_env['car'].setCollisionBox(game_env['car'].chassis)
+
+   render() })
+}
+
+function loadF1(){
+  var temp = []
+  readMesh('f1_car/chassis.obj', 'car')
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh);
+   game_env['car'] = new Car(temp, "car1")
+
+   target = game_env['car'].center
+
+   cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
+
+   // game_env['car'].setCollisionBox(game_env['car'].chassis)
 
    render() })
 }
@@ -101,7 +122,7 @@ function init_gl(){
 }
 
 function init_param(){
-  phi = degToRad(0); theta = degToRad(0); radius = 150
+  phi = degToRad(0); theta = degToRad(0); radius = 80
   cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                     radius*Math.sin(phi)*Math.sin(theta),
                     radius*Math.cos(phi)]
@@ -147,7 +168,7 @@ function update(time){
       if(game_env['car']!==undefined){
         (game_env['car']).carStep();
         // if(game_env['car2'].collisionBox!==undefined)
-          // (game_env['car']).collisionBox.hasCollided(game_env['car2'].collisionBox)
+        //   (game_env['car']).collisionBox.hasCollided(game_env['car2'].collisionBox)
       }
       window.requestAnimationFrame(update);
       return;
@@ -162,7 +183,8 @@ init_canvas()
 init_param()
 init_gl()
 loadTrack()
-loadCar()
+loadF1()
+// loadCar()
 // loadCar2()
 render()
 window.requestAnimationFrame(update);

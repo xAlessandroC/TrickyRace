@@ -37,22 +37,55 @@ function distinct_edges(faces){
   return res
 }
 
-function computeCenter(mesh, injectCollisionBox, initMatrix){
-  var vertices = mesh.vertices
+function computeCenter(vertices){
   var center = [0,0,0]
-  var max = [vertices[0],vertices[1],vertices[2]]
-  var min = [vertices[0],vertices[1],vertices[2]]
   var i = 0
   vertices.forEach((vertex)=>{
     center[i] = center[i] + vertex
-    if(vertex>max[i]) max[i] = vertex
-    if(vertex<min[i]) min[i] = vertex
     i = (i + 1) % 3
   })
   center[0] = center[0]/(vertices.length/3)
   center[1] = center[1]/(vertices.length/3)
   center[2] = center[2]/(vertices.length/3)
   center[3] = 1
+
+  return center
+}
+
+function computeDimensions(vertices){
+  var max = [vertices[0],vertices[1],vertices[2]]
+  var min = [vertices[0],vertices[1],vertices[2]]
+  var i = 0
+  vertices.forEach((vertex)=>{
+    if(vertex>max[i]) max[i] = vertex
+    if(vertex<min[i]) min[i] = vertex
+    i = (i + 1) % 3
+  })
+
+  // dimensioni
+  var width = max[0] - min[0]
+  var length = max[1] - min[1]
+  var height = max[2] - min[2]
+
+  return [width, length, height]
+}
+
+function computeCenter(mesh, injectCollisionBox, initMatrix){
+    var vertices = mesh.vertices
+    var center = [0,0,0]
+    var max = [vertices[0],vertices[1],vertices[2]]
+    var min = [vertices[0],vertices[1],vertices[2]]
+    var i = 0
+    vertices.forEach((vertex)=>{
+      center[i] = center[i] + vertex
+      if(vertex>max[i]) max[i] = vertex
+      if(vertex<min[i]) min[i] = vertex
+      i = (i + 1) % 3
+    })
+    center[0] = center[0]/(vertices.length/3)
+    center[1] = center[1]/(vertices.length/3)
+    center[2] = center[2]/(vertices.length/3)
+    center[3] = 1
 
   //collisionbox
   var width = max[0] - min[0]
@@ -64,7 +97,7 @@ function computeCenter(mesh, injectCollisionBox, initMatrix){
     .then((mesh)=>{
       var w1 = width;   var l1 = length;   var h1 = height; var c1 = center
       cbox = new CollisionBox(c1, w1, l1, h1, mesh, injectCollisionBox, initMatrix)
-      cbox.updateVertices(initMatrix)
+      // cbox.updateVertices(initMatrix)
       injectCollisionBox.collisionBox = cbox
       console.log("collision box loaded")
     })
