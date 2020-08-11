@@ -105,3 +105,7 @@ function computeCenter(mesh, injectCollisionBox, initMatrix){
 
   return center
 }
+
+function isPowerOf2(value) {
+  return (value & (value - 1)) === 0;
+}

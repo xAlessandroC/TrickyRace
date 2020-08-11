@@ -106,10 +106,10 @@ class GL_Mesh{
         gl.drawElements(mode || this.mode, len, gl.UNSIGNED_SHORT, start * 2);
 
         //draw wire
-        uniforms["u_texture"] = this.wireframe_text
-        webglUtils.setUniforms(program.uniformSetters, uniforms)
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers["indices"]);
-        gl.drawElements(gl.LINES, this.indices.length, gl.UNSIGNED_SHORT, 0);
+        // uniforms["u_texture"] = this.wireframe_text
+        // webglUtils.setUniforms(program.uniformSetters, uniforms)
+        // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers["indices"]);
+        // gl.drawElements(gl.LINES, this.indices.length, gl.UNSIGNED_SHORT, 0);
       }
     }
   }

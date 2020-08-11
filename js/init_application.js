@@ -15,11 +15,17 @@ var a=-40,b=24,c=6
 var free_view = false
 
 function loadTrack(){
-  readMesh('track/cube.obj')
+  readMesh('track/track3.obj')
   .then((mesh)=>{
     game_env['track'] = new Track(mesh)
     // render()
     console.log("track caricato")
+    readMesh('track/terrain.obj')
+    .then((mesh)=>{
+      game_env['terrain'] = new Track(mesh)
+      // render()
+      console.log("terrain caricato")
+    })
   })
 }
 

@@ -36,6 +36,14 @@ function readMesh(file){
     .then((obj_str2)=>{
       mesh["materials"] = obj_str2
 
+      for (const property in mesh["materials"]){
+        if(mesh["materials"][property].image !== undefined){
+          var t = mesh["materials"][property].image
+          mesh["materials"][property].image = file.split("/")[0] + "/" + t
+          var c = 2
+        }
+      }
+
       // costruisco mesh
       var temp = new GL_Mesh(mesh["vertices"],mesh["texcoord"],mesh["normals"],
                               mesh["faces"],mesh["materials"],mesh["gl"],mesh["mode"])
@@ -233,14 +241,17 @@ function readImage(src, texture, callback){
        // Yes, it's a power of 2. Generate mips.
        gl.generateMipmap(gl.TEXTURE_2D);
        console.log('mipmap');
-       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
     } else {
        // No, it's not a power of 2. Turn of mips and set wrapping to clamp to edge
+       console.log("no mipmap")
        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+       // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+       // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
     }
 
     callback()
