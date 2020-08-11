@@ -1,13 +1,24 @@
 # Blender MTL File: 'f1.blend'
-# Material Count: 1
+# Material Count: 2
 
-newmtl Wheel_rubber
-Ns 176.165286
+newmtl Tire
+Ns 225.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.034505 0.034505 0.034505
+Kd 0.800000 0.800000 0.800000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd c.jpg
+map_Kd tire3.jpg
+
+newmtl wheel_metal
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd wheel_metal.jpg
