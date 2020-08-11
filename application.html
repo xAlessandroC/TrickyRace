@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <META HTTP-EQUIV=”Pragma” CONTENT=”no-cache”>
+    <META HTTP-EQUIV=”Cache-Control” CONTENT=”no-cache”>
+    <title>Tricky Race</title>
+    </style>
+  </head>
+  <body>
+    <button id = "Button7">Increase A</button>
+    <button id = "Button8">Decrease A</button>
+    <button id = "Button9">Increase B</button>
+    <button id = "Button10">Decrease B</button>
+    <button id = "Button11">Increase C</button>
+    <button id = "Button12">Decrease C</button>
+    <div id="sterzo"></div>
+    <canvas width="500" height="500" id="my_Canvas" style="border: 2px solid black; width: 100%; height: 50%;"></canvas>
+    <div id="phi-theta">0-0</div>
+    <div id="a-b-c"></div>
+
+    <script id="3d-vertex-shader" type="x-shader/x-vertex">
+      attribute vec4 a_position;
+      attribute vec2 a_texcoord;
+
+      uniform mat4 u_matrix;
+
+      varying vec3 vcolor;
+      varying vec2 v_texcoord;
+
+      void main() {
+        // Multiply the position by the matrix.
+        gl_Position = u_matrix * a_position;
+
+        // Pass the texcoord to the fragment shader.
+        v_texcoord = a_texcoord;
+      }
+    </script>
+
+    <script id="3d-fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+
+      // Passed in from the vertex shader.
+      varying vec2 v_texcoord;
+
+      uniform sampler2D u_texture;
+
+      void main() {
+         gl_FragColor = texture2D(u_texture, v_texcoord);
+      }
+    </script>
+
+    <script type="text/javascript" src="js/model/track.js"></script>
+    <script type="text/javascript" src="js/model/car.js"></script>
+    <script type="text/javascript" src="js/model/collisionBox.js"></script>
+    <script type="text/javascript" src="js/utils/mouse_utils.js"></script>
+    <script type="text/javascript" src="js/interaction/keyboard.js"></script>
+    <script type="text/javascript" src="js/obj_reader/gl_mesh.js"></script>
+    <script type="text/javascript" src="js/obj_reader/OBJ_reader.js"></script>
+    <script type="text/javascript" src="js/utils/gl_mesh_utils.js"></script>
+    <script type="text/javascript" src="js/utils/m4.js"></script>
+    <script type="text/javascript" src="js/utils/webgl-utils.js"></script>
+
+    <script type="text/javascript" src="js/init_position.js"></script>
+    <script type="text/javascript" src="js/init_application.js"></script>
+  </body>
+</html>
