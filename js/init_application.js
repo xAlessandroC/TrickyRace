@@ -11,6 +11,10 @@ var a=-40,b=24,c=6
 // -40/24/6
 //b=116
 
+var l_x = -39, l_y = 100, l_z = 100;
+var step_x = 10, step_y = 10, step_z = 10;
+
+
 // settings
 var free_view = false
 
@@ -27,38 +31,6 @@ function loadTrack(){
       console.log("terrain caricato")
     })
   })
-}
-
-function loadCar2(){
-  var temp = []
-  readMesh('car/car.obj', 'car')
-  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w0.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w1.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w3.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w4.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh);
-   game_env['car2'] = new Car(temp, "car2")
-
-   render() })
-}
-
-function loadCar(){
-  var temp = []
-  readMesh('car/car.obj', 'car')
-  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w0.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w1.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w3.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('car/w4.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh);
-   game_env['car'] = new Car(temp, "car1")
-
-   target = game_env['car'].center
-
-   cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
-
-   // game_env['car'].setCollisionBox(game_env['car'].chassis)
-
-   render() })
 }
 
 function loadF1(){
@@ -164,6 +136,23 @@ function init_canvas(){
   document.getElementById("Button11").onclick = function(){c+=1; render()};
   document.getElementById("Button12").onclick = function(){c-=1; render()};
   document.getElementById("a-b-c").innerHTML = ""+a+"/"+b+"/"+c
+
+  webglLessonsUI.setupSlider("#button_x", {value: l_x, slide: updateX, min: -100, max: 100});
+  webglLessonsUI.setupSlider("#button_y", {value: l_y, slide: updateY, min: -100, max: 100});
+  webglLessonsUI.setupSlider("#button_z", {value: l_z, slide: updateZ, min: -100, max: 100});
+}
+
+function updateX(event, ui) {
+  l_x = ui.value;
+  render();
+}
+function updateY(event, ui) {
+  l_y = ui.value;
+  render();
+}
+function updateZ(event, ui) {
+  l_z = ui.value;
+  render();
 }
 
 const FRAMES_PER_SECOND = 30;
@@ -190,7 +179,5 @@ init_param()
 init_gl()
 loadTrack()
 loadF1()
-// loadCar()
-// loadCar2()
 render()
 window.requestAnimationFrame(update);

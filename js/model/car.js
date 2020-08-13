@@ -116,22 +116,6 @@ class Car {
     }
   }
 
-  // setCollisionBox(component){
-  //   var temp = computeDimensions(component.vertices)
-  //   var width = temp[0]
-  //   var length = temp[1]
-  //   var heigth = temp[2]
-  //
-  //   readMesh('collisionBox/box.obj')
-  //   .then((mesh)=>{
-  //     var w1 = width;   var l1 = length;   var h1 = heigth; var c1 = this.center
-  //     var cbox = new CollisionBox(c1, w1, l1, h1, component.getMatrix())
-  //     // cbox.updateVertices(initMatrix)
-  //     this.collisionBox = cbox
-  //     console.log("collision box loaded")
-  //   })
-  // }
-
   draw(view_mtx, projection_matrix, mode){
     this.chassis.draw(view_mtx, projection_matrix, mode)
     this.w0.draw(view_mtx, projection_matrix, mode)
@@ -139,7 +123,5 @@ class Car {
     this.w2.draw(view_mtx, projection_matrix, mode)
     this.w3.draw(view_mtx, projection_matrix, mode)
 
-    if (this.collisionBox!== undefined)
-      this.collisionBox.draw(view_mtx, projection_matrix, gl.LINES)
   }
 }
