@@ -45,7 +45,6 @@ class GL_Mesh{
       this.material_idx[property]["texture"] = t
       gl.bindTexture(gl.TEXTURE_2D, this.material_idx[property]["texture"]);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([Math.floor(Math.random(1231) * 256), Math.floor(Math.random(1231) * 256), Math.floor(Math.random(879) * 256), 255]));
-      // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255]));
 
       if( property !== "None" && property !== "default" && this.materials[property]["image"]!== undefined){// || Object.keys(this.materials).length !== 0){
         readImage(this.materials[property]["image"], this.material_idx[property]["texture"], render)
@@ -75,10 +74,28 @@ class GL_Mesh{
     this.bindAttributes(gl, program)
 
     view_mtx = m4.multiply(view_mtx, this.getMatrix())
+    var mw = view_mtx
     var res = m4.multiply(projection_matrix, view_mtx)
+
+    var worldMatrix = mw;
+    var worldInverseMatrix = m4.inverse(worldMatrix);
+    var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
     var uniforms = {
       u_matrix: res,
+      u_modelview: mw,
+      u_world: this.getMatrix(),
+      u_worldInverseTranspose: worldInverseTransposeMatrix,
+      u_lightWorldPosition: [l_x, l_y, l_z],
+      u_viewWorldPosition: cameraPosition,
+      u_color: [0.2, 1, 0.2, 1],
+      u_shininess: 2,
+      u_ka: [1.0, 1.0, 1.0],
+      u_kd: [1.0, 1.0, 1.0],
+      u_ks: [1.0, 1.0, 1.0],
+      u_lightColor: m4.normalize([1.0, 1.0, 1.0]),
+      u_ambientColor: m4.normalize([0.2, 0.2, 0.2]),
+      u_specularColor: m4.normalize([1.0, 1.0, 1.0]),
       u_texture: this.texture[0]
     };
 
@@ -98,6 +115,10 @@ class GL_Mesh{
     else{
       for (const property in this.materials) {
         uniforms["u_texture"] = this.material_idx[property]["texture"]
+        uniforms["u_shininess"] =  this.materials[property]["Ns"]
+        uniforms["u_ka"] =  this.materials[property]["Ka"]
+        uniforms["u_kd"] =  this.materials[property]["Kd"]
+        uniforms["u_ks"] =  this.materials[property]["Ks"]
         webglUtils.setUniforms(program.uniformSetters, uniforms)
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers["indices"]);

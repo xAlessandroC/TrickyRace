@@ -68,13 +68,13 @@ function parseMaterial(mtl_text){
       material[current_mtl]["Ns"] = Number((lines[i].trim().split(" "))[1])
     }
     if ( lines[i].trim().startsWith("Ka ")){
-      material[current_mtl]["Ka"] = Number((lines[i].trim().split(" "))[1])
+      material[current_mtl]["Ka"] = [Number((lines[i].trim().split(" "))[1]),Number((lines[i].trim().split(" "))[2]),Number((lines[i].trim().split(" "))[3])]
     }
     if ( lines[i].trim().startsWith("Kd ")){
-      material[current_mtl]["Kd"] = Number((lines[i].trim().split(" "))[1])
+      material[current_mtl]["Kd"] = [Number((lines[i].trim().split(" "))[1]),Number((lines[i].trim().split(" "))[2]),Number((lines[i].trim().split(" "))[3])]
     }
     if ( lines[i].trim().startsWith("Ks ")){
-      material[current_mtl]["Ks"] = Number((lines[i].trim().split(" "))[1])
+      material[current_mtl]["Ks"] = [Number((lines[i].trim().split(" "))[1]),Number((lines[i].trim().split(" "))[2]),Number((lines[i].trim().split(" "))[3])]
     }
     if ( lines[i].trim().startsWith("map_Kd ")){
       material[current_mtl]["image"] = (lines[i].trim().split(" "))[1]
@@ -87,10 +87,10 @@ function parseMaterial(mtl_text){
 // funzione per il parsing del file obj
 function parseObj(text){
   var lines = text.split('\n');
-  var vertices = []
+  var vertices = [], temp_vertices = []
   var faces = []
   var texcoords = [], temp_textcoords = []
-  var normals = []
+  var normals = [], temp_normals = []
   var mtl = ""
   var n_mtl = 0
   var mode = -1
@@ -107,14 +107,14 @@ function parseObj(text){
       mtl = (lines[i].trim().split(" "))[1]
     }
     if ( lines[i].startsWith("v ")){
-      vertices.push((lines[i].trim().split(" ").slice(1)).map(Number))
-      texcoords.push([])
+      temp_vertices.push((lines[i].trim().split(" ").slice(1)).map(Number))
+      // texcoords.push([])
     }
     if ( lines[i].startsWith("vt ")){
       temp_textcoords.push((lines[i].trim().split(" ").slice(1)).map(Number))
     }
     if ( lines[i].startsWith("vn ")){
-      normals.push((lines[i].trim().split(" ").slice(1)).map(Number))
+      temp_normals.push((lines[i].trim().split(" ").slice(1)).map(Number))
     }
     if ( lines[i].startsWith("usemtl ")){
       n_mtl ++
@@ -141,25 +141,12 @@ function parseObj(text){
         temp = (lines[i].trim().split(" ").slice(1)).map(x => x.split(delim)[0]).map(Number).map(x => x - 1)
 
       if(texture_active){
-        couples = (lines[i].trim().split(" ").slice(1)).map(x => [x.split(delim)[0],x.split(delim)[1]]).map(x => [Number(x[0])-1, Number(x[1])-1])
+        coll = (lines[i].trim().split(" ").slice(1)).map(x => [x.split(delim)[0],x.split(delim)[1],x.split(delim)[2]]).map(x => [Number(x[0])-1, Number(x[1])-1, Number(x[2])-1])
         var k = 0
-        couples.forEach(element => {
-          if(dict[element[0]] === undefined)
-            dict[element[0]] = []
-
-          if(texcoords[element[0]].length === 0){
-            texcoords[element[0]] = temp_textcoords[element[1]]
-          }else{
-            if(texcoords[element[0]] !== temp_textcoords[element[1]]){
-              var entry = Object()
-              entry.value = element[1]
-              entry.material = current_mtl
-              entry.f_idx = faces[current_mtl].length
-              entry.v_idx = k
-              dict[element[0]].push(entry)
-            }
-          }
-          k++
+        coll.forEach(element => {
+          vertices.push(temp_vertices[element[0]])
+          texcoords.push(temp_textcoords[element[1]])
+          normals.push(temp_normals[element[2]])
         })
       }
 
@@ -171,7 +158,14 @@ function parseObj(text){
         if(faces[current_mtl]!==[])
           faces[current_mtl] = []
       }
-      faces[current_mtl].push(temp)
+
+      var x = 0
+      var temp_entry = []
+      for(x = 1;x<=temp.length;x++){
+        temp_entry.push(vertices.length-x)
+        // faces[current_mtl].push([vertices.length-1,vertices.length-2,vertices.length-3])
+      }
+      faces[current_mtl].push(temp_entry)
     }
   }
 

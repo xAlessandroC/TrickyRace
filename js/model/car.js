@@ -100,37 +100,7 @@ class Car {
     mtx_w3 = m4.yRotate(mtx_w3, degToRad(this.mozzo));
     mtx_w3 = m4.translate(mtx_w3, -this.centerw3[0],-this.centerw3[1],-this.centerw3[2])
     this.w3.setMatrix(m4.copy(mtx_w3))
-
-    // collision box
-    if (this.collisionBox !== undefined){
-      this.collisionBox.center = [this.center[0]+this.shift_chassis,this.center[1],this.center[2]]
-
-      var mtx = m4.identity()
-      mtx = m4.multiply(mtx, m4.copy(this.chassis.getMatrix()))
-      mtx = m4.translate(mtx, 0.0,0.0,0.0)
-      mtx = m4.scale(mtx, 1.0, 1.0, 1.0)
-      mtx = m4.translate(mtx, this.shift_chassis, 0.0, 0.0)
-      this.collisionBox.box.setMatrix(mtx)
-
-      this.collisionBox.updateVertices(mtx)
-    }
   }
-
-  // setCollisionBox(component){
-  //   var temp = computeDimensions(component.vertices)
-  //   var width = temp[0]
-  //   var length = temp[1]
-  //   var heigth = temp[2]
-  //
-  //   readMesh('collisionBox/box.obj')
-  //   .then((mesh)=>{
-  //     var w1 = width;   var l1 = length;   var h1 = heigth; var c1 = this.center
-  //     var cbox = new CollisionBox(c1, w1, l1, h1, component.getMatrix())
-  //     // cbox.updateVertices(initMatrix)
-  //     this.collisionBox = cbox
-  //     console.log("collision box loaded")
-  //   })
-  // }
 
   draw(view_mtx, projection_matrix, mode){
     this.chassis.draw(view_mtx, projection_matrix, mode)
@@ -139,7 +109,5 @@ class Car {
     this.w2.draw(view_mtx, projection_matrix, mode)
     this.w3.draw(view_mtx, projection_matrix, mode)
 
-    if (this.collisionBox!== undefined)
-      this.collisionBox.draw(view_mtx, projection_matrix, gl.LINES)
   }
 }

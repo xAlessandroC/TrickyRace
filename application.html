@@ -13,6 +13,11 @@
     <button id = "Button10">Decrease B</button>
     <button id = "Button11">Increase C</button>
     <button id = "Button12">Decrease C</button>
+    <div>
+      <button id="button_x">X</input>
+      <button id="button_y">Y</input>
+      <button id="button_z">Z</input>
+    </div>
     <div id="sterzo"></div>
     <canvas width="500" height="500" id="my_Canvas" style="border: 2px solid black; width: 100%; height: 50%;"></canvas>
     <div id="phi-theta">0-0</div>
@@ -21,11 +26,15 @@
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
       attribute vec4 a_position;
       attribute vec2 a_texcoord;
+      attribute vec3 a_normal;
 
       uniform mat4 u_matrix;
+      uniform mat4 u_modelview;
+      uniform mat4 u_worldInverseTranspose;
 
-      varying vec3 vcolor;
       varying vec2 v_texcoord;
+      varying vec3 normalInterp;
+      varying vec3 vertPos;
 
       void main() {
         // Multiply the position by the matrix.
@@ -33,19 +42,50 @@
 
         // Pass the texcoord to the fragment shader.
         v_texcoord = a_texcoord;
+
+        vec4 vertPos4 = u_modelview * a_position;
+        vertPos = vec3(vertPos4) / vertPos4.w;
+        normalInterp = mat3(u_worldInverseTranspose) * a_normal;
       }
     </script>
 
     <script id="3d-fragment-shader" type="x-shader/x-fragment">
       precision mediump float;
 
+      uniform sampler2D u_texture;
+      uniform float u_shininess;
+      uniform vec3 u_ka;
+      uniform vec3 u_kd;
+      uniform vec3 u_ks;
+      uniform vec3 u_lightColor;
+      uniform vec3 u_ambientColor;
+      uniform vec3 u_specularColor;
+
+      uniform vec3 u_lightWorldPosition;
+
       // Passed in from the vertex shader.
       varying vec2 v_texcoord;
-
-      uniform sampler2D u_texture;
+      varying vec3 normalInterp;
+      varying vec3 vertPos;
 
       void main() {
-         gl_FragColor = texture2D(u_texture, v_texcoord);
+        vec3 N = normalize(normalInterp);
+        vec3 L = normalize(u_lightWorldPosition - vertPos);
+        // Lambert's cosine law
+        float lambertian = max(dot(N, L), 0.0);
+        float specular = 0.0;
+        if(lambertian > 0.0) {
+        vec3 R = reflect(-L, N); // Reflected light vector
+        vec3 V = normalize(-vertPos); // Vector to viewer
+        // Compute the specular term
+        float specAngle = max(dot(R, V), 0.0);
+        specular = pow(specAngle, u_shininess);
+        }
+        gl_FragColor = texture2D(u_texture, v_texcoord);
+        vec4 temp = texture2D(u_texture, v_texcoord);
+        gl_FragColor.rgb = vec3(u_ka * temp.rgb +
+                            u_kd * lambertian * u_lightColor +
+                            u_ks * specular * u_specularColor);
       }
     </script>
 
@@ -59,6 +99,7 @@
     <script type="text/javascript" src="js/utils/gl_mesh_utils.js"></script>
     <script type="text/javascript" src="js/utils/m4.js"></script>
     <script type="text/javascript" src="js/utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="js/utils/webgl-lessons-ui.js"></script>
 
     <script type="text/javascript" src="js/init_position.js"></script>
     <script type="text/javascript" src="js/init_application.js"></script>
