@@ -7,7 +7,7 @@ class Car {
     this.w2 = components[3]
     this.w3 = components[4]
 
-    this.collisionBox = undefined
+    this.positionObserver = []
 
     initialize_position_car(components);
 
@@ -69,7 +69,6 @@ class Car {
 
     this.center = [0,0,0,1]
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
-    // this.collisionBox.center = this.center
 
     // wheel 1
     var mtx_w0 = m4.copy(this.chassis.getMatrix())
@@ -100,6 +99,18 @@ class Car {
     mtx_w3 = m4.yRotate(mtx_w3, degToRad(this.mozzo));
     mtx_w3 = m4.translate(mtx_w3, -this.centerw3[0],-this.centerw3[1],-this.centerw3[2])
     this.w3.setMatrix(m4.copy(mtx_w3))
+
+    this.notifyPositionObservers(this.chassis.getMatrix())
+  }
+
+  addPositionObserver(observer){
+    this.positionObserver.push(observer)
+  }
+
+  notifyPositionObservers(mtx){
+    this.positionObserver.forEach(observer=>{
+      observer.update(mtx)
+    })
   }
 
   draw(view_mtx, projection_matrix, mode){
@@ -109,5 +120,8 @@ class Car {
     this.w2.draw(view_mtx, projection_matrix, mode)
     this.w3.draw(view_mtx, projection_matrix, mode)
 
+    this.positionObserver.forEach(observer=>{
+      observer.draw(view_mtx, projection_matrix, mode)
+    })
   }
 }

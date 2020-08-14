@@ -49,7 +49,30 @@ function loadF1(){
 
    cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
 
-   render() })
+   var dimensions = computeDimensions(temp[0])
+
+   var box = new Box(dimensions[0]/2, dimensions[1]/2, dimensions[2]/2, 'box')
+   game_env['car'].addPositionObserver(box)
+   game_env['car'].updatePosition()
+  })
+}
+
+function loadF1_2(){
+  var temp = []
+  readMesh('f1_car/chassis.obj', 'car')
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh);
+   game_env['car2'] = new Car(temp, "car2")
+
+   var dimensions = computeDimensions(temp[0])
+
+   var box = new Box(dimensions[0]/2, dimensions[1]/2, dimensions[2]/2, 'box2')
+   game_env['car2'].addPositionObserver(box)
+   game_env['car2'].updatePosition()
+  })
 }
 
 function render(){
@@ -161,13 +184,15 @@ function update(time){
     if(time-lastFrameTime < FRAME_MIN_TIME){
       if(game_env['car']!==undefined){
         (game_env['car']).carStep();
+        if(game_env['car2']!==undefined){
+          (game_env['car'].positionObserver[0]).hasCollided(game_env['car2'].positionObserver[0])
+        }
       }
       window.requestAnimationFrame(update);
       return;
     }
     lastFrameTime = time;
     render();
-    console.log("render")
     window.requestAnimationFrame(update);
 }
 
@@ -176,5 +201,6 @@ init_param()
 init_gl()
 loadTrack()
 loadF1()
+loadF1_2()
 render()
 window.requestAnimationFrame(update);
