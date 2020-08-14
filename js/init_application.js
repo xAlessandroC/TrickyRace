@@ -49,8 +49,6 @@ function loadF1(){
 
    cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
 
-   // game_env['car'].setCollisionBox(game_env['car'].chassis)
-
    render() })
 }
 
@@ -76,7 +74,6 @@ function render(){
     mesh.draw(matrix, projectionMatrix)
   }
   document.getElementById("a-b-c").innerHTML = ""+a+"/"+b+"/"+c
-  // window.requestAnimationFrame(render)
 }
 
 function clear(){
@@ -164,8 +161,6 @@ function update(time){
     if(time-lastFrameTime < FRAME_MIN_TIME){
       if(game_env['car']!==undefined){
         (game_env['car']).carStep();
-        // if(game_env['car2'].collisionBox!==undefined)
-        //   (game_env['car']).collisionBox.hasCollided(game_env['car2'].collisionBox)
       }
       window.requestAnimationFrame(update);
       return;

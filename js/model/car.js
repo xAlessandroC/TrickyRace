@@ -11,7 +11,7 @@ class Car {
 
     initialize_position_car(components);
 
-    this.center = computeCenter(this.chassis, this, this.chassis.getMatrix())
+    this.center = computeCenter(this.chassis)
     this.centerw0 = computeCenter(this.w0)
     this.centerw1 = computeCenter(this.w1)
     this.centerw2 = computeCenter(this.w2)
