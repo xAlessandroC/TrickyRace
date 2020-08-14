@@ -35,6 +35,7 @@ function initialize_position_car(components){
 
     // mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
 
+    mesh_mtx = m4.translate(mesh_mtx, 0.0, 0.0, 2.0)
     mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-90))
 
     component.setMatrix(mesh_mtx)

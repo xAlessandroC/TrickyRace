@@ -100,20 +100,6 @@ class Car {
     mtx_w3 = m4.yRotate(mtx_w3, degToRad(this.mozzo));
     mtx_w3 = m4.translate(mtx_w3, -this.centerw3[0],-this.centerw3[1],-this.centerw3[2])
     this.w3.setMatrix(m4.copy(mtx_w3))
-
-    // collision box
-    if (this.collisionBox !== undefined){
-      this.collisionBox.center = [this.center[0]+this.shift_chassis,this.center[1],this.center[2]]
-
-      var mtx = m4.identity()
-      mtx = m4.multiply(mtx, m4.copy(this.chassis.getMatrix()))
-      mtx = m4.translate(mtx, 0.0,0.0,0.0)
-      mtx = m4.scale(mtx, 1.0, 1.0, 1.0)
-      mtx = m4.translate(mtx, this.shift_chassis, 0.0, 0.0)
-      this.collisionBox.box.setMatrix(mtx)
-
-      this.collisionBox.updateVertices(mtx)
-    }
   }
 
   draw(view_mtx, projection_matrix, mode){

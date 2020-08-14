@@ -45,7 +45,7 @@
 
         vec4 vertPos4 = u_modelview * a_position;
         vertPos = vec3(vertPos4) / vertPos4.w;
-        normalInterp = vec3(u_worldInverseTranspose * vec4(a_normal, 0.0));
+        normalInterp = mat3(u_worldInverseTranspose) * a_normal;
       }
     </script>
 
