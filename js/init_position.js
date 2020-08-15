@@ -41,3 +41,12 @@ function initialize_position_car(components){
     component.setMatrix(mesh_mtx)
   })
 }
+
+function initialize_position_obstacle(mesh){
+  mesh_mtx = mesh.getMatrix()
+
+  mesh_mtx = m4.scale(mesh_mtx, 4,4,4)
+  mesh_mtx = m4.translate(mesh_mtx, 10.0, 0.0, 33.0)
+
+  mesh.setMatrix(mesh_mtx)
+}

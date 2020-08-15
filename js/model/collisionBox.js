@@ -112,14 +112,6 @@ class CollisionBox {
            (this.min_Y <= box.max_Y && this.max_Y >= box.min_Y) &&
            (this.min_Z <= box.max_Z && this.max_Z >= box.min_Z);
 
-    if(r===true){
-      this.collided()
-      box.collided()
-    }else{
-      this.clean()
-      box.clean()
-    }
-
     return r
   }
 

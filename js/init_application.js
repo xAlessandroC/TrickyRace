@@ -37,7 +37,7 @@ function loadTrack(){
 
 function loadF1(){
   var temp = []
-  readMesh('f1_car/chassis.obj', 'car')
+  readMesh('f1_car/chassis.obj')
   .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj') })
   .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj') })
   .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj') })
@@ -54,7 +54,7 @@ function loadF1(){
 
 function loadF1_2(){
   var temp = []
-  readMesh('f1_car/chassis.obj', 'car')
+  readMesh('f1_car/chassis.obj')
   .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj') })
   .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj') })
   .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj') })
@@ -63,6 +63,16 @@ function loadF1_2(){
    game_env['car2'] = new Car(temp, "car2")
 
    game_env['car2'].setCollisionBox()
+  })
+}
+
+function loadObstacle(){
+  var temp = []
+  readMesh('obstacle/obstacle.obj')
+  .then((mesh)=>{
+    game_env['obstacle1'] = new Obstacle(mesh, "obstacle1")
+
+    game_env['obstacle1'].setCollisionBox()
   })
 }
 
@@ -188,7 +198,12 @@ function update(time){
 function checkCollision(){
   var size = Object.keys(game_env).length
   var keys = Object.keys(game_env)
+  var temp = new Object()
   var i = 0, j = 0
+
+  for(i=0;i<size;i++){
+    temp[i] = "false"
+  }
 
   for(i=0;i<size;i++){
     for(j=i+1;j<size;j++){
@@ -196,8 +211,20 @@ function checkCollision(){
         var collision = game_env[keys[i]].collisionBox.hasCollided(game_env[keys[j]].collisionBox)
 
         if(collision){
+          temp[i] = "true"
+          temp[j] = "true"
           console.log("Collided " + game_env[keys[i]].id + " and " + game_env[keys[j]].id)
         }
+      }
+    }
+  }
+
+  for(i=0;i<size;i++){
+    if(game_env[keys[i]].hasCollisionBox()){
+      if(temp[i] == "false"){
+        game_env[keys[i]].collisionBox.clean()
+      }else{
+        game_env[keys[i]].collisionBox.collided()
       }
     }
   }
@@ -209,5 +236,6 @@ init_gl()
 loadTrack()
 loadF1()
 loadF1_2()
+loadObstacle()
 render()
 window.requestAnimationFrame(update);

@@ -7,8 +7,6 @@ class Car {
     this.w2 = components[3]
     this.w3 = components[4]
 
-    this.positionObserver = []
-
     initialize_position_car(components);
 
     this.center = computeCenter(this.chassis)
