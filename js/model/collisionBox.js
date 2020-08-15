@@ -58,7 +58,7 @@ class CollisionBox {
 
     this.box = new GL_Mesh(this.vertices.flat(),collisionBoxTexture,[],collisionBoxIndices,collisionBoxMaterial,gl,gl.LINES)
     this.clean()
-    this.box.setMatrix(m4.scale(this.box.getMatrix(),this.width,this.height,this.length))
+    this.box.setMatrix(m4.scale(this.box.getMatrix(),this.width,this.length,this.height))
     this.updateBox()
   }
 
@@ -74,7 +74,7 @@ class CollisionBox {
 
   update(mtx){
     this.box.setMatrix(mtx)
-    this.box.setMatrix(m4.scale(this.box.getMatrix(),this.width,this.height,this.length))
+    this.box.setMatrix(m4.scale(this.box.getMatrix(),this.width,this.length,this.height))
     this.updateBox()
   }
 

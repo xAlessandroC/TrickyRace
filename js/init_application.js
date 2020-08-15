@@ -225,6 +225,7 @@ function checkCollision(){
         game_env[keys[i]].collisionBox.clean()
       }else{
         game_env[keys[i]].collisionBox.collided()
+        game_env[keys[i]].onCollision()
       }
     }
   }

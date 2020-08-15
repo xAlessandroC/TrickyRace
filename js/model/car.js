@@ -98,11 +98,14 @@ class Car {
     mtx_w3 = m4.translate(mtx_w3, -this.centerw3[0],-this.centerw3[1],-this.centerw3[2])
     this.w3.setMatrix(m4.copy(mtx_w3))
 
-    this.collisionBox.update(this.chassis.getMatrix())
+
+    var box_mtx = m4.copy(this.chassis.getMatrix())
+    box_mtx = m4.translate(box_mtx, 0, 0, 3.5)
+    this.collisionBox.update(box_mtx)
   }
 
   setCollisionBox(){
-    var dimensions = computeDimensions(this.chassis)
+    var dimensions = computeDimensions([this.chassis,this.w0, this.w1, this.w2, this.w3])
 
     var box = new CollisionBox(dimensions[0]/2, dimensions[1]/2, dimensions[2]/2, this, 'box')
     this.collisionBox = box
@@ -111,6 +114,10 @@ class Car {
 
   hasCollisionBox(){
     return this.collisionBox !== undefined
+  }
+
+  onCollision(){
+    
   }
 
   draw(view_mtx, projection_matrix, mode){

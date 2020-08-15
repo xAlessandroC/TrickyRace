@@ -7,7 +7,7 @@ class Obstacle {
   }
 
   setCollisionBox(){
-    var dimensions = computeDimensions(this.obstacle)
+    var dimensions = computeDimensions([this.obstacle])
 
     var box = new CollisionBox(dimensions[0]/2, dimensions[1]/2, dimensions[2]/2, this, 'box')
     this.collisionBox = box
@@ -17,6 +17,10 @@ class Obstacle {
 
   hasCollisionBox(){
     return this.collisionBox !== undefined
+  }
+
+  onCollision(){
+    delete game_env[this.id] 
   }
 
   draw(view_mtx, projection_matrix, mode){

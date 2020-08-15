@@ -86,15 +86,18 @@ function computeCenter(mesh){
   return center
 }
 
-function computeDimensions(mesh){
-    var vertices = mesh.vertices
+function computeDimensions(meshes){
+    var vertices = meshes[0].vertices
     var max = [vertices[0],vertices[1],vertices[2]]
     var min = [vertices[0],vertices[1],vertices[2]]
-    var i = 0
-    vertices.forEach((vertex)=>{
-      if(vertex>max[i]) max[i] = vertex
-      if(vertex<min[i]) min[i] = vertex
-      i = (i + 1) % 3
+
+    meshes.forEach((mesh)=>{
+      var i = 0
+      mesh.vertices.forEach((vertex)=>{
+        if(vertex>max[i]) max[i] = vertex
+        if(vertex<min[i]) min[i] = vertex
+        i = (i + 1) % 3
+      })
     })
 
   //collisionbox
