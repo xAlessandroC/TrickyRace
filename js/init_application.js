@@ -38,40 +38,31 @@ function loadTrack(){
 function loadF1(){
   var temp = []
   readMesh('f1_car/chassis.obj', 'car')
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj') })
   .then((mesh)=>{ temp.push(mesh);
-   game_env['car'] = new Car(temp, "car1")
+   game_env['car'] = new Car(temp, "car")
+
+   game_env['car'].setCollisionBox()
 
    target = game_env['car'].center
-
    cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
-
-   var dimensions = computeDimensions(temp[0])
-
-   var box = new Box(dimensions[0]/2, dimensions[1]/2, dimensions[2]/2, 'box')
-   game_env['car'].addPositionObserver(box)
-   game_env['car'].updatePosition()
   })
 }
 
 function loadF1_2(){
   var temp = []
   readMesh('f1_car/chassis.obj', 'car')
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj', 'w0') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj', 'w0') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj') })
   .then((mesh)=>{ temp.push(mesh);
    game_env['car2'] = new Car(temp, "car2")
 
-   var dimensions = computeDimensions(temp[0])
-
-   var box = new Box(dimensions[0]/2, dimensions[1]/2, dimensions[2]/2, 'box2')
-   game_env['car2'].addPositionObserver(box)
-   game_env['car2'].updatePosition()
+   game_env['car2'].setCollisionBox()
   })
 }
 
@@ -184,9 +175,7 @@ function update(time){
     if(time-lastFrameTime < FRAME_MIN_TIME){
       if(game_env['car']!==undefined){
         (game_env['car']).carStep();
-        if(game_env['car2']!==undefined){
-          (game_env['car'].positionObserver[0]).hasCollided(game_env['car2'].positionObserver[0])
-        }
+        checkCollision()
       }
       window.requestAnimationFrame(update);
       return;
@@ -194,6 +183,24 @@ function update(time){
     lastFrameTime = time;
     render();
     window.requestAnimationFrame(update);
+}
+
+function checkCollision(){
+  var size = Object.keys(game_env).length
+  var keys = Object.keys(game_env)
+  var i = 0, j = 0
+
+  for(i=0;i<size;i++){
+    for(j=i+1;j<size;j++){
+      if(game_env[keys[i]].hasCollisionBox() && game_env[keys[j]].hasCollisionBox()){
+        var collision = game_env[keys[i]].collisionBox.hasCollided(game_env[keys[j]].collisionBox)
+
+        if(collision){
+          console.log("Collided " + game_env[keys[i]].id + " and " + game_env[keys[j]].id)
+        }
+      }
+    }
+  }
 }
 
 init_canvas()

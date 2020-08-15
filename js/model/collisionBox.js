@@ -1,37 +1,27 @@
-var collisionBoxIndices
-var collisionBoxTexture
-var collisionBoxVertices
-var collisionBoxMaterial
-
 class CollisionBox {
-  constructor(center, width, length, height, mesh, game_obj, initMatrix) {
-    this.center = center
+  constructor(width, length, height, game_obj, name) {
+    this.id = name
+    this.game_obj = game_obj
+
     this.width = width
     this.length = length
     this.height = height
 
-    this.box = mesh
-
-    var collisionBoxVertices = [center[0] - width/2, center[1] - length/2, center[2] - height/2,
-                            center[0] - width/2, center[1] - length/2, center[2] + height/2,
-                            center[0] - width/2, center[1] + length/2, center[2] - height/2,
-                            center[0] - width/2, center[1] + length/2, center[2] + height/2,
-                            center[0] + width/2, center[1] - length/2, center[2] - height/2,
-                            center[0] + width/2, center[1] - length/2, center[2] + height/2,
-                            center[0] + width/2, center[1] + length/2, center[2] - height/2,
-                            center[0] + width/2, center[1] + length/2, center[2] + height/2]
+    this.min_X = 0; this.max_X = 0;
+    this.min_Y = 0; this.max_Y = 0;
+    this.min_Z = 0; this.max_Z = 0;
 
     this.vertices = []
-    this.vertices.push([collisionBoxVertices[0],collisionBoxVertices[1],collisionBoxVertices[2]])
-    this.vertices.push([collisionBoxVertices[3],collisionBoxVertices[4],collisionBoxVertices[5]])
-    this.vertices.push([collisionBoxVertices[6],collisionBoxVertices[7],collisionBoxVertices[8]])
-    this.vertices.push([collisionBoxVertices[9],collisionBoxVertices[10],collisionBoxVertices[11]])
-    this.vertices.push([collisionBoxVertices[12],collisionBoxVertices[13],collisionBoxVertices[14]])
-    this.vertices.push([collisionBoxVertices[15],collisionBoxVertices[16],collisionBoxVertices[17]])
-    this.vertices.push([collisionBoxVertices[18],collisionBoxVertices[19],collisionBoxVertices[20]])
-    this.vertices.push([collisionBoxVertices[21],collisionBoxVertices[22],collisionBoxVertices[23]])
+    this.vertices.push([-1.0, -1.0, -1.0])
+    this.vertices.push([-1.0, -1.0, 1.0])
+    this.vertices.push([-1.0, 1.0, -1.0])
+    this.vertices.push([-1.0, 1.0, 1.0])
+    this.vertices.push([1.0, -1.0, -1.0])
+    this.vertices.push([1.0, -1.0, 1.0])
+    this.vertices.push([1.0, 1.0, -1.0])
+    this.vertices.push([1.0, 1.0, 1.0])
 
-    collisionBoxIndices = []
+    var collisionBoxIndices = []
     collisionBoxIndices["material"] = [ [0, 1],
       [1, 3],
       [3, 2],
@@ -45,15 +35,15 @@ class CollisionBox {
       [2, 6],
       [3, 7]]
 
-    collisionBoxMaterial = []
+    var collisionBoxMaterial = []
     collisionBoxMaterial["material"] = {
-      "Ka": 1,
-      "Kd": 0.8,
-      "Ks": 0.5,
+      "Ka": [1,1,1],
+      "Kd": [0.8,0.8,0.8],
+      "Ks": [0.5,0.5,0.5],
       "Ns": 323.999994
     }
 
-    collisionBoxTexture = [0.1, 0.1,
+    var collisionBoxTexture = [0.1, 0.1,
       0.1,0.1,
       0.1,0.1,
       0.1,0.1,
@@ -66,24 +56,10 @@ class CollisionBox {
       0.1,0.1,
       0.1,0.1]
 
-    this.box = new GL_Mesh(collisionBoxVertices,collisionBoxTexture,[],collisionBoxIndices,collisionBoxMaterial,gl,gl.LINES)
-    var nv = this.vertices.flat()
-    this.test = new GL_Mesh(nv,collisionBoxTexture,[],collisionBoxIndices,collisionBoxMaterial,gl,gl.LINES)
-
+    this.box = new GL_Mesh(this.vertices.flat(),collisionBoxTexture,[],collisionBoxIndices,collisionBoxMaterial,gl,gl.LINES)
     this.clean()
-
-    var mtx = m4.identity()
-    mtx = m4.multiply(mtx, initMatrix)
-    mtx = m4.translate(mtx, 0.0,0.0,0.0)
-    mtx = m4.scale(mtx, 1.0, 1.0, 1.0)
-    this.box.setMatrix(mtx)
-
-    this.updateVertices(mtx)
-  }
-
-  draw(view_mtx, projection_matrix, mode){
-    this.box.draw(view_mtx, projection_matrix, mode)
-    this.test.draw(view_mtx, projection_matrix, mode)
+    this.box.setMatrix(m4.scale(this.box.getMatrix(),this.width,this.height,this.length))
+    this.updateBox()
   }
 
   clean(){
@@ -96,55 +72,58 @@ class CollisionBox {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255]));
   }
 
-  updateVertices(mtx){
-    for(var i = 0; i<this.vertices.length; i++){
-      var t = [this.vertices[i][0],this.vertices[i][1],this.vertices[i][2], 1]
-      var r = m4.multiply(mtx,t).slice(0,3)
-      this.vertices[i] = r
+  update(mtx){
+    this.box.setMatrix(mtx)
+    this.box.setMatrix(m4.scale(this.box.getMatrix(),this.width,this.height,this.length))
+    this.updateBox()
+  }
+
+  updateBox(){
+    var i = 0
+    var vertex = [this.vertices[0][0],this.vertices[0][0],this.vertices[0][0],1.0]
+    var init = m4.multiply(this.box.getMatrix(),vertex).slice(0,3)
+
+    var min_x = init[0], max_x = init[0]
+    var min_y = init[1], max_y = init[1]
+    var min_z = init[2], max_z = init[2]
+
+
+    for(i=1;i<this.vertices.length;i++){
+      var vertex = [this.vertices[i][0],this.vertices[i][0],this.vertices[i][0],1.0]
+      var temp = m4.multiply(this.box.getMatrix(),vertex).slice(0,3)
+
+      if(temp[0]>max_x) max_x = temp[0]
+      if(temp[0]<min_x) min_x = temp[0]
+
+      if(temp[1]>max_y) max_y = temp[1]
+      if(temp[1]<min_y) min_y = temp[1]
+
+      if(temp[2]>max_z) max_z = temp[2]
+      if(temp[2]<min_z) min_z = temp[2]
     }
 
-    // var nv = this.vertices.flat()
-    // this.test = new GL_Mesh(nv,collisionBoxTexture,[],collisionBoxIndices,collisionBoxMaterial,gl,gl.LINES)
+    this.min_X = min_x; this.max_X = max_x
+    this.min_Y = min_y; this.max_Y = max_y
+    this.min_Z = min_z; this.max_Z = max_z
   }
 
   hasCollided(box){
-    var minX_A = this.vertices[0][0]; var maxX_A = this.vertices[0][0];
-    var minY_A = this.vertices[0][1]; var maxY_A = this.vertices[0][1];
-    var minZ_A = this.vertices[0][2]; var maxZ_A = this.vertices[0][2];
+    var r =  (this.min_X <= box.max_X && this.max_X >= box.min_X) &&
+           (this.min_Y <= box.max_Y && this.max_Y >= box.min_Y) &&
+           (this.min_Z <= box.max_Z && this.max_Z >= box.min_Z);
 
-    var minX_B = box.vertices[0][0]; var maxX_B = box.vertices[0][0];
-    var minY_B = box.vertices[0][1]; var maxY_B = box.vertices[0][1];
-    var minZ_B = box.vertices[0][2]; var maxZ_B = box.vertices[0][2];
+    if(r===true){
+      this.collided()
+      box.collided()
+    }else{
+      this.clean()
+      box.clean()
+    }
 
-    var i = 0
-    this.vertices.forEach((vertex)=>{
-      if(vertex[0]>maxX_A) maxX_A = vertex[0]
-      if(vertex[0]<minX_A) minX_A = vertex[0]
+    return r
+  }
 
-      if(vertex[1]>maxY_A) maxY_A = vertex[1]
-      if(vertex[1]<minY_A) minY_A = vertex[1]
-
-      if(vertex[2]>maxZ_A) maxZ_A = vertex[2]
-      if(vertex[2]<minZ_A) minZ_A = vertex[2]
-
-    })
-
-    box.vertices.forEach((vertex)=>{
-      if(vertex[0]>maxX_B) maxX_B = vertex[0]
-      if(vertex[0]<minX_B) minX_B = vertex[0]
-
-      if(vertex[1]>maxY_B) maxY_B = vertex[1]
-      if(vertex[1]<minY_B) minY_B = vertex[1]
-
-      if(vertex[2]>maxZ_B) maxZ_B = vertex[2]
-      if(vertex[2]<minZ_B) minZ_B = vertex[2]
-
-    })
-
-    var r =  (minX_A <= maxX_B && maxX_A >= minX_B) &&
-           (minY_A <= maxY_B && maxY_A >= minY_B) &&
-           (minZ_A <= maxZ_B && maxZ_A >= minZ_B);
-
-    console.log(r)
+  draw(view_mtx, projection_matrix, mode){
+    this.box.draw(view_mtx, projection_matrix, gl.LINES)
   }
 }

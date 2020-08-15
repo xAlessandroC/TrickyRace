@@ -100,17 +100,19 @@ class Car {
     mtx_w3 = m4.translate(mtx_w3, -this.centerw3[0],-this.centerw3[1],-this.centerw3[2])
     this.w3.setMatrix(m4.copy(mtx_w3))
 
-    this.notifyPositionObservers(this.chassis.getMatrix())
+    this.collisionBox.update(this.chassis.getMatrix())
   }
 
-  addPositionObserver(observer){
-    this.positionObserver.push(observer)
+  setCollisionBox(){
+    var dimensions = computeDimensions(this.chassis)
+
+    var box = new CollisionBox(dimensions[0]/2, dimensions[1]/2, dimensions[2]/2, this, 'box')
+    this.collisionBox = box
+    this.updatePosition()
   }
 
-  notifyPositionObservers(mtx){
-    this.positionObserver.forEach(observer=>{
-      observer.update(mtx)
-    })
+  hasCollisionBox(){
+    return this.collisionBox !== undefined
   }
 
   draw(view_mtx, projection_matrix, mode){
@@ -120,8 +122,6 @@ class Car {
     this.w2.draw(view_mtx, projection_matrix, mode)
     this.w3.draw(view_mtx, projection_matrix, mode)
 
-    this.positionObserver.forEach(observer=>{
-      observer.draw(view_mtx, projection_matrix, mode)
-    })
+    this.collisionBox.draw(view_mtx, projection_matrix, mode)
   }
 }
