@@ -20,62 +20,6 @@ var step_x = 10, step_y = 10, step_z = 10;
 // settings
 var free_view = false
 
-function loadTrack(){
-  readMesh('track/track3.obj')
-  .then((mesh)=>{
-    game_env['track'] = new Track(mesh)
-    // render()
-    console.log("track caricato")
-    readMesh('track/terrain.obj')
-    .then((mesh)=>{
-      game_env['terrain'] = new Track(mesh)
-      // render()
-      console.log("terrain caricato")
-    })
-  })
-}
-
-function loadF1(){
-  var temp = []
-  readMesh('f1_car/chassis.obj')
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj') })
-  .then((mesh)=>{ temp.push(mesh);
-   game_env['car'] = new Car(temp, "car")
-
-   game_env['car'].setCollisionBox()
-
-   target = game_env['car'].center
-   cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
-  })
-}
-
-function loadF1_2(){
-  var temp = []
-  readMesh('f1_car/chassis.obj')
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj') })
-  .then((mesh)=>{ temp.push(mesh);
-   game_env['car2'] = new Car(temp, "car2")
-
-   game_env['car2'].setCollisionBox()
-  })
-}
-
-function loadObstacle(){
-  var temp = []
-  readMesh('obstacle/obstacle.obj')
-  .then((mesh)=>{
-    game_env['obstacle1'] = new Obstacle(mesh, "obstacle1")
-
-    game_env['obstacle1'].setCollisionBox()
-  })
-}
-
 function render(){
   clear()
 
@@ -183,16 +127,29 @@ const FRAME_MIN_TIME = (1000/60) * (60 / FRAMES_PER_SECOND) - (1000/60) * 0.5;
 var lastFrameTime = 0;
 function update(time){
     if(time-lastFrameTime < FRAME_MIN_TIME){
-      if(game_env['car']!==undefined){
-        (game_env['car']).carStep();
-        checkCollision()
-      }
+      frameStep()
       window.requestAnimationFrame(update);
       return;
     }
     lastFrameTime = time;
     render();
     window.requestAnimationFrame(update);
+}
+
+function frameStep(){
+  if(game_env['car'] !== undefined){
+    (game_env['car']).carStep();
+    checkCollision()
+  }
+
+  var size = Object.keys(game_env).length
+  var keys = Object.keys(game_env)
+
+  for(i=0;i<size;i++){
+    if(keys[i].startsWith("obstacle")){
+      game_env[keys[i]].obstacleStep()
+    }
+  }
 }
 
 function checkCollision(){
@@ -234,9 +191,6 @@ function checkCollision(){
 init_canvas()
 init_param()
 init_gl()
-loadTrack()
-loadF1()
-loadF1_2()
-loadObstacle()
+initScene()
 render()
 window.requestAnimationFrame(update);
