@@ -3,7 +3,7 @@ function initScene(){
   loadF1()
   // loadF1_2()
   loadObstacle(0, 0, 10.0, 10.0)
-  loadBoost()
+  loadBoost(-25.5, 15.0, -6)
 }
 
 function loadTrack(){
@@ -61,11 +61,11 @@ function loadObstacle(angle, multiplier, translation1, translation2){
   })
 }
 
-function loadBoost(){
+function loadBoost(translation1, translation2, angle){
   var temp = []
   readMesh('speed_boost/boost.obj')
   .then((mesh)=>{
-    game_env['boost1'] = new Boost(mesh, "boost1")
+    game_env['boost1'] = new Boost(mesh, "boost1", translation1, translation2, angle)
 
     game_env['boost1'].setCollisionBox()
   })

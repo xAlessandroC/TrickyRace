@@ -1,18 +1,27 @@
 class Boost {
-  constructor(mesh, name) {
+  constructor(mesh, name, translation1, translation2, angle) {
     this.id = name
     this.boost = mesh
 
     var mesh_mtx = this.boost.getMatrix()
 
-    mesh_mtx = m4.scale(mesh_mtx, 4,4,4)
-    mesh_mtx = m4.translate(mesh_mtx, -5.5, -0.8, 10.0)
-    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(90))
-    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-6))
+    mesh_mtx = m4.scale(mesh_mtx, 1,1,1)
+    mesh_mtx = m4.translate(mesh_mtx, translation1, 1.0, translation2)
+    // mesh_mtx = m4.xRotate(mesh_mtx, degToRad(90))
+    // mesh_mtx = m4.zRotate(mesh_mtx, degToRad(angle))
 
     this.boost.setMatrix(mesh_mtx)
 
     this.angle = 0
+  }
+
+  boostStep(){
+    var mesh_mtx = this.boost.getMatrix()
+    mesh_mtx = m4.yRotate(mesh_mtx, degToRad(this.angle))
+    this.boost.setMatrix(mesh_mtx)
+
+    this.angle += 0.1
+    this.collisionBox.update(mesh_mtx)
   }
 
   setCollisionBox(){
@@ -29,7 +38,8 @@ class Boost {
   }
 
   onCollision(){
-    game_env['car'].speedBoost(2, 2000)
+    speedBoost_number += 1
+    delete game_env[this.id]
   }
 
   draw(view_mtx, projection_matrix, mode){
