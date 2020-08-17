@@ -1,7 +1,7 @@
 function initScene(){
   loadTrack()
   loadF1()
-  loadF1_2()
+  // loadF1_2()
   loadObstacle(0, 0, 10.0, 10.0)
   loadBoost()
 }
@@ -15,7 +15,6 @@ function loadTrack(){
     readMesh('track/terrain.obj')
     .then((mesh)=>{
       game_env['terrain'] = new Track(mesh)
-      // render()
       console.log("terrain caricato")
     })
   })

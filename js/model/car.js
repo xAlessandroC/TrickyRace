@@ -25,12 +25,14 @@ class Car {
     this.sterzo = 0; this.vsterzo = 1.4; this.rsterzo = 0.75
     this.mozzo = 0;
     this.raggio = 0.5
+
+    this.boost = 1; this.setBoost = false
   }
 
   carStep(){
     // console.log("[CAR STEP]:\nFORWARD:" + key_forward + "\nBACKWARD:" + key_backward + "\nLEFT:" + key_left + "\nRIGHT:" + key_right)
     if (key_forward === true)
-      this.vx += this.acceleration
+      this.vx += this.acceleration * this.boost
     if (key_backward === true)
       this.vx -= this.acceleration
 
@@ -117,7 +119,23 @@ class Car {
   }
 
   onCollision(){
-    
+
+  }
+
+  speedBoost(value, time){
+    this.boost = value
+    var self = this
+
+    if (this.setBoost === false){
+      setInterval(function(){
+         self.boost = 1;
+      }, time)
+      setInterval(function(){
+         self.setBoost = false
+      }, 5000)
+    }
+
+    this.setBoost = true
   }
 
   draw(view_mtx, projection_matrix, mode){

@@ -29,7 +29,7 @@ class Boost {
   }
 
   onCollision(){
-
+    game_env['car'].speedBoost(2, 2000)
   }
 
   draw(view_mtx, projection_matrix, mode){
