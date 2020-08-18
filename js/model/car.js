@@ -18,23 +18,30 @@ class Car {
     this.shift_chassis = -this.center[0]
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
 
-    this.acceleration = 0.6
+    this.acceleration = 1.9
     this.attritoZ = 0.991; this.attritoX = 0.8; this.attritoY = 1.0
     this.vx = 0; this.vy = 0; this.vz = 0
     this.facing = 0; this.grip = 0.45
     this.sterzo = 0; this.vsterzo = 1.4; this.rsterzo = 0.75
     this.mozzo = 0;
-    this.raggio = 0.5
+    this.raggio = 1.8
 
     this.boost = 1; this.setBoost = false
   }
 
   carStep(){
-    // console.log("[CAR STEP]:\nFORWARD:" + key_forward + "\nBACKWARD:" + key_backward + "\nLEFT:" + key_left + "\nRIGHT:" + key_right)
-    if (key_forward === true)
+    if (key_forward === true){
+      // this.acceleration += 0.2
+      // if(this.acceleration >= 1.2)  this.acceleration = 1.2
       this.vx += this.acceleration * this.boost
-    if (key_backward === true)
+    }
+    if (key_backward === true){
+      // this.acceleration += 0.2
+      // if(this.acceleration >= 1.2)  this.acceleration = 1.2
       this.vx -= this.acceleration
+    }
+    // this.acceleration *= 0.9; if(Math.abs(this.acceleration) < 0.0001) this.acceleration = 0
+    document.getElementById("acceleration").innerHTML = "acc " + this.acceleration
 
     if (key_left === true)
       this.sterzo += this.vsterzo;
@@ -47,7 +54,7 @@ class Car {
     this.vy *= this.attritoY; if(Math.abs(this.vy) < 0.0001) this.vy = 0
     this.vz *= this.attritoZ; if(Math.abs(this.vz) < 0.0001) this.vz = 0
 
-    this.facing = (this.vx*this.grip)*this.sterzo;
+    this.facing = (this.vx*this.grip)*this.sterzo * 0.4;
 
     var da ;
     da = (180.0*this.vx)/(Math.PI*this.raggio);

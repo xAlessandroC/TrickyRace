@@ -23,7 +23,7 @@ function initialize_position_car(components){
   components.forEach((component)=>{
     mesh_mtx = component.getMatrix()
 
-    mesh_mtx = m4.scale(mesh_mtx, 0.6,0.6,0.6)
+    mesh_mtx = m4.scale(mesh_mtx, 0.4,0.4,0.4)
     // // mesh_mtx = m4.xRotate(mesh_mtx, degToRad(30))
     // // mesh_mtx = m4.yRotate(mesh_mtx, degToRad(20))
     // mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-90))
@@ -35,8 +35,9 @@ function initialize_position_car(components){
 
     // mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
 
-    mesh_mtx = m4.translate(mesh_mtx, 0.0, -4.8, 0.0)
+    mesh_mtx = m4.translate(mesh_mtx, -70.0, -4.8, 0.0)
     mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-90))
+    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-87))
 
     component.setMatrix(mesh_mtx)
   })

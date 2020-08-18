@@ -11,8 +11,9 @@ var speedBoost_number = 0
 var light2 = [0,0,0]
 
 // var a=-15,b=116,c=18
-var a=-5,b=125,c=0
+var a=-7,b=56,c=-45
 // -40/24/6
+// OK -7/56/-45
 //b=116
 
 var l_x = -39, l_y = 100, l_z = 100;
@@ -97,31 +98,13 @@ function init_canvas(){
   // Inizializzo game environment
   game_env = {}
 
-
-  document.getElementById("Button7").onclick = function(){a+=5; render()};
-  document.getElementById("Button8").onclick = function(){a-=5; render()};
-  document.getElementById("Button9").onclick = function(){b+=1; render()};
-  document.getElementById("Button10").onclick = function(){b-=1; render()};
-  document.getElementById("Button11").onclick = function(){c+=1; render()};
-  document.getElementById("Button12").onclick = function(){c-=1; render()};
-  document.getElementById("a-b-c").innerHTML = ""+a+"/"+b+"/"+c
+  webglLessonsUI.setupSlider("#button_a", {value: a, slide: updateA, min: -100, max: 100});
+  webglLessonsUI.setupSlider("#button_b", {value: b, slide: updateB, min: -100, max: 100});
+  webglLessonsUI.setupSlider("#button_c", {value: c, slide: updateC, min: -100, max: 100});
 
   webglLessonsUI.setupSlider("#button_x", {value: l_x, slide: updateX, min: -100, max: 100});
   webglLessonsUI.setupSlider("#button_y", {value: l_y, slide: updateY, min: -100, max: 100});
   webglLessonsUI.setupSlider("#button_z", {value: l_z, slide: updateZ, min: -100, max: 100});
-}
-
-function updateX(event, ui) {
-  l_x = ui.value;
-  render();
-}
-function updateY(event, ui) {
-  l_y = ui.value;
-  render();
-}
-function updateZ(event, ui) {
-  l_z = ui.value;
-  render();
 }
 
 const FRAMES_PER_SECOND = 30;
