@@ -2,8 +2,31 @@ function initScene(){
   loadTrack()
   loadF1()
   // loadF1_2()
-  loadObstacle(0, 0, 10.0, 10.0)
-  loadBoost(-25.5, 15.0, -6)
+  // loadObstacle(0, 0, 10.0, 10.0)
+  // loadBoost(-25.5, 15.0, -6)
+  loadRandomObstacle(10)
+  loadRandomBoost(10)
+}
+
+function loadRandomObstacle(num){
+  var i = 0
+  for(i = 0; i<num; i++){
+    var t1 = Math.random(1231) * 100
+    var t2 = Math.random(333) * 100
+    loadObstacle(Math.random(333)*360, Math.random(333)*20, t1, t2, "obstacle"+i)
+    console.log("loaded obstacle"+i+" in " + t1 + " " + t2)
+  }
+  console.log("finito")
+}
+function loadRandomBoost(num){
+  var i = 0
+  for(i = 0; i<num; i++){
+    var t1 = Math.random(1231) * 100
+    var t2 = Math.random(333) * 100
+    loadBoost(t1, t2, 0, "boost"+i)
+    console.log("loaded boost"+i+" in " + t1 + " " + t2)
+  }
+  console.log("finito")
 }
 
 function loadTrack(){
@@ -51,22 +74,22 @@ function loadF1_2(){
   })
 }
 
-function loadObstacle(angle, multiplier, translation1, translation2){
+function loadObstacle(angle, multiplier, translation1, translation2, name){
   var temp = []
   readMesh('obstacle/obstacle.obj')
   .then((mesh)=>{
-    game_env['obstacle1'] = new Obstacle(mesh, "obstacle1", angle, multiplier, translation1, translation2)
+    game_env[name] = new Obstacle(mesh, name, angle, multiplier, translation1, translation2)
 
-    game_env['obstacle1'].setCollisionBox()
+    game_env[name].setCollisionBox()
   })
 }
 
-function loadBoost(translation1, translation2, angle){
+function loadBoost(translation1, translation2, angle, name){
   var temp = []
   readMesh('speed_boost/boost.obj')
   .then((mesh)=>{
-    game_env['boost1'] = new Boost(mesh, "boost1", translation1, translation2, angle)
+    game_env[name] = new Boost(mesh, name, translation1, translation2, angle)
 
-    game_env['boost1'].setCollisionBox()
+    game_env[name].setCollisionBox()
   })
 }

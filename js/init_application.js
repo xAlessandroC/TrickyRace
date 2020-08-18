@@ -11,7 +11,7 @@ var speedBoost_number = 0
 var light2 = [0,0,0]
 
 // var a=-15,b=116,c=18
-var a=-40,b=24,c=6
+var a=-5,b=125,c=0
 // -40/24/6
 //b=116
 
@@ -135,6 +135,7 @@ function update(time){
     }
     lastFrameTime = time;
     render();
+    document.getElementById("n_boost").innerHTML = "boost " + speedBoost_number
     window.requestAnimationFrame(update);
 }
 
@@ -153,8 +154,11 @@ function frameStep(){
     }
   }
 
-  if(game_env['boost1'] !== undefined)
-    game_env['boost1'].boostStep()
+  for(i=0;i<size;i++){
+    if(keys[i].startsWith("boost")){
+      game_env[keys[i]].boostStep()
+    }
+  }
 }
 
 function checkCollision(){
