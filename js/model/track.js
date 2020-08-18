@@ -17,6 +17,10 @@ class Track {
     this.center = (m4.multiply(this.track.getMatrix(), this.center)).slice(0, 3);
   }
 
+  hasCollisionBox(){
+    return this.collisionBox !== undefined
+  }
+
   draw(view_mtx, projection_matrix, mode){
     this.track.draw(view_mtx, projection_matrix, mode)
   }

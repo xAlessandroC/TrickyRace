@@ -29,6 +29,13 @@ function onMouseDown(e){
 
     pressed_dx = 1
   }
+
+  if ( e.button == 0){
+    if(speedBoost_number !== 0){
+      speedBoost_number -= 1
+      game_env['car'].speedBoost(2, 2000)
+    }
+  }
 }
 
 function onMouseMove(e){
