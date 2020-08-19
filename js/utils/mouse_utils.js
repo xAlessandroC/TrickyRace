@@ -36,6 +36,21 @@ function onMouseDown(e){
       game_env['car'].speedBoost(2, 2000)
     }
   }
+
+  if ( e.button == 1){
+    e.preventDefault()
+
+    first_person = !first_person
+    if(first_person === true){
+      a=0
+      b=0
+      c=-0.1
+    }else{
+      a=-7
+      b=56
+      c=-45
+    }
+  }
 }
 
 function onMouseMove(e){

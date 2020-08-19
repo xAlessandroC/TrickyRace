@@ -14,6 +14,7 @@ var light2 = [0,0,0]
 var a=-7,b=56,c=-45
 // -40/24/6
 // OK -7/56/-45
+// FIRST PERSON 0 0 -1
 //b=116
 
 var l_x = -39, l_y = 100, l_z = 100;
@@ -22,21 +23,21 @@ var step_x = 10, step_y = 10, step_z = 10;
 
 // settings
 var free_view = false
+var first_person = false
 
 function render(){
   clear()
 
   for (const [type, mesh] of Object.entries(game_env)) {
 
-    if(free_view === true){
+    if(game_env['car'] === undefined){
       cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                         radius*Math.sin(phi)*Math.sin(theta),
                         radius*Math.cos(phi)]
     }else{
-      if(game_env['car'] !== undefined){
-        target = game_env['car'].center
-        cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
-      }
+      target = game_env['car'].center
+      document.getElementById("target").innerHTML = "[" + target[0] + " / " + target[1] + " / " + target[2] + "]"
+      cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
     }
 
     var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
@@ -105,6 +106,10 @@ function init_canvas(){
   webglLessonsUI.setupSlider("#button_x", {value: l_x, slide: updateX, min: -100, max: 100});
   webglLessonsUI.setupSlider("#button_y", {value: l_y, slide: updateY, min: -100, max: 100});
   webglLessonsUI.setupSlider("#button_z", {value: l_z, slide: updateZ, min: -100, max: 100});
+
+  webglLessonsUI.setupSlider("#button_phi", {value: phi, slide: updatePhi, min: -360, max: 360});
+  webglLessonsUI.setupSlider("#button_theta", {value: theta, slide: updateTheta, min: -360, max: 360});
+  webglLessonsUI.setupSlider("#button_r", {value: radius, slide: updateR, min: -360, max: 360});
 }
 
 const FRAMES_PER_SECOND = 30;

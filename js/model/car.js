@@ -60,7 +60,6 @@ class Car {
     da = (180.0*this.vx)/(Math.PI*this.raggio);
     this.mozzo+=da;
 
-    // console.log("[CAR STEP]: position ["+this.vx+","+this.vy+","+this.vz+","+this.sterzo+"]")
     document.getElementById("sterzo").innerHTML = "sterzo " + this.sterzo
     this.updatePosition()
   }
@@ -76,6 +75,9 @@ class Car {
 
     this.center = [0,0,0,1]
     this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
+    this.center[0] += 0
+    this.center[1] += 2
+    this.center[2] += 70
 
     // wheel 1
     var mtx_w0 = m4.copy(this.chassis.getMatrix())
