@@ -9,14 +9,10 @@ class Car {
 
     initialize_position_car(components);
 
-    this.center = computeCenter(this.chassis)
     this.centerw0 = computeCenter(this.w0)
     this.centerw1 = computeCenter(this.w1)
     this.centerw2 = computeCenter(this.w2)
     this.centerw3 = computeCenter(this.w3)
-
-    this.shift_chassis = -this.center[0]
-    this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
 
     this.acceleration = 1.9
     this.attritoZ = 0.991; this.attritoX = 0.8; this.attritoY = 1.0
@@ -60,7 +56,6 @@ class Car {
     da = (180.0*this.vx)/(Math.PI*this.raggio);
     this.mozzo+=da;
 
-    document.getElementById("sterzo").innerHTML = "sterzo " + this.sterzo
     this.updatePosition()
   }
 
@@ -72,12 +67,6 @@ class Car {
     var mtx_c = m4.copy(mtx)
     mtx_c = m4.zRotate(mtx_c, degToRad(this.facing));
     this.chassis.setMatrix(mtx_c)
-
-    this.center = [0,0,0,1]
-    this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
-    this.center[0] += 0
-    this.center[1] += 2
-    this.center[2] += 70
 
     // wheel 1
     var mtx_w0 = m4.copy(this.chassis.getMatrix())

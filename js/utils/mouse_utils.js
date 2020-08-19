@@ -44,7 +44,7 @@ function onMouseDown(e){
     if(first_person === true){
       a=0
       b=0
-      c=-0.1
+      c=0
     }else{
       a=-7
       b=56

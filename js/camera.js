@@ -1,13 +1,20 @@
-
-
-
 function setCamera(){
-  if(game_env['car'] !== undefined){
+  if(game_env['car'] === undefined || free_view === true){
     cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                       radius*Math.sin(phi)*Math.sin(theta),
                       radius*Math.cos(phi)]
   }else{
-    target = game_env['car'].center
-    cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
+    var center = [0,0,0,1]
+    center = (m4.multiply(game_env['car'].chassis.getMatrix(), center)).slice(0, 3);
+    center[1] += 2
+    cameraPosition = [center[0]+a,center[1]+b,center[2]+c]
+
+    if(first_person === true){
+      var dimensions = computeDimensions([game_env['car'].chassis,game_env['car'].w0, game_env['car'].w1, game_env['car'].w2, game_env['car'].w3])
+      var temp = [dimensions[0]/2, dimensions[1]*0/2, dimensions[2]/2, 1.0]
+      target = (m4.multiply(game_env['car'].chassis.getMatrix(), temp)).slice(0, 3);
+    }else{
+      target = center
+    }
   }
 }

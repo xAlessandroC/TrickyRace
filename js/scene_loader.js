@@ -4,8 +4,8 @@ function initScene(){
   // loadF1_2()
   // loadObstacle(0, 0, 10.0, 10.0)
   // loadBoost(-25.5, 15.0, -6)
-  loadRandomObstacle(10)
-  loadRandomBoost(10)
+  // loadRandomObstacle(10)
+  // loadRandomBoost(10)
 }
 
 function loadRandomObstacle(num){
@@ -54,9 +54,6 @@ function loadF1(){
    game_env['car'] = new Car(temp, "car")
 
    game_env['car'].setCollisionBox()
-
-   target = game_env['car'].center
-   cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
   })
 }
 

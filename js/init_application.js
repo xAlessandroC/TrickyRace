@@ -11,6 +11,7 @@ var speedBoost_number = 0
 var light2 = [0,0,0]
 
 // var a=-15,b=116,c=18
+// var a=-40,b=24,c=6
 var a=-7,b=56,c=-45
 // -40/24/6
 // OK -7/56/-45
@@ -30,15 +31,7 @@ function render(){
 
   for (const [type, mesh] of Object.entries(game_env)) {
 
-    if(game_env['car'] === undefined){
-      cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
-                        radius*Math.sin(phi)*Math.sin(theta),
-                        radius*Math.cos(phi)]
-    }else{
-      target = game_env['car'].center
-      document.getElementById("target").innerHTML = "[" + target[0] + " / " + target[1] + " / " + target[2] + "]"
-      cameraPosition = [game_env['car'].center[0]+a,game_env['car'].center[1]+b,game_env['car'].center[2]+c]
-    }
+    setCamera()
 
     var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
     var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
