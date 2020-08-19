@@ -44,6 +44,7 @@ class Obstacle {
   onCollision(){
     delete game_env[this.id]
     score -= 900
+    if(score<0) score = 0
   }
 
   draw(view_mtx, projection_matrix, mode){

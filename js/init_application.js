@@ -1,4 +1,4 @@
-var canvas, gl, program
+var canvas, overlay, gl, ctx_2d, program
 
 var phi, theta, radius
 var cameraPosition, up, target
@@ -40,12 +40,11 @@ function render(){
 
     mesh.draw(matrix, projectionMatrix)
   }
-  document.getElementById("a-b-c").innerHTML = ""+a+"/"+b+"/"+c
 }
 
 function clear(){
   gl.enable(gl.DEPTH_TEST);
-  gl.clearColor(0.0, 0.0, 0.0, 1);
+  gl.clearColor(175/255, 238/255, 238/255, 1);
   gl.clearDepth(1.0);
   gl.viewport(0.0, 0.0, canvas.width, canvas.height);
   // console.log(canvas.width, canvas.height);
@@ -81,11 +80,18 @@ function init_param(){
 
 function init_canvas(){
   canvas = document.getElementById("my_Canvas")
+  overlay = document.getElementById("overlay_canvas_2d")
   gl = canvas.getContext("webgl")
+  ctx_2d = overlay.getContext("2d")
+
+  canvas.focus()
 
   // Adatto il canvas a ricoprire il browser
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
+
+  overlay.width = window.innerWidth
+  overlay.height = window.innerHeight
 
   //mouse controls
   setUpMouseInteraction()
@@ -113,6 +119,7 @@ var lastFrameTime = 0;
 function update(time){
     if(time-lastFrameTime < FRAME_MIN_TIME){
       frameStep()
+      drawOverlay()
       window.requestAnimationFrame(update);
       score = Math.floor( score * 0.9999 )
       document.getElementById("score").innerHTML = "score " + score

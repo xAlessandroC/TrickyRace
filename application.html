@@ -4,6 +4,27 @@
     <META HTTP-EQUIV=”Pragma” CONTENT=”no-cache”>
     <META HTTP-EQUIV=”Cache-Control” CONTENT=”no-cache”>
     <title>Tricky Race</title>
+    <style>
+      #my_Canvas{
+        border: 2px solid black;
+        width: 100%;
+        height: 100%;
+      }
+      #canvasDiv{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      #overlay_canvas_2d{
+        border: 2px solid black;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: 1;
+      }
     </style>
   </head>
   <body>
@@ -25,9 +46,10 @@
     <div id="acceleration"></div>
     <div id="n_boost">0</div>
     <div id="score">score 0</div>
-    <canvas width="500" height="500" id="my_Canvas" style="border: 2px solid black; width: 100%; height: 50%;"></canvas>
-    <div id="phi-theta">0-0</div>
-    <div id="a-b-c"></div>
+    <div id="canvasDiv">
+      <canvas width="500" height="500" id="my_Canvas" tabindex="0"></canvas>
+      <canvas width="500" height="500" id="overlay_canvas_2d" ></canvas>
+    </div>
 
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
       attribute vec4 a_position;
@@ -96,6 +118,7 @@
     </script>
 
     <script type="text/javascript" src="js/camera.js"></script>
+    <script type="text/javascript" src="js/overlay.js"></script>
     <script type="text/javascript" src="js/model/track.js"></script>
     <script type="text/javascript" src="js/model/car.js"></script>
     <script type="text/javascript" src="js/model/collisionBox.js"></script>

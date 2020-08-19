@@ -15,6 +15,11 @@ function setUpMouseInteraction(){
   canvas.addEventListener("mouseup", onMouseUp)
   canvas.addEventListener("mousemove", onMouseMove)
   canvas.addEventListener('contextmenu', e => { e.preventDefault(); });
+
+  overlay.addEventListener("mousedown", onMouseDown)
+  overlay.addEventListener("mouseup", onMouseUp)
+  overlay.addEventListener("mousemove", onMouseMove)
+  overlay.addEventListener('contextmenu', e => { e.preventDefault(); });
 }
 
 var pressed_dx = 0
@@ -68,8 +73,6 @@ function onMouseMove(e){
 
     start_x = cc_x
     start_y = cc_y
-
-    document.getElementById("phi-theta").innerHTML=""+theta+"-"+phi
 
     render()
   }
