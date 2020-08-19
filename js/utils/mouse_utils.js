@@ -40,8 +40,8 @@ function onMouseDown(e){
   if ( e.button == 1){
     e.preventDefault()
 
-    first_person = !first_person
-    if(first_person === true){
+    third_person = !third_person
+    if(third_person === true){
       a=0
       b=0
       c=0

@@ -99,8 +99,6 @@ class CollisionBox {
 
       if(temp[2]>max_z) max_z = temp[2]
       if(temp[2]<min_z) min_z = temp[2]
-
-      this.prova = temp
     }
 
     this.min_X = min_x; this.max_X = max_x

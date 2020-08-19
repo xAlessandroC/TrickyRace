@@ -24,7 +24,7 @@ var step_x = 10, step_y = 10, step_z = 10;
 
 // settings
 var free_view = false
-var first_person = false
+var third_person = false
 
 function render(){
   clear()
