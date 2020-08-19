@@ -10,6 +10,8 @@ var speedBoost_number = 0
 
 var light2 = [0,0,0]
 
+var score = 10000
+
 // var a=-15,b=116,c=18
 // var a=-40,b=24,c=6
 var a=-7,b=56,c=-45
@@ -112,6 +114,8 @@ function update(time){
     if(time-lastFrameTime < FRAME_MIN_TIME){
       frameStep()
       window.requestAnimationFrame(update);
+      score = Math.floor( score * 0.9999 )
+      document.getElementById("score").innerHTML = "score " + score
       return;
     }
     lastFrameTime = time;

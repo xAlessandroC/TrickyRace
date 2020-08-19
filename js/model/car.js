@@ -9,6 +9,11 @@ class Car {
 
     initialize_position_car(components);
 
+    var dimensions = computeDimensions([this.chassis,this.w0, this.w1, this.w2, this.w3])
+    this.width = dimensions[0]
+    this.length = dimensions[1]
+    this.height = dimensions[2]
+
     this.centerw0 = computeCenter(this.w0)
     this.centerw1 = computeCenter(this.w1)
     this.centerw2 = computeCenter(this.w2)
@@ -105,9 +110,7 @@ class Car {
   }
 
   setCollisionBox(){
-    var dimensions = computeDimensions([this.chassis,this.w0, this.w1, this.w2, this.w3])
-
-    var box = new CollisionBox(dimensions[0]/2, dimensions[1]/2, dimensions[2]/2, this, 'box')
+    var box = new CollisionBox(this.width/2, this.length/2, this.height/2, this, 'box')
     this.collisionBox = box
     this.updatePosition()
   }

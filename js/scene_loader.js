@@ -4,8 +4,8 @@ function initScene(){
   // loadF1_2()
   // loadObstacle(0, 0, 10.0, 10.0)
   // loadBoost(-25.5, 15.0, -6)
-  // loadRandomObstacle(10)
-  // loadRandomBoost(10)
+  loadRandomObstacle(10)
+  loadRandomBoost(10)
 }
 
 function loadRandomObstacle(num){

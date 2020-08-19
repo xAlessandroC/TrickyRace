@@ -10,9 +10,9 @@ function setCamera(){
     cameraPosition = [center[0]+a,center[1]+b,center[2]+c]
 
     if(third_person === true){
-      var dimensions = computeDimensions([game_env['car'].chassis,game_env['car'].w0, game_env['car'].w1, game_env['car'].w2, game_env['car'].w3])
-      var temp = [dimensions[0]/2, 0, dimensions[2]/2, 1.0]
-      var temp2 = [-dimensions[0]-7, dimensions[1]*0/2, dimensions[2]+10, 1.0]
+      var obj = game_env['car']
+      var temp = [obj.width/2, 0, obj.height/2, 1.0]
+      var temp2 = [-obj.width-7, 0, obj.height+10, 1.0]
       target = (m4.multiply(game_env['car'].chassis.getMatrix(), temp)).slice(0, 3);
       cameraPosition = (m4.multiply(game_env['car'].chassis.getMatrix(), temp2)).slice(0, 3);
     }else{
