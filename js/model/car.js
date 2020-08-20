@@ -128,15 +128,13 @@ class Car {
     var self = this
 
     if (this.setBoost === false){
-      setInterval(function(){
+      setTimeout(function(){
          self.boost = 1;
-      }, time)
-      setInterval(function(){
          self.setBoost = false
-      }, 5000)
+      }, time)
+      this.setBoost = true
     }
 
-    this.setBoost = true
   }
 
   draw(view_mtx, projection_matrix, mode){
