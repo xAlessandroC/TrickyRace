@@ -119,7 +119,7 @@ class Car {
     return this.collisionBox !== undefined
   }
 
-  onCollision(){
+  onCollision(tag){
 
   }
 

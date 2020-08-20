@@ -41,10 +41,12 @@ class Obstacle {
     return this.collisionBox !== undefined
   }
 
-  onCollision(){
-    delete game_env[this.id]
-    score -= 900
-    if(score<0) score = 0
+  onCollision(tag){
+    if(tag === 'car'){
+      delete game_env[this.id]
+      score -= 900
+      if(score<0) score = 0  
+    }
   }
 
   draw(view_mtx, projection_matrix, mode){

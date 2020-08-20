@@ -157,10 +157,12 @@ function checkCollision(){
   var size = Object.keys(game_env).length
   var keys = Object.keys(game_env)
   var temp = new Object()
+  var collidedWith = new Object()
   var i = 0, j = 0
 
   for(i=0;i<size;i++){
     temp[i] = "false"
+    collidedWith[i] = []
   }
 
   for(i=0;i<size;i++){
@@ -171,6 +173,8 @@ function checkCollision(){
         if(collision){
           temp[i] = "true"
           temp[j] = "true"
+          collidedWith[i].push(keys[j])
+          collidedWith[j].push(keys[i])
           console.log("Collided " + game_env[keys[i]].id + " and " + game_env[keys[j]].id)
         }
       }
@@ -183,7 +187,9 @@ function checkCollision(){
         game_env[keys[i]].collisionBox.clean()
       }else{
         game_env[keys[i]].collisionBox.collided()
-        game_env[keys[i]].onCollision()
+        collidedWith[i].forEach((tag) => {
+          game_env[keys[i]].onCollision(tag)
+        });
       }
     }
   }
