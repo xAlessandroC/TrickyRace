@@ -10,7 +10,6 @@ function drawOverlay(){
     var offset = 0
     digits = separateNumber(score)
     digits.forEach((digit)=>{
-      console.log("2searching " + digit + "digit")
       ctx_2d.drawImage(resourcesDict[digit].img, overlay.width*0.015+offset, overlay.height*0.02, 32*resourcesDict[digit].ar, 32)
       offset += 25
     })
@@ -40,7 +39,6 @@ function drawOverlay(){
     var offset = 0
     digits = separateNumber(speedBoost_number)
     digits.forEach((digit)=>{
-      console.log("searching " + digit + "digit")
       ctx_2d.drawImage(resourcesDict[digit].img, overlay.width*0.934+offset, overlay.height*0.055, 32*resourcesDict[digit].ar, 32)
       offset += 25
     })

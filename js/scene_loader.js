@@ -45,11 +45,11 @@ function loadTrack(){
 
 function loadF1(){
   var temp = []
-  readMesh('f1_car/chassis.obj')
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj') })
+  readMesh('ronin/chassis.obj')
+  .then((mesh)=>{ temp.push(mesh); return readMesh('ronin/w0.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('ronin/w1.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('ronin/w2.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('ronin/w3.obj') })
   .then((mesh)=>{ temp.push(mesh);
    game_env['car'] = new Car(temp, "car")
 

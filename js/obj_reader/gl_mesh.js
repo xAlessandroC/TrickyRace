@@ -86,7 +86,7 @@ class GL_Mesh{
       u_modelview: mw,
       u_world: this.getMatrix(),
       u_worldInverseTranspose: worldInverseTransposeMatrix,
-      u_lightWorldPosition: [l_x, l_y, l_z],
+      u_lightWorldPosition: [l_x,l_y,l_z],
       u_viewWorldPosition: cameraPosition,
       u_color: [0.2, 1, 0.2, 1],
       u_shininess: 2,

@@ -6,10 +6,8 @@ var angle, ar, near, far
 
 var game_env
 
+
 var speedBoost_number = 0
-
-var light2 = [0,0,0]
-
 var score = 10000
 
 // var a=-15,b=116,c=18
@@ -23,6 +21,7 @@ var a=-7,b=56,c=-45
 var l_x = -39, l_y = 100, l_z = 100;
 var step_x = 10, step_y = 10, step_z = 10;
 
+var light = [l_x, l_y, l_z]
 
 // settings
 var free_view = false

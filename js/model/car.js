@@ -19,7 +19,7 @@ class Car {
     this.centerw2 = computeCenter(this.w2)
     this.centerw3 = computeCenter(this.w3)
 
-    this.acceleration = 1.9
+    this.acceleration = 2.4 //1.2
     this.attritoZ = 0.991; this.attritoX = 0.8; this.attritoY = 1.0
     this.vx = 0; this.vy = 0; this.vz = 0
     this.facing = 0; this.grip = 0.45
@@ -105,7 +105,8 @@ class Car {
 
 
     var box_mtx = m4.copy(this.chassis.getMatrix())
-    box_mtx = m4.translate(box_mtx, 0, 0, 3.5)
+    // box_mtx = m4.translate(box_mtx, 0, 0, 3.5) //F1
+    box_mtx = m4.translate(box_mtx, 0, 0, 7.0) //Ronin  
     this.collisionBox.update(box_mtx)
   }
 

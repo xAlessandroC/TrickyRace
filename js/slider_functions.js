@@ -11,19 +11,16 @@ function updateZ(event, ui) {
   render();
 }
 function updateA(event, ui) {
-  a = ui.value/10;
+  a = ui.value;
   render();
-  document.getElementById("a-b-c").innerHTML = ""+a+"/"+b+"/"+c
 }
 function updateB(event, ui) {
   b = ui.value;
   render();
-  document.getElementById("a-b-c").innerHTML = ""+a+"/"+b+"/"+c
 }
 function updateC(event, ui) {
   c = ui.value;
   render();
-  document.getElementById("a-b-c").innerHTML = ""+a+"/"+b+"/"+c
 }
 
 function updatePhi(event, ui) {
