@@ -1,5 +1,5 @@
 var completion = 0
-var toComplete = 34
+var toComplete = 67
 
 function clear(){
   ctx_2d.clearRect(0, 0, overlay.width, overlay.height);
@@ -36,4 +36,6 @@ function render(){
     // disegno la schermata di loading
     drawLoadingOverlay()
   }
+
+  console.log("COMPLETION " + completion)
 }

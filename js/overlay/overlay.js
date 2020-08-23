@@ -3,6 +3,12 @@ var resourcesDict = new Object()
 function drawGameOverlay(){
   var digits = []
 
+  ctx_2d.font = "bold 14px Arial";
+  ctx_2d.textAlign = "center";
+  ctx_2d.textBaseline = "middle";
+  ctx_2d.strokeStyle = "black";
+  ctx_2d.fillStyle = "black";
+
   // score
   if(resourcesDict['score'] !== undefined){
     ctx_2d.drawImage(resourcesDict['score'].img, overlay.width*0.00, overlay.height*0.0, 64*resourcesDict['score'].ar, 64)
@@ -13,10 +19,7 @@ function drawGameOverlay(){
       offset += 25
     })
   }
-  ctx_2d.font = "bold 14px Arial";
-  ctx_2d.textAlign = "center";
-  ctx_2d.textBaseline = "middle";
-  ctx_2d.strokeStyle = "black";
+
   ctx_2d.fillText("SCORE", overlay.width*0.05, overlay.height*0.12);
 
   // funzioni utente
@@ -54,7 +57,7 @@ function drawLoadingOverlay(){
   ctx_2d.fillStyle = "white";
   ctx_2d.fillText("TRICKY RACE", overlay.width*0.5, overlay.height*0.3);
   ctx_2d.font = "bold 22px Arial";
-  ctx_2d.fillText("Loading " + Math.round(completion/toComplete*100), overlay.width*0.5, overlay.height*0.6);
+  ctx_2d.fillText("Loading " + Math.round(completion/toComplete*100) + "%", overlay.width*0.5, overlay.height*0.6);
 }
 
 function readResource(name){

@@ -35,12 +35,13 @@ function loadTrack(){
     game_env['track'] = new Track(mesh)
     // render()
     console.log("track caricato")
-    readMesh('track/terrain.obj')
-    .then((mesh)=>{
-      game_env['terrain'] = new Track(mesh)
-      console.log("terrain caricato")
-      incrementLoading()
-    })
+    incrementLoading()
+    return readMesh('track/terrain.obj')
+  })
+  .then((mesh)=>{
+    game_env['terrain'] = new Track(mesh)
+    console.log("terrain caricato")
+    incrementLoading()
   })
 }
 
