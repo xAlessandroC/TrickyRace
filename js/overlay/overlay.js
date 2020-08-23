@@ -54,7 +54,7 @@ function drawLoadingOverlay(){
   ctx_2d.fillStyle = "white";
   ctx_2d.fillText("TRICKY RACE", overlay.width*0.5, overlay.height*0.3);
   ctx_2d.font = "bold 22px Arial";
-  ctx_2d.fillText("Loading " + Math.round(completion/toComplete)*100, overlay.width*0.5, overlay.height*0.6);
+  ctx_2d.fillText("Loading " + Math.round(completion/toComplete*100), overlay.width*0.5, overlay.height*0.6);
 }
 
 function readResource(name){
