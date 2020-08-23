@@ -27,28 +27,19 @@ var light = [l_x, l_y, l_z]
 var free_view = false
 var third_person = false
 
-function render(){
-  clear()
-
-  for (const [type, mesh] of Object.entries(game_env)) {
-
-    setCamera()
-
-    var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
-    var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
-
-    mesh.draw(matrix, projectionMatrix)
-  }
-}
-
-function clear(){
-  gl.enable(gl.DEPTH_TEST);
-  gl.clearColor(175/255, 238/255, 238/255, 1);
-  gl.clearDepth(1.0);
-  gl.viewport(0.0, 0.0, canvas.width, canvas.height);
-  // console.log(canvas.width, canvas.height);
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-}
+// function render(){
+//   clear()
+//
+//   for (const [type, mesh] of Object.entries(game_env)) {
+//
+//     setCamera()
+//
+//     var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
+//     var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
+//
+//     mesh.draw(matrix, projectionMatrix)
+//   }
+// }
 
 ///////////////////////// INIT FUNCTIONS /////////////////////////////////////////////////
 function init_gl(){
@@ -59,8 +50,6 @@ function init_gl(){
   var res = m4.multiply(projectionMatrix, matrix)
 
   gl.useProgram(program.program)
-
-  render()
 }
 
 function init_param(){
@@ -118,7 +107,6 @@ var lastFrameTime = 0;
 function update(time){
     if(time-lastFrameTime < FRAME_MIN_TIME){
       frameStep()
-      drawOverlay()
       window.requestAnimationFrame(update);
       score = Math.floor( score * 0.9999 )
       document.getElementById("score").innerHTML = "score " + score

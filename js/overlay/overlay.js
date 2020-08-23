@@ -1,8 +1,7 @@
 var resourcesDict = new Object()
 
-function drawOverlay(){
+function drawGameOverlay(){
   var digits = []
-  ctx_2d.clearRect(0, 0, overlay.width, overlay.height);
 
   // score
   if(resourcesDict['score'] !== undefined){
@@ -45,6 +44,19 @@ function drawOverlay(){
   }
 }
 
+function drawLoadingOverlay(){
+  ctx_2d.font = "bold 56px Arial";
+  ctx_2d.textAlign = "center";
+  ctx_2d.textBaseline = "middle";
+  ctx_2d.strokeStyle = "white";
+  ctx_2d.fillStyle = "orange";
+  ctx_2d.fillRect(0, 0, overlay.width, overlay.height);
+  ctx_2d.fillStyle = "white";
+  ctx_2d.fillText("TRICKY RACE", overlay.width*0.5, overlay.height*0.3);
+  ctx_2d.font = "bold 22px Arial";
+  ctx_2d.fillText("Loading " + Math.round(completion/toComplete)*100, overlay.width*0.5, overlay.height*0.6);
+}
+
 function readResource(name){
   var image = new Image();
   var name_p = name
@@ -54,6 +66,7 @@ function readResource(name){
       img : image,
       ar : image.naturalWidth/image.naturalHeight
     }
+    incrementLoading()
   });
 }
 

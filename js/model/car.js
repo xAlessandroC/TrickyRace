@@ -105,8 +105,8 @@ class Car {
 
 
     var box_mtx = m4.copy(this.chassis.getMatrix())
-    // box_mtx = m4.translate(box_mtx, 0, 0, 3.5) //F1
-    box_mtx = m4.translate(box_mtx, 0, 0, 7.0) //Ronin  
+    box_mtx = m4.translate(box_mtx, 0, 0, 3.5) //F1
+    // box_mtx = m4.translate(box_mtx, 0, 0, 7.0) //Ronin
     this.collisionBox.update(box_mtx)
   }
 

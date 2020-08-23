@@ -39,21 +39,23 @@ function loadTrack(){
     .then((mesh)=>{
       game_env['terrain'] = new Track(mesh)
       console.log("terrain caricato")
+      incrementLoading()
     })
   })
 }
 
 function loadF1(){
   var temp = []
-  readMesh('ronin/chassis.obj')
-  .then((mesh)=>{ temp.push(mesh); return readMesh('ronin/w0.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('ronin/w1.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('ronin/w2.obj') })
-  .then((mesh)=>{ temp.push(mesh); return readMesh('ronin/w3.obj') })
+  readMesh('f1_car/chassis.obj')
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w0.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w1.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w2.obj') })
+  .then((mesh)=>{ temp.push(mesh); return readMesh('f1_car/w3.obj') })
   .then((mesh)=>{ temp.push(mesh);
    game_env['car'] = new Car(temp, "car")
 
    game_env['car'].setCollisionBox()
+   incrementLoading()
   })
 }
 
@@ -78,6 +80,7 @@ function loadObstacle(angle, multiplier, translation1, translation2, name){
     game_env[name] = new Obstacle(mesh, name, angle, multiplier, translation1, translation2)
 
     game_env[name].setCollisionBox()
+    incrementLoading()
   })
 }
 
@@ -88,5 +91,6 @@ function loadBoost(translation1, translation2, angle, name){
     game_env[name] = new Boost(mesh, name, translation1, translation2, angle)
 
     game_env[name].setCollisionBox()
+    incrementLoading()
   })
 }
