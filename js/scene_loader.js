@@ -143,7 +143,7 @@ function loadF1_2(){
 
 function loadObstacle(angle, multiplier, translation1, translation2, name){
   var temp = []
-  readMesh('obstacle/obstacle.obj')
+  readMesh('obstacle/obstacle2.obj')
   .then((mesh)=>{
     game_env[name] = new Obstacle(mesh, name, angle, multiplier, translation1, translation2)
 
