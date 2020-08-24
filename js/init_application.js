@@ -27,6 +27,7 @@ var light = [l_x, l_y, l_z]
 var free_view = false
 var third_person = false
 var startPlayed = false
+var finished = false
 
 // function render(){
 //   clear()
@@ -111,7 +112,7 @@ function update(time){
     if(time-lastFrameTime < FRAME_MIN_TIME){
       frameStep()
       window.requestAnimationFrame(update);
-      if(completion === toComplete && startPlayed === true)
+      if(completion === toComplete && startPlayed === true && finished === false)
         score = Math.floor( score * 0.9999 )
       document.getElementById("score").innerHTML = "score " + score
       return;

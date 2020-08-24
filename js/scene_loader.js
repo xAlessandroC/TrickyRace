@@ -65,7 +65,7 @@ function loadRandomBoost(num){
 function loadTrack(){
   readMesh('track/track4.obj')
   .then((mesh)=>{
-    game_env['track'] = new GenericObj(mesh)
+    game_env['track'] = new GenericObj(mesh, 'track')
 
     var mesh_mtx = game_env['track'].track.getMatrix()
     mesh_mtx = m4.scale(mesh_mtx, 3.0, 0.2, 4.0)
@@ -85,7 +85,7 @@ function loadTrack(){
   //   return readMesh('track/arena.obj')
   // })
   .then((mesh)=>{
-    game_env['arena'] = new GenericObj(mesh)
+    game_env['arena'] = new GenericObj(mesh, 'arena')
 
     var mesh_mtx = game_env['arena'].track.getMatrix()
     mesh_mtx = m4.scale(mesh_mtx, 4.0, 4.0, 4.0)
@@ -93,6 +93,21 @@ function loadTrack(){
     game_env['arena'].track.setMatrix(mesh_mtx)
 
     console.log("arena caricato")
+    incrementLoading()
+    return readMesh('track/finish.obj')
+  })
+  .then((mesh)=>{
+    game_env['finish'] = new GenericObj(mesh, 'finish')
+
+    var mesh_mtx = game_env['finish'].track.getMatrix()
+    mesh_mtx = m4.scale(mesh_mtx, 1.5, 1.5, 1.5)
+    mesh_mtx = m4.yRotate(mesh_mtx, degToRad(96))
+    mesh_mtx = m4.translate(mesh_mtx, 10.0, 0.5, -19.0)
+    game_env['finish'].track.setMatrix(mesh_mtx)
+
+    game_env['finish'].setCollisionBox()
+
+    console.log("finish caricato")
     incrementLoading()
   })
 }

@@ -36,9 +36,9 @@ function initialize_position_car(components){
     // mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
 
     // mesh_mtx = m4.translate(mesh_mtx, -70.0, -4.8, 0.0)  //F1
-    mesh_mtx = m4.translate(mesh_mtx, -70.0, -9.6, 0.0)  //Ronin
+    mesh_mtx = m4.translate(mesh_mtx, -92.0, -9.6, 20.0)  //Ronin
     mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-87))
+    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-85))
 
     component.setMatrix(mesh_mtx)
   })

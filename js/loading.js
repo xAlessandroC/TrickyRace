@@ -1,5 +1,5 @@
 var completion = 0
-var toComplete = 89
+var toComplete = 91
 
 function clear(){
   ctx_2d.clearRect(0, 0, overlay.width, overlay.height);
@@ -16,25 +16,29 @@ function incrementLoading(){
 }
 
 function render(){
-  if(completion === toComplete){
-    // disegno i frame e la gui di gioco
-    clear()
-    drawGameOverlay()
+  if(finished === false){
+    if(completion === toComplete){
+      // disegno i frame e la gui di gioco
+      clear()
+      drawGameOverlay()
 
-    // webgl rendering
-    for (const [type, mesh] of Object.entries(game_env)) {
+      // webgl rendering
+      for (const [type, mesh] of Object.entries(game_env)) {
 
-      setCamera()
+        setCamera()
 
-      var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
-      var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
+        var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
+        var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
 
-      mesh.draw(matrix, projectionMatrix)
+        mesh.draw(matrix, projectionMatrix)
+      }
+
+    }else{
+      // disegno la schermata di loading
+      drawLoadingOverlay()
     }
-
   }else{
-    // disegno la schermata di loading
-    drawLoadingOverlay()
+    drawEndOverlay()
   }
 
   console.log("COMPLETION " + completion)

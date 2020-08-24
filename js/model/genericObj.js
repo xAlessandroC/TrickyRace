@@ -1,5 +1,6 @@
 class GenericObj {
-  constructor(mesh) {
+  constructor(mesh, id) {
+    this.id = id
     this.track = mesh
 
     // initialize_position_track(this.track)
@@ -17,11 +18,29 @@ class GenericObj {
     this.center = (m4.multiply(this.track.getMatrix(), this.center)).slice(0, 3);
   }
 
+  setCollisionBox(){
+    var dimensions = computeDimensions([this.track])
+
+    var box = new CollisionBox(dimensions[0], dimensions[1]/2, dimensions[2]/2, this, 'box')
+    this.collisionBox = box
+
+    this.collisionBox.update(this.track.getMatrix())
+  }
+
   hasCollisionBox(){
     return this.collisionBox !== undefined
   }
 
+  onCollision(tag){
+    if(this.id === 'finish' && tag === 'car'){
+      finished = true
+    }
+  }
+
   draw(view_mtx, projection_matrix, mode){
     this.track.draw(view_mtx, projection_matrix, mode)
+
+    if(this.collisionBox !== undefined)
+      this.collisionBox.draw(view_mtx, projection_matrix, mode)
   }
 }

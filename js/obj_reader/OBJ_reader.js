@@ -204,7 +204,7 @@ function parseObj(text){
 
 // Legge in maniera asincrona un immagine (deve trovarsi nella sottocartella data)
 // dopodichè setta la texture giusta e infine invoca la callback
-function readImage(src, texture, callback){
+function readImage(src, texture){
   var image = new Image();
   image.src = "resources/models/" + src
   image.addEventListener('load', function() {
@@ -230,7 +230,5 @@ function readImage(src, texture, callback){
        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
     }
     incrementLoading()
-
-    callback()
   });
 }
