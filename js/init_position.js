@@ -13,8 +13,8 @@ function initialize_position_track(mesh){
   // mesh_mtx = m4.translate(mesh_mtx, 0.0, 0.0, -20.0)
 
   //for cube track
-  mesh_mtx = m4.scale(mesh_mtx, 3.0, 0.2, 4.0)
-  mesh_mtx = m4.translate(mesh_mtx, 0.0, -18.0, 0.0)
+  // mesh_mtx = m4.scale(mesh_mtx, 3.0, 0.2, 4.0)
+  // mesh_mtx = m4.translate(mesh_mtx, 0.0, -18.0, 0.0)
 
   mesh.setMatrix(mesh_mtx)
 }

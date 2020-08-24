@@ -35,3 +35,8 @@ function updateR(event, ui) {
   radius = ui.value;
   render();
 }
+
+function updateF(event, ui) {
+  angle = ui.value;
+  render();
+}

@@ -38,7 +38,7 @@ function onMouseDown(e){
   if ( e.button == 0){
     if(speedBoost_number !== 0){
       speedBoost_number -= 1
-      game_env['car'].speedBoost(2, 2000)
+      game_env['car'].speedBoost(1.8, 2000)
     }
   }
 
@@ -50,10 +50,12 @@ function onMouseDown(e){
       a=0
       b=0
       c=0
+      angle = 81
     }else{
       a=-7
       b=56
       c=-45
+      angle = 50
     }
   }
 }

@@ -19,11 +19,11 @@ class Car {
     this.centerw2 = computeCenter(this.w2)
     this.centerw3 = computeCenter(this.w3)
 
-    this.acceleration = 2.4 //1.2
+    this.acceleration = 2.0 //1.2
     this.attritoZ = 0.991; this.attritoX = 0.8; this.attritoY = 1.0
     this.vx = 0; this.vy = 0; this.vz = 0
-    this.facing = 0; this.grip = 0.45
-    this.sterzo = 0; this.vsterzo = 1.4; this.rsterzo = 0.75
+    this.facing = 0; this.grip = 0.40
+    this.sterzo = 0; this.vsterzo = 1.1; this.rsterzo = 0.75
     this.mozzo = 0;
     this.raggio = 1.8
 
@@ -32,16 +32,11 @@ class Car {
 
   carStep(){
     if (key_forward === true){
-      // this.acceleration += 0.2
-      // if(this.acceleration >= 1.2)  this.acceleration = 1.2
-      this.vx += this.acceleration * this.boost
+      this.vx += this.acceleration
     }
     if (key_backward === true){
-      // this.acceleration += 0.2
-      // if(this.acceleration >= 1.2)  this.acceleration = 1.2
-      this.vx -= this.acceleration
+      this.vx -= (this.acceleration/1.2)
     }
-    // this.acceleration *= 0.9; if(Math.abs(this.acceleration) < 0.0001) this.acceleration = 0
     document.getElementById("acceleration").innerHTML = "acc " + this.acceleration
 
     if (key_left === true)
@@ -65,7 +60,7 @@ class Car {
   }
 
   updatePosition(){
-    var mtx = m4.translate(this.chassis.getMatrix(), this.vx, this.vy, this.vz)
+    var mtx = m4.translate(this.chassis.getMatrix(), this.vx* this.boost, this.vy, this.vz)
     var sterzo_multiplier = 30/4.2
 
     // chassis

@@ -100,6 +100,8 @@ function init_canvas(){
   webglLessonsUI.setupSlider("#button_phi", {value: phi, slide: updatePhi, min: -360, max: 360});
   webglLessonsUI.setupSlider("#button_theta", {value: theta, slide: updateTheta, min: -360, max: 360});
   webglLessonsUI.setupSlider("#button_r", {value: radius, slide: updateR, min: -360, max: 360});
+
+  webglLessonsUI.setupSlider("#button_F", {value: angle, slide: updateF, min: -360, max: 360});
 }
 
 const FRAMES_PER_SECOND = 30;

@@ -180,24 +180,6 @@ function parseObj(text){
     triang = 1
   }
 
-  // Aggiungere vertici duplicati
-  if(texture_active){
-    for (const property in dict) {
-      var entries = dict[property]
-      for (const property2 in entries) {
-        var entry = entries[property2]
-
-        vertices.push(vertices[Number(property)])
-        texcoords.push(temp_textcoords[entry.value])
-        idx = vertices.length - 1
-
-        var t1 = faces[entry.material]
-        var t2 = t1[entry.f_idx]
-        t2[entry.v_idx] = idx
-      }
-    }
-  }
-
   if(triang === 1){
     for (const property in faces) {
       faces[property] = triangulate(faces[property])

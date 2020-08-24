@@ -1,8 +1,8 @@
-class Track {
+class GenericObj {
   constructor(mesh) {
     this.track = mesh
 
-    initialize_position_track(this.track)
+    // initialize_position_track(this.track)
 
     this.center = [0,0,0,1]
     var i = 0
