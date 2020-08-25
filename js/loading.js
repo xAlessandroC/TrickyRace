@@ -1,5 +1,5 @@
 var completion = 0
-var toComplete = 89
+var toComplete = 96
 
 function clear(){
   ctx_2d.clearRect(0, 0, overlay.width, overlay.height);

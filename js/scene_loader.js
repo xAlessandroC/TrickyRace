@@ -76,26 +76,32 @@ function loadTrack(){
     // render()
     console.log("track caricato")
     incrementLoading()
-    return readMesh('track/arena.obj')
+    return readMesh('track/terrain.obj')
   })
-  // .then((mesh)=>{
-  //   game_env['terrain'] = new Track(mesh)
-  //   console.log("terrain caricato")
-  //   incrementLoading()
-  //   return readMesh('track/arena.obj')
-  // })
   .then((mesh)=>{
-    game_env['arena'] = new GenericObj(mesh, 'arena')
+    game_env['terrain'] = new GenericObj(mesh)
 
-    var mesh_mtx = game_env['arena'].track.getMatrix()
-    mesh_mtx = m4.scale(mesh_mtx, 4.0, 4.0, 4.0)
-    mesh_mtx = m4.translate(mesh_mtx, 0.0, -0.8, 15.0)
-    game_env['arena'].track.setMatrix(mesh_mtx)
+    var mesh_mtx = game_env['terrain'].track.getMatrix()
+    mesh_mtx = m4.scale(mesh_mtx, 3.0, 0.2, 4.0)
+    mesh_mtx = m4.translate(mesh_mtx, 0.0, -18.0, 0.0)
+    game_env['terrain'].track.setMatrix(mesh_mtx)
 
-    console.log("arena caricato")
+    console.log("terrain caricato")
     incrementLoading()
     return readMesh('track/finish.obj')
   })
+  // .then((mesh)=>{
+  //   game_env['arena'] = new GenericObj(mesh, 'arena')
+  //
+  //   var mesh_mtx = game_env['arena'].track.getMatrix()
+  //   mesh_mtx = m4.scale(mesh_mtx, 3.9, 3.9, 3.9)
+  //   mesh_mtx = m4.translate(mesh_mtx, 0.0, -1.0, 10.0)
+  //   game_env['arena'].track.setMatrix(mesh_mtx)
+  //
+  //   console.log("arena caricato")
+  //   incrementLoading()
+  //   return readMesh('track/finish.obj')
+  // })
   .then((mesh)=>{
     game_env['finish'] = new GenericObj(mesh, 'finish')
 
@@ -108,6 +114,51 @@ function loadTrack(){
     game_env['finish'].setCollisionBox()
 
     console.log("finish caricato")
+    incrementLoading()
+    return readMesh('track/s1.obj')
+  })
+  .then((mesh)=>{
+    game_env['s1'] = new GenericObj(mesh, 's1')
+
+    var mesh_mtx = game_env['s1'].track.getMatrix()
+    mesh_mtx = m4.translate(mesh_mtx, -80.0, -2.0, 170.0)
+    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
+    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-65))
+    mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
+    mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
+    game_env['s1'].track.setMatrix(mesh_mtx)
+
+    console.log("s1 caricato")
+    incrementLoading()
+    return readMesh('track/s1.obj')
+  })
+  .then((mesh)=>{
+    game_env['s2'] = new GenericObj(mesh, 's2')
+
+    var mesh_mtx = game_env['s2'].track.getMatrix()
+    mesh_mtx = m4.translate(mesh_mtx, 150.0, -2.0, -180.0)
+    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
+    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-86))
+    mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
+    mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
+    game_env['s2'].track.setMatrix(mesh_mtx)
+
+    console.log("s2 caricato")
+    incrementLoading()
+    return readMesh('track/adv.obj')
+  })
+  .then((mesh)=>{
+    game_env['adv1'] = new GenericObj(mesh, 'adv1')
+
+    var mesh_mtx = game_env['adv1'].track.getMatrix()
+    mesh_mtx = m4.translate(mesh_mtx, -100.0, 4.0, 450.0)
+    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-90))
+    // mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-86))
+    // mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
+    mesh_mtx = m4.scale(mesh_mtx, 0.5, 0.5, 0.5)
+    game_env['adv1'].track.setMatrix(mesh_mtx)
+
+    console.log("adv1 caricato")
     incrementLoading()
   })
 }
