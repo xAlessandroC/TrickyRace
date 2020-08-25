@@ -86,6 +86,7 @@ function init_canvas(){
   //mouse controls
   setUpMouseInteraction()
   keyboardSetUp()
+  ButtonSetUp()
 
   // Inizializzo game environment
   game_env = {}

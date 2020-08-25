@@ -10,10 +10,25 @@
         width: 100%;
         height: 100%;
       }
+      #right_zone{
+        position: absolute;
+        width: 12.5%;
+        height: 100%;
+        left: 87.7%;
+        padding-left: 10px;
+        top: 65%;
+      }
+      #left_zone{
+        position: absolute;
+        width: 12.3%;
+        height: 10%;
+        top: 75%;
+      }
       #canvasDiv{
         position: absolute;
-        width: 100%;
+        width: 75%;
         height: 100%;
+        left: 12.5%;
       }
 
       #overlay_canvas_2d{
@@ -48,9 +63,24 @@
     <div id="acceleration"></div>
     <div id="n_boost">0</div>
     <div id="score">score 0</div>
-    <div id="canvasDiv">
-      <canvas width="500" height="500" id="my_Canvas" tabindex="0"></canvas>
-      <canvas width="500" height="500" id="overlay_canvas_2d" ></canvas>
+    <div id="play_zone">
+      <div id="left_zone">
+        <button id="forward_button">Avanti</button>
+        <p></p>
+        <button id="backward_button">Indietro</button>
+      </div>
+      <div id="canvasDiv">
+        <canvas width="500" height="500" id="my_Canvas" tabindex="0"></canvas>
+        <canvas width="500" height="500" id="overlay_canvas_2d" ></canvas>
+      </div>
+      <div id="right_zone">
+        <button id="left_button" style="padding-right:10px;">Sinistra</button>
+        <button id="right_button">Destra</button>
+        <p></p>
+        <button id="camera_button">Cambio camera</button>
+        <p></p>
+        <button id="boost_button">Boost</button>
+      </div>
     </div>
 
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
@@ -130,6 +160,7 @@
     <script type="text/javascript" src="js/model/boost.js"></script>
     <script type="text/javascript" src="js/utils/mouse_utils.js"></script>
     <script type="text/javascript" src="js/interaction/keyboard.js"></script>
+    <script type="text/javascript" src="js/interaction/button.js"></script>
     <script type="text/javascript" src="js/obj_reader/gl_mesh.js"></script>
     <script type="text/javascript" src="js/obj_reader/OBJ_reader.js"></script>
     <script type="text/javascript" src="js/utils/gl_mesh_utils.js"></script>
