@@ -6,6 +6,8 @@ function initScene(){
   // loadBoost(-25.5, 15.0, -6)
   // loadRandomObstacle(10)
   // loadRandomBoost(10)
+  loadLight("light1")
+  loadLight("light2")
 
   //obstacle
   loadObstacle(Math.random(333)*360, Math.random(333)*20, -6, 20, "obstacle1")
@@ -212,4 +214,9 @@ function loadBoost(translation1, translation2, angle, name){
     game_env[name].setCollisionBox()
     incrementLoading()
   })
+}
+
+function loadLight(name){
+  game_env[name] = new Light(0, 100, 0)
+  game_env[name].setCollisionBox()
 }

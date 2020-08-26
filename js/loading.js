@@ -41,5 +41,5 @@ function render(){
     drawEndOverlay()
   }
 
-  console.log("COMPLETION " + completion)
+  // console.log("COMPLETION " + completion)
 }

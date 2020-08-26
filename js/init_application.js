@@ -18,7 +18,7 @@ var a=-7,b=56,c=-45
 // FIRST PERSON 0 0 -1
 //b=116
 
-var l_x = -39, l_y = 100, l_z = 100;
+var l_x = 0, l_y = 100, l_z = 0;
 var step_x = 10, step_y = 10, step_z = 10;
 
 var light = [l_x, l_y, l_z]
