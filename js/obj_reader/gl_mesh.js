@@ -47,7 +47,7 @@ class GL_Mesh{
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([Math.floor(Math.random(1231) * 256), Math.floor(Math.random(1231) * 256), Math.floor(Math.random(879) * 256), 255]));
 
       if( property !== "None" && property !== "default" && this.materials[property]["image"]!== undefined){// || Object.keys(this.materials).length !== 0){
-        readImage(this.materials[property]["image"], this.material_idx[property]["texture"], render)
+        readImage(this.materials[property]["image"], this.material_idx[property]["texture"])
       }
     }
 
@@ -86,7 +86,7 @@ class GL_Mesh{
       u_modelview: mw,
       u_world: this.getMatrix(),
       u_worldInverseTranspose: worldInverseTransposeMatrix,
-      u_lightWorldPosition: [l_x, l_y, l_z],
+      u_lightWorldPosition: [l_x,l_y,l_z],
       u_viewWorldPosition: cameraPosition,
       u_color: [0.2, 1, 0.2, 1],
       u_shininess: 2,

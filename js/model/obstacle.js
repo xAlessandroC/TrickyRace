@@ -9,7 +9,7 @@ class Obstacle {
 
     var mesh_mtx = mesh.getMatrix()
 
-    mesh_mtx = m4.scale(mesh_mtx, 4,4,4)
+    mesh_mtx = m4.scale(mesh_mtx, 3,3,3)
     mesh_mtx = m4.translate(mesh_mtx, translation1, 0.3, translation2)
 
     mesh.setMatrix(mesh_mtx)
@@ -41,8 +41,12 @@ class Obstacle {
     return this.collisionBox !== undefined
   }
 
-  onCollision(){
-    delete game_env[this.id]
+  onCollision(tag){
+    if(tag === 'car'){
+      delete game_env[this.id]
+      score -= 900
+      if(score<0) score = 0
+    }
   }
 
   draw(view_mtx, projection_matrix, mode){

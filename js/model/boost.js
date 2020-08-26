@@ -12,7 +12,7 @@ class Boost {
 
     this.boost.setMatrix(mesh_mtx)
 
-    this.angle = 0
+    this.angle = 10
   }
 
   boostStep(){
@@ -20,7 +20,7 @@ class Boost {
     mesh_mtx = m4.yRotate(mesh_mtx, degToRad(this.angle))
     this.boost.setMatrix(mesh_mtx)
 
-    this.angle += 0.1
+    // this.angle += 0.1
     this.collisionBox.update(mesh_mtx)
   }
 
@@ -37,9 +37,11 @@ class Boost {
     return this.collisionBox !== undefined
   }
 
-  onCollision(){
-    speedBoost_number += 1
-    delete game_env[this.id]
+  onCollision(tag){
+    if(tag === 'car'){
+      speedBoost_number += 1
+      delete game_env[this.id]
+    }
   }
 
   draw(view_mtx, projection_matrix, mode){

@@ -10,13 +10,13 @@ function keyboardSetUp(){
 
 function doKeyDown(e){
 
-  if (e.keyCode == 87) key_forward=true; // W key
+  if (e.keyCode == 87){ key_forward=true; startPlayed = true } // W key
 
-  if (e.keyCode == 83) key_backward=true; // S key
+  if (e.keyCode == 83){ key_backward=true; startPlayed = true } // S key
 
-  if (e.keyCode == 65) key_left=true; // A key
+  if (e.keyCode == 65){ key_left=true; startPlayed = true } // A key
 
-  if (e.keyCode == 68) key_right=true; // D KEY
+  if (e.keyCode == 68){ key_right=true; startPlayed = true } // D KEY
 }
 function doKeyUp(e){
 

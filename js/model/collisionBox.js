@@ -80,16 +80,15 @@ class CollisionBox {
 
   updateBox(){
     var i = 0
-    var vertex = [this.vertices[0][0],this.vertices[0][0],this.vertices[0][0],1.0]
+    var vertex = [this.vertices[0][0],this.vertices[0][1],this.vertices[0][2],1.0]
     var init = m4.multiply(this.box.getMatrix(),vertex).slice(0,3)
 
     var min_x = init[0], max_x = init[0]
     var min_y = init[1], max_y = init[1]
     var min_z = init[2], max_z = init[2]
 
-
     for(i=1;i<this.vertices.length;i++){
-      var vertex = [this.vertices[i][0],this.vertices[i][0],this.vertices[i][0],1.0]
+      var vertex = [this.vertices[i][0],this.vertices[i][1],this.vertices[i][2],1.0]
       var temp = m4.multiply(this.box.getMatrix(),vertex).slice(0,3)
 
       if(temp[0]>max_x) max_x = temp[0]

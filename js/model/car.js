@@ -9,32 +9,35 @@ class Car {
 
     initialize_position_car(components);
 
-    this.center = computeCenter(this.chassis)
+    var dimensions = computeDimensions([this.chassis,this.w0, this.w1, this.w2, this.w3])
+    this.width = dimensions[0]
+    this.length = dimensions[1]
+    this.height = dimensions[2]
+
     this.centerw0 = computeCenter(this.w0)
     this.centerw1 = computeCenter(this.w1)
     this.centerw2 = computeCenter(this.w2)
     this.centerw3 = computeCenter(this.w3)
 
-    this.shift_chassis = -this.center[0]
-    this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
-
-    this.acceleration = 0.6
+    this.acceleration = 2.0 //1.2
     this.attritoZ = 0.991; this.attritoX = 0.8; this.attritoY = 1.0
     this.vx = 0; this.vy = 0; this.vz = 0
-    this.facing = 0; this.grip = 0.45
-    this.sterzo = 0; this.vsterzo = 1.4; this.rsterzo = 0.75
+    this.facing = 0; this.grip = 0.40
+    this.sterzo = 0; this.vsterzo = 1.1; this.rsterzo = 0.75
     this.mozzo = 0;
-    this.raggio = 0.5
+    this.raggio = 1.8
 
     this.boost = 1; this.setBoost = false
   }
 
   carStep(){
-    // console.log("[CAR STEP]:\nFORWARD:" + key_forward + "\nBACKWARD:" + key_backward + "\nLEFT:" + key_left + "\nRIGHT:" + key_right)
-    if (key_forward === true)
-      this.vx += this.acceleration * this.boost
-    if (key_backward === true)
-      this.vx -= this.acceleration
+    if (key_forward === true){
+      this.vx += this.acceleration
+    }
+    if (key_backward === true){
+      this.vx -= (this.acceleration/1.2)
+    }
+    document.getElementById("acceleration").innerHTML = "acc " + this.acceleration
 
     if (key_left === true)
       this.sterzo += this.vsterzo;
@@ -47,28 +50,23 @@ class Car {
     this.vy *= this.attritoY; if(Math.abs(this.vy) < 0.0001) this.vy = 0
     this.vz *= this.attritoZ; if(Math.abs(this.vz) < 0.0001) this.vz = 0
 
-    this.facing = (this.vx*this.grip)*this.sterzo;
+    this.facing = (this.vx*this.grip)*this.sterzo * 0.4;
 
     var da ;
     da = (180.0*this.vx)/(Math.PI*this.raggio);
     this.mozzo+=da;
 
-    // console.log("[CAR STEP]: position ["+this.vx+","+this.vy+","+this.vz+","+this.sterzo+"]")
-    document.getElementById("sterzo").innerHTML = "sterzo " + this.sterzo
     this.updatePosition()
   }
 
   updatePosition(){
-    var mtx = m4.translate(this.chassis.getMatrix(), this.vx, this.vy, this.vz)
+    var mtx = m4.translate(this.chassis.getMatrix(), this.vx* this.boost, this.vy, this.vz)
     var sterzo_multiplier = 30/4.2
 
     // chassis
     var mtx_c = m4.copy(mtx)
     mtx_c = m4.zRotate(mtx_c, degToRad(this.facing));
     this.chassis.setMatrix(mtx_c)
-
-    this.center = [0,0,0,1]
-    this.center = (m4.multiply(this.chassis.getMatrix(), this.center)).slice(0, 3);
 
     // wheel 1
     var mtx_w0 = m4.copy(this.chassis.getMatrix())
@@ -102,14 +100,13 @@ class Car {
 
 
     var box_mtx = m4.copy(this.chassis.getMatrix())
-    box_mtx = m4.translate(box_mtx, 0, 0, 3.5)
+    box_mtx = m4.translate(box_mtx, 0, 0, 3.5) //F1
+    // box_mtx = m4.translate(box_mtx, 0, 0, 7.0) //Ronin
     this.collisionBox.update(box_mtx)
   }
 
   setCollisionBox(){
-    var dimensions = computeDimensions([this.chassis,this.w0, this.w1, this.w2, this.w3])
-
-    var box = new CollisionBox(dimensions[0]/2, dimensions[1]/2, dimensions[2]/2, this, 'box')
+    var box = new CollisionBox(this.width/2, this.length/2, this.height/2, this, 'box')
     this.collisionBox = box
     this.updatePosition()
   }
@@ -118,7 +115,7 @@ class Car {
     return this.collisionBox !== undefined
   }
 
-  onCollision(){
+  onCollision(tag){
 
   }
 
@@ -127,15 +124,13 @@ class Car {
     var self = this
 
     if (this.setBoost === false){
-      setInterval(function(){
+      setTimeout(function(){
          self.boost = 1;
-      }, time)
-      setInterval(function(){
          self.setBoost = false
-      }, 5000)
+      }, time)
+      this.setBoost = true
     }
 
-    this.setBoost = true
   }
 
   draw(view_mtx, projection_matrix, mode){

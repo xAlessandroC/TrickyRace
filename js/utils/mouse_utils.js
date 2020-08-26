@@ -15,6 +15,11 @@ function setUpMouseInteraction(){
   canvas.addEventListener("mouseup", onMouseUp)
   canvas.addEventListener("mousemove", onMouseMove)
   canvas.addEventListener('contextmenu', e => { e.preventDefault(); });
+
+  overlay.addEventListener("mousedown", onMouseDown)
+  overlay.addEventListener("mouseup", onMouseUp)
+  overlay.addEventListener("mousemove", onMouseMove)
+  overlay.addEventListener('contextmenu', e => { e.preventDefault(); });
 }
 
 var pressed_dx = 0
@@ -33,7 +38,24 @@ function onMouseDown(e){
   if ( e.button == 0){
     if(speedBoost_number !== 0){
       speedBoost_number -= 1
-      game_env['car'].speedBoost(2, 2000)
+      game_env['car'].speedBoost(1.8, 2000)
+    }
+  }
+
+  if ( e.button == 1){
+    e.preventDefault()
+
+    third_person = !third_person
+    if(third_person === true){
+      a=0
+      b=0
+      c=0
+      angle = 81
+    }else{
+      a=-7
+      b=56
+      c=-45
+      angle = 50
     }
   }
 }
@@ -53,8 +75,6 @@ function onMouseMove(e){
 
     start_x = cc_x
     start_y = cc_y
-
-    document.getElementById("phi-theta").innerHTML=""+theta+"-"+phi
 
     render()
   }

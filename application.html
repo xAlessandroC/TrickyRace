@@ -4,24 +4,84 @@
     <META HTTP-EQUIV=”Pragma” CONTENT=”no-cache”>
     <META HTTP-EQUIV=”Cache-Control” CONTENT=”no-cache”>
     <title>Tricky Race</title>
+    <style>
+      #my_Canvas{
+        border: 2px solid black;
+        width: 100%;
+        height: 100%;
+      }
+      #right_zone{
+        position: absolute;
+        width: 12.5%;
+        height: 100%;
+        left: 87.7%;
+        padding-left: 10px;
+        top: 65%;
+      }
+      #left_zone{
+        position: absolute;
+        width: 12.3%;
+        height: 10%;
+        top: 75%;
+      }
+      #canvasDiv{
+        position: absolute;
+        width: 75%;
+        height: 100%;
+        left: 12.5%;
+      }
+
+      #overlay_canvas_2d{
+        border: 2px solid black;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: 1;
+      }
     </style>
   </head>
   <body>
-    <button id = "Button7">Increase A</button>
-    <button id = "Button8">Decrease A</button>
-    <button id = "Button9">Increase B</button>
-    <button id = "Button10">Decrease B</button>
-    <button id = "Button11">Increase C</button>
-    <button id = "Button12">Decrease C</button>
     <div>
-      <button id="button_x">X</input>
-      <button id="button_y">Y</input>
-      <button id="button_z">Z</input>
+      <button id="button_a">A</button>
+      <button id="button_b">B</button>
+      <button id="button_c">C</button>
+
+      <button id="button_x">X</button>
+      <button id="button_y">Y</button>
+      <button id="button_z">Z</button>
+
+      <button id="button_phi">PHI</button>
+      <button id="button_theta">THETA</button>
+      <button id="button_r">R</button>
+
+      <button id="button_F">FOV</button>
     </div>
+    <div id="target"></div>
     <div id="sterzo"></div>
-    <canvas width="500" height="500" id="my_Canvas" style="border: 2px solid black; width: 100%; height: 50%;"></canvas>
-    <div id="phi-theta">0-0</div>
-    <div id="a-b-c"></div>
+    <div id="acceleration"></div>
+    <div id="n_boost">0</div>
+    <div id="score">score 0</div>
+    <div id="play_zone">
+      <div id="left_zone">
+        <button id="forward_button">Avanti</button>
+        <p></p>
+        <button id="backward_button">Indietro</button>
+      </div>
+      <div id="canvasDiv">
+        <canvas width="500" height="500" id="my_Canvas" tabindex="0"></canvas>
+        <canvas width="500" height="500" id="overlay_canvas_2d" ></canvas>
+      </div>
+      <div id="right_zone">
+        <button id="left_button" style="padding-right:10px;">Sinistra</button>
+        <button id="right_button">Destra</button>
+        <p></p>
+        <button id="camera_button">Cambio camera</button>
+        <p></p>
+        <button id="boost_button">Boost</button>
+      </div>
+    </div>
 
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
       attribute vec4 a_position;
@@ -89,13 +149,18 @@
       }
     </script>
 
-    <script type="text/javascript" src="js/model/track.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+    <script type="text/javascript" src="js/camera.js"></script>
+    <script type="text/javascript" src="js/overlay/overlay_utils.js"></script>
+    <script type="text/javascript" src="js/overlay/overlay.js"></script>
+    <script type="text/javascript" src="js/model/genericObj.js"></script>
     <script type="text/javascript" src="js/model/car.js"></script>
     <script type="text/javascript" src="js/model/collisionBox.js"></script>
     <script type="text/javascript" src="js/model/obstacle.js"></script>
     <script type="text/javascript" src="js/model/boost.js"></script>
     <script type="text/javascript" src="js/utils/mouse_utils.js"></script>
     <script type="text/javascript" src="js/interaction/keyboard.js"></script>
+    <script type="text/javascript" src="js/interaction/button.js"></script>
     <script type="text/javascript" src="js/obj_reader/gl_mesh.js"></script>
     <script type="text/javascript" src="js/obj_reader/OBJ_reader.js"></script>
     <script type="text/javascript" src="js/utils/gl_mesh_utils.js"></script>
@@ -103,6 +168,7 @@
     <script type="text/javascript" src="js/utils/webgl-utils.js"></script>
     <script type="text/javascript" src="js/utils/webgl-lessons-ui.js"></script>
 
+    <script type="text/javascript" src="js/slider_functions.js"></script>
     <script type="text/javascript" src="js/scene_loader.js"></script>
     <script type="text/javascript" src="js/init_position.js"></script>
     <script type="text/javascript" src="js/init_application.js"></script>
