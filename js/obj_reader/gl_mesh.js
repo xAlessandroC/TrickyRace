@@ -92,7 +92,6 @@ class GL_Mesh{
       u_worldInverseTranspose: worldInverseTransposeMatrix,
       u_lightWorldPosition2: game_env['carlight'].light,
       u_lights: lightPos,
-      u_referencePoint: target,
       u_viewWorldPosition: cameraPosition,
       u_color: [0.2, 1, 0.2, 1],
       u_shininess: 2,

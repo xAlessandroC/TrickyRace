@@ -1,5 +1,5 @@
 var completion = 0
-var toComplete = 96
+var toComplete = 97
 
 function clear(){
   ctx_2d.clearRect(0, 0, overlay.width, overlay.height);
@@ -41,5 +41,5 @@ function render(){
     drawEndOverlay()
   }
 
-  // console.log("COMPLETION " + completion)
+  console.log("COMPLETION " + completion)
 }

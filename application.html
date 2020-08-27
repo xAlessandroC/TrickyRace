@@ -126,7 +126,6 @@
 
       uniform vec3 u_lightWorldPosition2;
       uniform vec3 u_lights[3];
-      uniform vec3 u_referencePoint;
 
       // Passed in from the vertex shader.
       varying vec2 v_texcoord;
@@ -137,19 +136,6 @@
         vec3 sum_lambertian = vec3(0,0,0);
         vec3 sum_specular = vec3(0,0,0);
         vec3 N = normalize(normalInterp);
-
-        // vec3 L = normalize(u_lightWorldPosition - vertPos);
-        // float lambertian = max(dot(N, L), 0.0);
-        // float specular = 0.0;
-        // if(lambertian > 0.0) {
-        //   vec3 R = reflect(-L, N); // Reflected light vector
-        //   vec3 V = normalize(-vertPos); // Vector to viewer
-        //   // Compute the specular term
-        //   float specAngle = max(dot(R, V), 0.0);
-        //   specular = pow(specAngle, u_shininess);
-        // }
-        // sum_lambertian += vec3(u_kd * lambertian * u_lightColor);
-        // sum_specular += vec3(u_ks * specular * u_specularColor);
 
         vec3 ambient = vec3(0,0,0);
         for(int i=0; i<3; i++){
@@ -170,9 +156,7 @@
 
         vec3 L2 = normalize(u_lightWorldPosition2 - vertPos);
         float lambertian2 = 0.0;
-        vec3 T = normalize(u_lightWorldPosition2 - u_lightWorldPosition2);
-        float angle = dot(T,L2);
-        if(length(u_lightWorldPosition2 - vertPos) < 10.0 && angle<=0.2 && angle >= -0.2){
+        if(length(u_lightWorldPosition2 - vertPos) < 10.0){
           lambertian2 = 2.0*max(dot(N, L2), 0.0);
         }
         float specular2 = 0.0;
