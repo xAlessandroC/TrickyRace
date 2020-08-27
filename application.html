@@ -165,7 +165,7 @@
         vec3 V2 = normalize(-vertPos); // Vector to viewer
         // Compute the specular term
         float specAngle = max(dot(R2, V2), 0.0);
-        specular2 = pow(specAngle, u_shininess);
+        specular2 = 2.0*pow(specAngle, u_shininess);
         }
 
         gl_FragColor = texture2D(u_texture, v_texcoord);
