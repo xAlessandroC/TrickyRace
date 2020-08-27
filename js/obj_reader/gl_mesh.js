@@ -81,13 +81,18 @@ class GL_Mesh{
     var worldInverseMatrix = m4.inverse(worldMatrix);
     var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
+    //lights
+    var keys = (Object.keys(game_env)).filter(x => {if (x.startsWith("light")) return x})
+    var lightPos = (keys.map(x => game_env[x].light)).flat()
+
     var uniforms = {
       u_matrix: res,
       u_modelview: mw,
       u_world: this.getMatrix(),
       u_worldInverseTranspose: worldInverseTransposeMatrix,
-      u_lightWorldPosition: game_env['light1'].light,
-      u_lightWorldPosition2: game_env['light2'].light,
+      u_lightWorldPosition2: game_env['carlight'].light,
+      u_lights: lightPos,
+      u_referencePoint: target,
       u_viewWorldPosition: cameraPosition,
       u_color: [0.2, 1, 0.2, 1],
       u_shininess: 2,
@@ -97,8 +102,8 @@ class GL_Mesh{
       u_lightColor: m4.normalize([1.0, 1.0, 1.0]),
       u_ambientColor: m4.normalize([1.0, 1.0, 1.0]),
       u_specularColor: m4.normalize([1.0, 1.0, 1.0]),
-      u_lightColor2: m4.normalize([1.0, 1.0, 0.0]),
-      u_specularColor2: m4.normalize([1.0, 1.0, 0.0]),
+      u_lightColor2: m4.normalize([1.0, 0.75, 0.0]),
+      u_specularColor2: m4.normalize([1.0, 0.75, 0.0]),
       u_texture: this.texture[0],
       u_mode: 1
     };
