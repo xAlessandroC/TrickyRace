@@ -74,19 +74,24 @@ class GL_Mesh{
     this.bindAttributes(gl, program)
 
     view_mtx = m4.multiply(view_mtx, this.getMatrix())
-    var mw = view_mtx
+    var mw = m4.copy(this.getMatrix())
     var res = m4.multiply(projection_matrix, view_mtx)
 
     var worldMatrix = mw;
     var worldInverseMatrix = m4.inverse(worldMatrix);
     var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
+    //lights
+    var keys = (Object.keys(game_env)).filter(x => {if (x.startsWith("light")) return x})
+    var lightPos = (keys.map(x => game_env[x].light)).flat()
+
     var uniforms = {
       u_matrix: res,
       u_modelview: mw,
       u_world: this.getMatrix(),
       u_worldInverseTranspose: worldInverseTransposeMatrix,
-      u_lightWorldPosition: [l_x,l_y,l_z],
+      u_lightWorldPosition2: game_env['carlight'].light,
+      u_lights: lightPos,
       u_viewWorldPosition: cameraPosition,
       u_color: [0.2, 1, 0.2, 1],
       u_shininess: 2,
@@ -94,9 +99,12 @@ class GL_Mesh{
       u_kd: [1.0, 1.0, 1.0],
       u_ks: [1.0, 1.0, 1.0],
       u_lightColor: m4.normalize([1.0, 1.0, 1.0]),
-      u_ambientColor: m4.normalize([0.2, 0.2, 0.2]),
+      u_ambientColor: m4.normalize([1.0, 1.0, 1.0]),
       u_specularColor: m4.normalize([1.0, 1.0, 1.0]),
-      u_texture: this.texture[0]
+      u_lightColor2: m4.normalize([1.0, 0.75, 0.0]),
+      u_specularColor2: m4.normalize([1.0, 0.75, 0.0]),
+      u_texture: this.texture[0],
+      u_mode: 1
     };
 
     return uniforms
@@ -104,6 +112,7 @@ class GL_Mesh{
 
   draw(view_mtx, projection_matrix, mode){
     var uniforms = this.getUniforms(view_mtx, projection_matrix)
+    // console.log("LIGHT: " + uniforms.u_lightWorldPosition)
 
     if(Object.keys(this.materials).length == 0){
         uniforms["u_texture"] = this.material_idx["default"]["texture"]

@@ -26,9 +26,9 @@
       }
       #canvasDiv{
         position: absolute;
-        width: 75%;
+        width: 100%;
         height: 100%;
-        left: 12.5%;
+        /* left: 12.5%; */
       }
 
       #overlay_canvas_2d{
@@ -64,23 +64,23 @@
     <div id="n_boost">0</div>
     <div id="score">score 0</div>
     <div id="play_zone">
-      <div id="left_zone">
+      <!--<div id="left_zone">
         <button id="forward_button">Avanti</button>
         <p></p>
         <button id="backward_button">Indietro</button>
-      </div>
+      </div>-->
       <div id="canvasDiv">
         <canvas width="500" height="500" id="my_Canvas" tabindex="0"></canvas>
         <canvas width="500" height="500" id="overlay_canvas_2d" ></canvas>
       </div>
-      <div id="right_zone">
+      <!--<div id="right_zone">
         <button id="left_button" style="padding-right:10px;">Sinistra</button>
         <button id="right_button">Destra</button>
         <p></p>
         <button id="camera_button">Cambio camera</button>
         <p></p>
         <button id="boost_button">Boost</button>
-      </div>
+      </div>-->
     </div>
 
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
@@ -120,8 +120,12 @@
       uniform vec3 u_lightColor;
       uniform vec3 u_ambientColor;
       uniform vec3 u_specularColor;
+      uniform vec3 u_lightColor2;
+      uniform vec3 u_specularColor2;
+      uniform int u_mode;
 
-      uniform vec3 u_lightWorldPosition;
+      uniform vec3 u_lightWorldPosition2;
+      uniform vec3 u_lights[3];
 
       // Passed in from the vertex shader.
       varying vec2 v_texcoord;
@@ -129,23 +133,55 @@
       varying vec3 vertPos;
 
       void main() {
+        vec3 sum_lambertian = vec3(0,0,0);
+        vec3 sum_specular = vec3(0,0,0);
         vec3 N = normalize(normalInterp);
-        vec3 L = normalize(u_lightWorldPosition - vertPos);
-        // Lambert's cosine law
-        float lambertian = max(dot(N, L), 0.0);
-        float specular = 0.0;
-        if(lambertian > 0.0) {
-        vec3 R = reflect(-L, N); // Reflected light vector
-        vec3 V = normalize(-vertPos); // Vector to viewer
-        // Compute the specular term
-        float specAngle = max(dot(R, V), 0.0);
-        specular = pow(specAngle, u_shininess);
+
+        vec3 ambient = vec3(0,0,0);
+        for(int i=0; i<3; i++){
+          vec3 L = normalize(u_lights[i] - vertPos);
+          float lambertian = max(dot(N, L), 0.0);
+          float specular = 0.0;
+          if(lambertian > 0.0) {
+          vec3 R = reflect(-L, N); // Reflected light vector
+          vec3 V = normalize(-vertPos); // Vector to viewer
+          // Compute the specular term
+          float specAngle = max(dot(R, V), 0.0);
+          specular = pow(specAngle, u_shininess);
+          }
+
+          sum_lambertian += vec3(u_kd * lambertian * u_lightColor);
+          sum_specular += vec3(u_ks * specular * u_specularColor);
         }
+
+        vec3 L2 = normalize(u_lightWorldPosition2 - vertPos);
+        float lambertian2 = 0.0;
+        if(length(u_lightWorldPosition2 - vertPos) < 10.0){
+          lambertian2 = 2.0*max(dot(N, L2), 0.0);
+        }
+        float specular2 = 0.0;
+        if(lambertian2 > 0.0) {
+        vec3 R2 = reflect(-L2, N); // Reflected light vector
+        vec3 V2 = normalize(-vertPos); // Vector to viewer
+        // Compute the specular term
+        float specAngle = max(dot(R2, V2), 0.0);
+        specular2 = 2.0*pow(specAngle, u_shininess);
+        }
+
         gl_FragColor = texture2D(u_texture, v_texcoord);
         vec4 temp = texture2D(u_texture, v_texcoord);
-        gl_FragColor.rgb = vec3(u_ka * temp.rgb +
-                            u_kd * lambertian * u_lightColor +
-                            u_ks * specular * u_specularColor);
+        gl_FragColor.rgb = vec3(u_ka * u_ambientColor +
+                            u_kd * lambertian2 * u_lightColor2 +
+                            sum_lambertian +
+                            u_ks * specular2 * u_specularColor2 +
+                            sum_specular) * temp.rgb;
+
+        // only ambient
+        if(u_mode == 2) gl_FragColor = vec4(u_ka * u_ambientColor, 1.0);
+        // only diffuse
+        if(u_mode == 3) gl_FragColor = vec4(u_kd * sum_lambertian * u_lightColor, 1.0);
+        // only specular
+        if(u_mode == 4) gl_FragColor = vec4(u_ks * sum_specular * u_specularColor, 1.0);
       }
     </script>
 
@@ -158,6 +194,7 @@
     <script type="text/javascript" src="js/model/collisionBox.js"></script>
     <script type="text/javascript" src="js/model/obstacle.js"></script>
     <script type="text/javascript" src="js/model/boost.js"></script>
+    <script type="text/javascript" src="js/model/light.js"></script>
     <script type="text/javascript" src="js/utils/mouse_utils.js"></script>
     <script type="text/javascript" src="js/interaction/keyboard.js"></script>
     <script type="text/javascript" src="js/interaction/button.js"></script>
