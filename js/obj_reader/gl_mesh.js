@@ -88,6 +88,7 @@ class GL_Mesh{
     var uniforms = {
       u_matrix: res,
       u_modelview: mw,
+      u_cameraPosition: cameraPosition,
       u_world: this.getMatrix(),
       u_worldInverseTranspose: worldInverseTransposeMatrix,
       u_lightWorldPosition2: game_env['carlight'].light,
@@ -104,14 +105,17 @@ class GL_Mesh{
       u_lightColor2: m4.normalize([1.0, 0.75, 0.0]),
       u_specularColor2: m4.normalize([1.0, 0.75, 0.0]),
       u_texture: this.texture[0],
-      u_mode: 1
+      u_textureCube: environment_texture,
+      u_mode: 1,
+      u_enabled : 1
     };
 
     return uniforms
   }
 
-  draw(view_mtx, projection_matrix, mode){
+  draw(view_mtx, projection_matrix, mode, environmentEnabled){
     var uniforms = this.getUniforms(view_mtx, projection_matrix)
+    uniforms["u_enabled"] = environmentEnabled
     // console.log("LIGHT: " + uniforms.u_lightWorldPosition)
 
     if(Object.keys(this.materials).length == 0){

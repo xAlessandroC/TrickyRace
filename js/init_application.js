@@ -87,6 +87,7 @@ function init_canvas(){
   setUpMouseInteraction()
   keyboardSetUp()
   ButtonSetUp()
+  setUpEnvironmentMapping()
 
   // Inizializzo game environment
   game_env = {}

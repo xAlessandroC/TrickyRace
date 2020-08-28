@@ -154,6 +154,7 @@ function loadTrack(){
   })
   .then((mesh)=>{
     game_env['adv1'] = new GenericObj(mesh, 'adv1')
+    // game_env['adv1'].setEnvironment()
 
     var mesh_mtx = game_env['adv1'].track.getMatrix()
     mesh_mtx = m4.translate(mesh_mtx, -100.0, 4.0, 450.0)
@@ -179,6 +180,7 @@ function loadF1(){
    game_env['car'] = new Car(temp, "car")
 
    game_env['car'].setCollisionBox()
+   game_env['car'].setEnvironment()
    incrementLoading()
   })
 }
@@ -204,6 +206,7 @@ function loadObstacle(angle, multiplier, translation1, translation2, name){
     game_env[name] = new Obstacle(mesh, name, angle, multiplier, translation1, translation2)
 
     game_env[name].setCollisionBox()
+    game_env[name].setEnvironment()
     incrementLoading()
   })
 }

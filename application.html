@@ -113,6 +113,7 @@
       precision mediump float;
 
       uniform sampler2D u_texture;
+      uniform samplerCube u_textureCube;
       uniform float u_shininess;
       uniform vec3 u_ka;
       uniform vec3 u_kd;
@@ -126,6 +127,9 @@
 
       uniform vec3 u_lightWorldPosition2;
       uniform vec3 u_lights[3];
+
+      uniform vec3 u_cameraPosition;
+      uniform int u_enabled;
 
       // Passed in from the vertex shader.
       varying vec2 v_texcoord;
@@ -168,13 +172,21 @@
         specular2 = 2.0*pow(specAngle, u_shininess);
         }
 
+        //environment
+        vec4 env_color = vec4(1.0,1.0,1.0,1.0);
+        if(u_enabled == 1){
+          vec3 eyeToSurfaceDir = normalize(vertPos - u_cameraPosition);
+          vec3 direction = reflect(eyeToSurfaceDir,N);
+          env_color = textureCube(u_textureCube, direction);
+        }
+
         gl_FragColor = texture2D(u_texture, v_texcoord);
         vec4 temp = texture2D(u_texture, v_texcoord);
         gl_FragColor.rgb = vec3(u_ka * u_ambientColor +
                             u_kd * lambertian2 * u_lightColor2 +
                             sum_lambertian +
                             u_ks * specular2 * u_specularColor2 +
-                            sum_specular) * temp.rgb;
+                            sum_specular) * temp.rgb * env_color.rgb;
 
         // only ambient
         if(u_mode == 2) gl_FragColor = vec4(u_ka * u_ambientColor, 1.0);
@@ -185,6 +197,7 @@
       }
     </script>
 
+    <script type="text/javascript" src="js/environment/environment.js"></script>
     <script type="text/javascript" src="js/loading.js"></script>
     <script type="text/javascript" src="js/camera.js"></script>
     <script type="text/javascript" src="js/overlay/overlay_utils.js"></script>
