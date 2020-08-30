@@ -1,6 +1,7 @@
 class Car {
   constructor(components, name) {
     this.id = name
+    this.environment = 0
     this.chassis = components[0]
     this.w0 = components[1]
     this.w1 = components[2]
@@ -105,6 +106,10 @@ class Car {
     this.collisionBox.update(box_mtx)
   }
 
+  setEnvironment(){
+    this.environment = 1
+  }
+
   setCollisionBox(){
     var box = new CollisionBox(this.width/2, this.length/2, this.height/2, this, 'box')
     this.collisionBox = box
@@ -134,12 +139,12 @@ class Car {
   }
 
   draw(view_mtx, projection_matrix, mode){
-    this.chassis.draw(view_mtx, projection_matrix, mode)
-    this.w0.draw(view_mtx, projection_matrix, mode)
-    this.w1.draw(view_mtx, projection_matrix, mode)
-    this.w2.draw(view_mtx, projection_matrix, mode)
-    this.w3.draw(view_mtx, projection_matrix, mode)
+    this.chassis.draw(view_mtx, projection_matrix, mode, this.environment)
+    this.w0.draw(view_mtx, projection_matrix, mode, 0)
+    this.w1.draw(view_mtx, projection_matrix, mode, 0)
+    this.w2.draw(view_mtx, projection_matrix, mode, 0)
+    this.w3.draw(view_mtx, projection_matrix, mode, 0)
 
-    this.collisionBox.draw(view_mtx, projection_matrix, mode)
+    this.collisionBox.draw(view_mtx, projection_matrix, mode, 0)
   }
 }

@@ -1,6 +1,7 @@
 class Obstacle {
   constructor(mesh, name, angle, multiplier, translation1, translation2) {
     this.id = name
+    this.environment = 0
     this.obstacle = mesh
 
     this.anim_angle = 0
@@ -28,6 +29,10 @@ class Obstacle {
     this.anim_angle += 10
   }
 
+  setEnvironment(){
+    this.environment = 1
+  }
+
   setCollisionBox(){
     var dimensions = computeDimensions([this.obstacle])
 
@@ -50,7 +55,7 @@ class Obstacle {
   }
 
   draw(view_mtx, projection_matrix, mode){
-    this.obstacle.draw(view_mtx, projection_matrix, mode)
-    this.collisionBox.draw(view_mtx, projection_matrix, mode)
+    this.obstacle.draw(view_mtx, projection_matrix, mode, this.environment)
+    this.collisionBox.draw(view_mtx, projection_matrix, mode, 0)
   }
 }

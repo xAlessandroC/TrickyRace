@@ -1,6 +1,7 @@
 class GenericObj {
   constructor(mesh, id) {
     this.id = id
+    this.environment = 0
     this.track = mesh
 
     // initialize_position_track(this.track)
@@ -16,6 +17,10 @@ class GenericObj {
     this.center[2] = this.center[2]/(this.track.vertices.length/3)
 
     this.center = (m4.multiply(this.track.getMatrix(), this.center)).slice(0, 3);
+  }
+
+  setEnvironment(){
+    this.environment = 1
   }
 
   setCollisionBox(){
@@ -38,7 +43,7 @@ class GenericObj {
   }
 
   draw(view_mtx, projection_matrix, mode){
-    this.track.draw(view_mtx, projection_matrix, mode)
+    this.track.draw(view_mtx, projection_matrix, mode, this.environment)
 
     if(this.collisionBox !== undefined)
       this.collisionBox.draw(view_mtx, projection_matrix, mode)

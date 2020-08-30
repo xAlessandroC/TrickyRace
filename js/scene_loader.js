@@ -1,11 +1,11 @@
 function initScene(){
   loadTrack()
   loadF1()
-  // loadF1_2()
-  // loadObstacle(0, 0, 10.0, 10.0)
-  // loadBoost(-25.5, 15.0, -6)
-  // loadRandomObstacle(10)
-  // loadRandomBoost(10)
+
+  // game_env['skybox'] = new EnvironmentCube('skybox')
+  loadSkyBox()
+
+
   loadLight("light1", 0, 100, 300)
   loadLight("light2", -250, 100, 0)
   loadLight("light3", 0, 100, -300)
@@ -154,6 +154,7 @@ function loadTrack(){
   })
   .then((mesh)=>{
     game_env['adv1'] = new GenericObj(mesh, 'adv1')
+    // game_env['adv1'].setEnvironment()
 
     var mesh_mtx = game_env['adv1'].track.getMatrix()
     mesh_mtx = m4.translate(mesh_mtx, -100.0, 4.0, 450.0)
@@ -179,6 +180,7 @@ function loadF1(){
    game_env['car'] = new Car(temp, "car")
 
    game_env['car'].setCollisionBox()
+   game_env['car'].setEnvironment()
    incrementLoading()
   })
 }
@@ -204,6 +206,7 @@ function loadObstacle(angle, multiplier, translation1, translation2, name){
     game_env[name] = new Obstacle(mesh, name, angle, multiplier, translation1, translation2)
 
     game_env[name].setCollisionBox()
+    game_env[name].setEnvironment()
     incrementLoading()
   })
 }
@@ -222,4 +225,19 @@ function loadBoost(translation1, translation2, angle, name){
 function loadLight(name, x, y, z){
   game_env[name] = new Light(x, y, z)
   game_env[name].setCollisionBox()
+}
+
+function loadSkyBox(){
+  var temp = []
+  readMesh('sky/sky.obj')
+  .then((mesh)=>{
+    game_env['skybox'] = new GenericObj(mesh, 'skybox')
+
+    var mesh_mtx = game_env['skybox'].track.getMatrix()
+    mesh_mtx = m4.translate(mesh_mtx, 0.0, 70.0, 50.0)
+    mesh_mtx = m4.scale(mesh_mtx, 450, 450, 450)
+    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(180))
+    game_env['skybox'].track.setMatrix(mesh_mtx)
+    incrementLoading()
+  })
 }
