@@ -6,7 +6,7 @@ class Light {
   update(x, y, z){
     this.light = [x,y,z]
     this.mtx = m4.translate(m4.identity(), x, y, z)
-    
+
     if(this.collisionBox !== undefined){
       this.collisionBox.update(this.mtx)
     }
@@ -28,7 +28,7 @@ class Light {
   }
 
   draw(view_mtx, projection_matrix, mode){
-    if(this.collisionBox !== undefined)
+    if(this.hasCollisionBox() === true && activeBox === true)
       this.collisionBox.draw(view_mtx, projection_matrix, mode)
   }
 }

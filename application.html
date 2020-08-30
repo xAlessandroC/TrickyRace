@@ -5,6 +5,11 @@
     <META HTTP-EQUIV=”Cache-Control” CONTENT=”no-cache”>
     <title>Tricky Race</title>
     <style>
+
+      input{
+          margin: 10px;
+      }
+
       #my_Canvas{
         border: 2px solid black;
         width: 100%;
@@ -16,19 +21,19 @@
         height: 100%;
         left: 87.7%;
         padding-left: 10px;
-        top: 65%;
+        top: 45%;
       }
       #left_zone{
         position: absolute;
         width: 12.3%;
         height: 10%;
-        top: 75%;
+        top: 50%;
       }
       #canvasDiv{
         position: absolute;
-        width: 100%;
-        height: 100%;
-        /* left: 12.5%; */
+        width: 75%;
+        height: 90%;
+        left: 12.5%;
       }
 
       #overlay_canvas_2d{
@@ -43,44 +48,34 @@
     </style>
   </head>
   <body>
-    <div>
-      <button id="button_a">A</button>
-      <button id="button_b">B</button>
-      <button id="button_c">C</button>
+    <div id="container">
+      <div style="padding-bottom:10px;">
+        <input type="checkbox" id="activeCollisionBox" name="activeCollisionBox" value="active">
+        <label for="activeCollisionBox"> Attiva Collision Box</label>
 
-      <button id="button_x">X</button>
-      <button id="button_y">Y</button>
-      <button id="button_z">Z</button>
+        <input type="checkbox" id="activeEnvironmentBox" name="activeEnvironmentBox" value="active">
+        <label for="activeEnvironmentBox"> Attiva Environment Box</label>
 
-      <button id="button_phi">PHI</button>
-      <button id="button_theta">THETA</button>
-      <button id="button_r">R</button>
-
-      <button id="button_F">FOV</button>
-    </div>
-    <div id="target"></div>
-    <div id="sterzo"></div>
-    <div id="acceleration"></div>
-    <div id="n_boost">0</div>
-    <div id="score">score 0</div>
-    <div id="play_zone">
-      <!--<div id="left_zone">
+        <input type="checkbox" id="activeLighting" name="activeLighting" value="active" checked>
+        <label for="activeLighting"> Attiva Illuminazione</label>
+      <div>
+      <div id="left_zone">
         <button id="forward_button">Avanti</button>
         <p></p>
         <button id="backward_button">Indietro</button>
-      </div>-->
+      </div>
       <div id="canvasDiv">
         <canvas width="500" height="500" id="my_Canvas" tabindex="0"></canvas>
         <canvas width="500" height="500" id="overlay_canvas_2d" ></canvas>
       </div>
-      <!--<div id="right_zone">
+      <div id="right_zone">
         <button id="left_button" style="padding-right:10px;">Sinistra</button>
         <button id="right_button">Destra</button>
         <p></p>
         <button id="camera_button">Cambio camera</button>
         <p></p>
         <button id="boost_button">Boost</button>
-      </div>-->
+      </div>
     </div>
 
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
@@ -100,15 +95,8 @@
       varying vec4 v_position;
 
       void main() {
-        // Multiply the position by the matrix.
         gl_Position = u_matrix * a_position;
-        // if(u_skybox == 1.0){
-        //   v_position = a_position;
-        //   gl_Position = a_position;
-        //   gl_Position.z = 1.0;
-        // }
 
-        // Pass the texcoord to the fragment shader.
         v_texcoord = a_texcoord;
 
         vec4 vertPos4 = u_modelview * a_position;
@@ -135,6 +123,7 @@
 
       uniform vec3 u_lightWorldPosition2;
       uniform vec3 u_lights[3];
+      uniform int u_lightingEnabled;
 
       uniform vec3 u_cameraPosition;
       uniform int u_enabled;
@@ -158,9 +147,9 @@
           float lambertian = max(dot(N, L), 0.0);
           float specular = 0.0;
           if(lambertian > 0.0) {
-          vec3 R = reflect(-L, N); // Reflected light vector
-          vec3 V = normalize(-vertPos); // Vector to viewer
-          // Compute the specular term
+          vec3 R = reflect(-L, N);
+          vec3 V = normalize(-vertPos);
+
           float specAngle = max(dot(R, V), 0.0);
           specular = pow(specAngle, u_shininess);
           }
@@ -176,9 +165,9 @@
         }
         float specular2 = 0.0;
         if(lambertian2 > 0.0) {
-        vec3 R2 = reflect(-L2, N); // Reflected light vector
-        vec3 V2 = normalize(-vertPos); // Vector to viewer
-        // Compute the specular term
+        vec3 R2 = reflect(-L2, N);
+        vec3 V2 = normalize(-vertPos);
+
         float specAngle = max(dot(R2, V2), 0.0);
         specular2 = 2.0*pow(specAngle, u_shininess);
         }
@@ -192,18 +181,14 @@
         }
 
         gl_FragColor = texture2D(u_texture, v_texcoord);
-        vec4 temp = texture2D(u_texture, v_texcoord);
-        gl_FragColor.rgb = vec3(u_ka * u_ambientColor +
-                            u_kd * lambertian2 * u_lightColor2 +
-                            sum_lambertian +
-                            u_ks * specular2 * u_specularColor2 +
-                            sum_specular) * temp.rgb * env_color.rgb;
-
-        // if(u_skybox == 1.0){
-        //   vec4 t = u_viewDirectionProjectionInverse * v_position;
-        //   // gl_FragColor = textureCube(u_textureCube, normalize(t.xyz / t.w));
-        //   gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-        // }
+        if(u_lightingEnabled == 1){
+          vec4 temp = texture2D(u_texture, v_texcoord);
+          gl_FragColor.rgb = vec3(u_ka * u_ambientColor +
+                              u_kd * lambertian2 * u_lightColor2 +
+                              sum_lambertian +
+                              u_ks * specular2 * u_specularColor2 +
+                              sum_specular) * temp.rgb * env_color.rgb;
+        }
       }
     </script>
 

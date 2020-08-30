@@ -56,6 +56,8 @@ class Obstacle {
 
   draw(view_mtx, projection_matrix, mode){
     this.obstacle.draw(view_mtx, projection_matrix, mode, this.environment)
-    this.collisionBox.draw(view_mtx, projection_matrix, mode, 0)
+
+    if(this.hasCollisionBox() === true && activeBox === true)
+      this.collisionBox.draw(view_mtx, projection_matrix, mode, 0)
   }
 }

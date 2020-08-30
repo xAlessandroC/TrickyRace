@@ -57,6 +57,7 @@ class EnvironmentCube {
   }
 
   draw(view_mtx, projection_matrix, mode){
-    this.environmentCube.draw(view_mtx, projection_matrix, gl.TRIANGLES, 0, 1.0)
+    if(environmentBox === true)
+      this.environmentCube.draw(view_mtx, projection_matrix, gl.TRIANGLES, 0, 1.0)
   }
 }

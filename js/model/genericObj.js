@@ -45,7 +45,7 @@ class GenericObj {
   draw(view_mtx, projection_matrix, mode){
     this.track.draw(view_mtx, projection_matrix, mode, this.environment)
 
-    if(this.collisionBox !== undefined)
+    if(this.hasCollisionBox() === true && activeBox === true)
       this.collisionBox.draw(view_mtx, projection_matrix, mode)
   }
 }

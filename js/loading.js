@@ -23,14 +23,18 @@ function render(){
       drawGameOverlay()
 
       // webgl rendering
+      setCamera()
+      var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
+      var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
+
       for (const [type, mesh] of Object.entries(game_env)) {
 
-        setCamera()
+        if(type !== 'skybox')
+          mesh.draw(matrix, projectionMatrix)
+      }
 
-        var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
-        var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
-
-        mesh.draw(matrix, projectionMatrix)
+      if(activeEnvironmentBox === true){
+        game_env['skybox'].draw(matrix, projectionMatrix)
       }
 
     }else{
