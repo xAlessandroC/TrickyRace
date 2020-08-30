@@ -23,9 +23,11 @@ function drawGameOverlay(){
   ctx_2d.fillText("SCORE", overlay.width*0.05, overlay.height*0.12);
 
   // funzioni utente
-  ctx_2d.font = "italic 16px Arial";
+  ctx_2d.fillStyle = "black"
+  ctx_2d.font = "italic 18px Arial";
   ctx_2d.textAlign = "start";
-  ctx_2d.strokeRect(overlay.width*0.008, overlay.height*0.74, overlay.width*0.25, overlay.height*0.25);
+  ctx_2d.fillRect(overlay.width*0.008, overlay.height*0.74, overlay.width*0.30, overlay.height*0.25);
+  ctx_2d.fillStyle = "white"
   ctx_2d.fillText("Tasto centrale del mouse: cambio camera", overlay.width*0.01, overlay.height*0.76);
   ctx_2d.fillText("Tasto sinistro del mouse: attivazione boost", overlay.width*0.01, overlay.height*0.80);
   ctx_2d.fillText("W: movimento in avanti", overlay.width*0.01, overlay.height*0.84);
