@@ -74,8 +74,6 @@ function init_canvas(){
   gl = canvas.getContext("webgl")
   ctx_2d = overlay.getContext("2d")
 
-  canvas.focus()
-
   // Adatto il canvas a ricoprire il browser
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight

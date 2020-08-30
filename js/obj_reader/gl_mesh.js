@@ -87,6 +87,7 @@ class GL_Mesh{
 
     var uniforms = {
       u_matrix: res,
+      u_viewDirectionProjectionInverse: m4.inverse(res),
       u_modelview: mw,
       u_cameraPosition: cameraPosition,
       u_world: this.getMatrix(),
@@ -107,15 +108,17 @@ class GL_Mesh{
       u_texture: this.texture[0],
       u_textureCube: environment_texture,
       u_mode: 1,
+      u_skybox: 1,
       u_enabled : 1
     };
 
     return uniforms
   }
 
-  draw(view_mtx, projection_matrix, mode, environmentEnabled){
+  draw(view_mtx, projection_matrix, mode, environmentEnabled, skyboxEnabled){
     var uniforms = this.getUniforms(view_mtx, projection_matrix)
     uniforms["u_enabled"] = environmentEnabled
+    uniforms["u_skybox"] = skyboxEnabled
     // console.log("LIGHT: " + uniforms.u_lightWorldPosition)
 
     if(Object.keys(this.materials).length == 0){

@@ -84,6 +84,7 @@
     </div>
 
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
       attribute vec4 a_position;
       attribute vec2 a_texcoord;
       attribute vec3 a_normal;
@@ -91,14 +92,21 @@
       uniform mat4 u_matrix;
       uniform mat4 u_modelview;
       uniform mat4 u_worldInverseTranspose;
+      uniform float u_skybox;
 
       varying vec2 v_texcoord;
       varying vec3 normalInterp;
       varying vec3 vertPos;
+      varying vec4 v_position;
 
       void main() {
         // Multiply the position by the matrix.
         gl_Position = u_matrix * a_position;
+        // if(u_skybox == 1.0){
+        //   v_position = a_position;
+        //   gl_Position = a_position;
+        //   gl_Position.z = 1.0;
+        // }
 
         // Pass the texcoord to the fragment shader.
         v_texcoord = a_texcoord;
@@ -130,6 +138,9 @@
 
       uniform vec3 u_cameraPosition;
       uniform int u_enabled;
+      uniform float u_skybox;
+      uniform mat4 u_viewDirectionProjectionInverse;
+      varying vec4 v_position;
 
       // Passed in from the vertex shader.
       varying vec2 v_texcoord;
@@ -188,16 +199,16 @@
                             u_ks * specular2 * u_specularColor2 +
                             sum_specular) * temp.rgb * env_color.rgb;
 
-        // only ambient
-        if(u_mode == 2) gl_FragColor = vec4(u_ka * u_ambientColor, 1.0);
-        // only diffuse
-        if(u_mode == 3) gl_FragColor = vec4(u_kd * sum_lambertian * u_lightColor, 1.0);
-        // only specular
-        if(u_mode == 4) gl_FragColor = vec4(u_ks * sum_specular * u_specularColor, 1.0);
+        // if(u_skybox == 1.0){
+        //   vec4 t = u_viewDirectionProjectionInverse * v_position;
+        //   // gl_FragColor = textureCube(u_textureCube, normalize(t.xyz / t.w));
+        //   gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        // }
       }
     </script>
 
     <script type="text/javascript" src="js/environment/environment.js"></script>
+    <script type="text/javascript" src="js/environment/environmentCube.js"></script>
     <script type="text/javascript" src="js/loading.js"></script>
     <script type="text/javascript" src="js/camera.js"></script>
     <script type="text/javascript" src="js/overlay/overlay_utils.js"></script>
