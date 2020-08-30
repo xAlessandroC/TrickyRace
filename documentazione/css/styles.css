@@ -1,0 +1,49 @@
+span{
+  font-weight: bold;
+}
+
+fun{
+  font-style: italic;
+}
+
+
+#container{
+  margin: 10px;
+}
+
+#title{
+
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-top-color: black;
+  border-bottom-color: black;
+}
+
+#sub_title1{
+  float: left;
+  padding-right: 35%;
+}
+
+#sub_title2{
+  float: left;
+}
+
+#indice{
+  clear: left;
+  padding-bottom: 10px;
+}
+
+.title{
+  line-height: 10px;
+}
+
+.li2{
+  padding-left: 30px;
+  list-style-type: none;
+}
+
+.chapter_title{
+  margin-bottom: 1%;
+  border-bottom-style: solid;
+  border-bottom-color: black;
+}

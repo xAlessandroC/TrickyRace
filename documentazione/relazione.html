@@ -1,0 +1,487 @@
+<html>
+  <head>
+    <title>Relazione</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <div id="container">
+      <div id="title">
+        <h1 class="title">Progetto Computer Graphics AA 19/20: Tricky Race</h1>
+        <div id="sub_title1">
+          <h4 class="title">Alessandro Calvio</h4>
+        </div>
+        <div id="sub_title2">
+          <h4 class="title">Matricola: 0000901971</h4>
+        </div>
+      </div>
+      <div id="indice">
+        <h3>Indice</h3>
+        <ul>
+          <li><a href="#concept">Concept</a></li>
+          <li><a href="#funzionalita">Funzionalità</a></li>
+          <li><a href="#obj">Leggere file OBJ</a></li>
+          <li class="li2"><a href="#glmesh">GL_Mesh</a></li>
+          <li><a href="#gameObj">Elementi di gioco</a></li>
+          <li class="li2"><a href="#genericObj">GenericObj</a></li>
+          <li class="li2"><a href="#car">Car</a></li>
+          <li class="li2"><a href="#obstacle">Obstacle</a></li>
+          <li class="li2"><a href="#boost">Boost</a></li>
+          <li class="li2"><a href="#light">Light</a></li>
+          <li><a href="#collision">Collisioni</a></li>
+          <li><a href="#scene">Inizializzazione della scena</a></li>
+          <li><a href="#camera">Camera</a></li>
+          <li><a href="#overlay">Overlay 2D e loading</a></li>
+          <li><a href="#interaction">Interattività</a></li>
+          <li><a href="#lighting">Illuminazione</a></li>
+
+        <ul>
+      </div>
+      <div id="concept" name="concept">
+        <h3 class="chapter_title">CONCEPT</h3>
+        <div class="content">
+          Tricky Race è un gioco di corsa il cui scopo è quello di finire un giro di pista nel minor
+          tempo possibile cercando di colpire il numero minore possibile di ostacoli. Durante il percorso possono
+          essere trovati dei boost che permettono di far andare la macchina più
+          veloce per una breve frazione di tempo.
+          L'ambientazione cerca di riprodurre una classica pista di formula 1.
+        </div>
+      </div>
+      <div id="funzionalita" name="funzionalita">
+        <h3 class="chapter_title">FUNZIONALIT&Aacute</h3>
+        <div class="content">
+          <ul>
+            <li>Il movimento avviene tramite i tasti <span>W, A, S, D</span> per muoversi rispettivamente <span>avanti, sinistra, indietro, destra</span>;</li>
+            <li>Il <span>tasto centrale del mouse</span> viene usato per cambiare visuale. Ci sono due camere diverse: <span>visuale alta</span> e <span>visuale posteriore</span>;</li>
+            <li>Il <span>tasto sinistro</span> serve per attivare i boost quando disponibili;</li>
+            <li>I boost vengono aggiunti al totale posseduti quando li si tocca;</li>
+            <li>Il punteggio parte da 10000 e scende con lo scorrere del tempo, quando si tocca un ostacolo si subisce una penalità
+            di ulteriori 900 punti;</li>
+            <li>Lo scopo è completare il giro con il maggior punteggio possibile.</li>
+          </ul>
+        </div>
+      </div>
+      <div id="obj" name="obj">
+        <h3 class="chapter_title">LEGGERE FILE OBJ</h3>
+        <div class="content">
+          Tutti gli oggetti mesh presenti nel gioco sono descritti da <span>file OBJ</span>, questo ha portato a porsi il problema
+          di come caricare questo formato di file per poterlo poi utilizzare all'interno di WebGL. La questione sorta è duplice:
+          <ol>
+            <li>Leggere automaticamente un file OBJ da script senza che l'utente debba selezionare alcunchè;</li>
+            <li>Convertire i dati del file in un formato comprensibile da WebGL</li>
+          </ol>
+
+          Per quanto riguarda il primo punto, la lettura del file avviene in maniera asincrona tramite <span>AJAX</span>, una tecnica che permette di accedere in maniera
+          parallela a pagine web senza bloccare la navigazione dell'utente sulla pagina principale che prosegue
+          indisturbata: nel nostro caso la pagina web a cui vogliamo accedere è quella del file obj da leggere.<br>
+          Il problema che sorge ora sta nell'elaborare dati che arrivano in maniera asincrona. Facendo riferimento al
+          file <span>OBJ_reader.js</span> la funzione <fun>readFile</fun> si occupa di recuperare un file OBJ e invocarne sul
+          contenuto la funzione di callback passata come argomento, una particolarità del codice consiste nell'utilizzo
+          delle Promise che permettono di evitare il cosiddetto 'callback hell' tramite l'utilizzo in sequenza del metodo
+          'then': la potenza è la stessa delle chiamate asincrone con una leggibilità maggiore.
+          Ogni OBJ è formato da due file, il vero e proprio obj e il corrispondente mtl, per cui la funzione <fun>readFile</fun> viene
+          chiamata due volte e vengono passate due diverse callback per recuperare il diverso tipo di contenuto:
+          <fun>parseObj</fun> e <fun>parseMaterial</fun>.</br>
+
+          La prima funzione si occupa, prima di tutto, di salvare in array temporanei tutti i vertici, le coordinate
+          texture e le normali della mesh: questi array non costituirano quelli finali da usare con WebGL visto che molti
+          di questi dati potrebbero dover essere ripetuti. Segue l'analisi della topologia tramite la descrizione delle facce,
+          da ogni riga vengono estratti i vari elementi nella forma
+          </br>
+          </br>
+          <span>v/vt/vn</span>
+          </br>
+          </br>
+          e per ognuno di questi viene inserito il rispettivo elemento degli array temporanei nei tre array finali
+          (vertici, texture, normali) che verranno usati da WebGL, se ad esempio dovessimo trovare:
+          </br>
+          </br>
+          <span>1/22/4</span>
+          </br>
+          </br>
+          andremmo ad inserire rispettivamente l'elemento 0, 21 e 3 dei tre array. In questo modo si tiene conto di tutte le duplicazioni
+          che possono esserci.</br>
+          Per quanto riguarda la letture delle facce, andiamo a prevedere diversi sottoinsiemi a causa del fatto che
+          una mesh potrebbe essere composta da più sottogruppi o texture diverse, è importante mantenere l'informazione
+          relativamente a quale faccia appartiene a quale texture. Per come stiamo costruendo le cose gli indici dei vertici che compongono
+          la singola faccia non vengono più presi dal file ma sono semplicemente gli ultimi n vertici inseriti nell'array
+          (con n numero dei lati della faccia).</br>
+          Un'ultima ottimizzazione consiste nell'andare a fornire sempre facce triangolari, quindi nel caso di facce più
+          complesse (n>3) verrà attuata una triangolarizzazione.
+          </br>
+          La funzione <fun>parseMaterial</fun> semplicemente crea una struttura dati contentente, divisi per materiale,
+          tutti i dati relativi ai coefficenti di illuminazione (ka, ks, kd, Ns) e le texture utilizzate.
+
+        </div>
+        <h4 id="glmesh" name="glmesh">GL_Mesh</h4>
+        <div class="content">
+          GL_Mesh (<span>gl_mesh.js</span>) è il nome della classe base che viene usata per contenere tutti i dati di una mesh.
+          Il costruttore prende in input tutti i parametri estrapolati dalla <fun>readMesh</fun> e li elabora per caricare tutte le
+          texture (in maniera asincrona) o per ottenere i range delle facce per materiale, inoltre si occupa di fare tutti i binding degli array.
+          Il metodo <fun>draw</fun> si occupa della semantica di disegno della singola mesh a seconda che sia costituita da un solo materiale
+          o più di uno, in entrambi i casi viene fatto prima il bind delle uniform e infine viene invocata appropriatamente la
+          <fun>drawElements</fun>.</br></br>
+
+          <code>
+            var start = this.material_idx[property][0]</br>
+            var len = this.material_idx[property][1]</br>
+            gl.drawElements(mode || this.mode, len, gl.UNSIGNED_SHORT, start * 2);</br>
+          </code>
+          <icaption style="padding-top:10px; font-size: 0.8em;">
+            Nel caso in cui una mesh sia composta da più materiali la drawElements viene invocata fornendo il numero di facce
+            da disegnare appartenenti al materiale considerato (material_idx[property]) e l'offset di inizio.
+            La moltiplicazione per 2 è dovuta al fatto che per ogni indice vengono usati due byte.</br></br>
+          </icaption>
+
+          La classe GL_Mesh tiene conto anche della model matrix del singolo oggetto, in maniera da semplificare le operazioni.
+        </div>
+      </div>
+      <div id="gameObj" name="gameObj">
+        <h3 class="chapter_title">ELEMENTI DI GIOCO</h3>
+        <div class="content">
+          Utilizzare le mesh cosi come vengono create con la classe GL_Mesh risulta essere difficoltoso per creare comportamenti
+          di più alto livello, se, ad esempio, dovessimo inserire tutta la logica di funzionamento della macchina qui dentro
+          il codice risulterebbe pesante da leggere e capire. Per questo motivo sono state create delle classi wrapper che
+          si presentano come contenitori di mesh ma che offrono una interfaccia di più alto livello con cui interagire
+          delegando alla/alle mesh contenute le funzioni di più basso livello come, ad esempio, il disegno.</br>
+          Tutti questi oggetti hanno delle caratteristiche in comune sebbene cambi il loro comportamento e vengono tenuti
+          in considerazione all'interno del codice attraverso il dizionario <span>game_env</span> che contiene tutte le mesh
+          presenti in scena in un certo istante di gioco.
+        </div>
+
+        <h4 id="genericObj" name="genericObj">GenericObj (genericObj.js)</h4>
+        <div class="content">
+          Questo tipo di mesh rappresenta un oggetto statico della scena, oggetto che contribuisce solamente a livello
+          scenico ma che non avrà alcuna interazione con il giocatore.</br>
+          Un esempio di oggetto di questo tipo è la pista.
+        </div>
+        <h4 id="car" name="car">Car (car.js)</h4>
+        <div class="content">
+          La classe car modella l'auto che verrà usata dal giocatore principale, contiene cinque diverse mesh:
+          lo chassis, e le quattro ruote distinte. Per ogni ruota viene calcolato il centro relativo al sistema
+          di riferimento macchina, queste coordinate serviranno per effettuare le trasformazioni necessarie per
+          realizzare la rotazione.</br>
+          Vengono definiti ulteriori parametri:
+          <ul>
+            <li><span>acceleration</span>: determina l'accelerazione dell'auto</li>
+            <li><span>attritoZ, attritoX, attritoY</span>: coefficenti di attrito sui tre assi</li>
+            <li><span>vx, vy, vz</span>: velocità dell'auto</li>
+            <li><span>facing</span>: indica la direzione di rotazione dell'auto</li>
+            <li><span>grip</span>: indica l'aderenza delle ruote al terreno e quindi l'efficacia della sterzata</li>
+            <li><span>sterzo</span>: indica la posizione dello sterzo</li>
+            <li><span>vsterzo</span>: velocità di rotazione dello sterzo</li>
+            <li><span>rsterzo</span>: attrito esercitato dallo sterzo</li>
+            <li><span>mozzo</span>: rotazione delle ruote</li>
+            <li><span>raggio</span>: raggio delle ruote, supposte tutte uguali</li>
+          </ul>
+
+          Tutto questo viene usato all'interno delle due funzioni <fun>carStep</fun> e <fun>updatePosition</fun>.
+          La prima è quella che si occupa di calcolare la posizione successiva dell'auto a seconda dei tasti che
+          vengono premuti. Sfruttando l'equazione del moto uniformente accelerato, la velocità è<br></br>
+          <code>V(t+1) = V(t) + acceleration*t (avanti)</code></br></br>
+          <code>V(t+1) = V(t) - acceleration*t (indietro)</code></br></br>
+          che diventa</br></br>
+          <code>V(t+1) = V(t) + acceleration (avanti)</code></br></br>
+          <code>V(t+1) = V(t) - acceleration (indietro)</code></br></br>
+          considerando un tempo di simulazione pari ad 1 secondo.
+          I coefficenti di attrito evitano che la macchina raggiunga una velocità infinita e di conseguenza per
+          un tempo t infinito la velocità di assesta e il moto diventa uniforme.</br>
+          La pressione dei tasti destra e sinistra innesca la gestione della rotazione dello sterzo attraverso
+          la formula</br></br>
+          <code>sterzo += vsterzo (sinistra)</code></br></br>
+          <code>sterzo -= vsterzo (destra)</code></br></br>
+          Anche qui l'attrito dello sterzo evita che le ruote girino all'infinito assestandosi su un angolo preciso.
+          Se lo sterzo è ruotato e l'auto in movimento diventa significativo il contributo del facing</br></br>
+          <code>facing = (vx*grip)*sterzo * 0.4;</code></br></br>
+          0.4 è un numero che serve a accentuare o ridurre l'effetto della sterzata.
+          Infine la velocità delle ruote che viene calcolata a seconda della dimensione stessa di queste tramite</br></br>
+          <code>da = (180.0*vx)/(Math.PI*raggio)</br>mozzo += da;</code></br></br>
+
+          La funzione <fun>updatePosition</fun> effettua le trasformazioni necessarie per tradurre i nuovi dati
+          calcolati in una resa realistica della mesh, per cui</br></br>
+          <code>
+            var mtx = m4.translate(this.chassis.getMatrix(), this.vx* this.boost, this.vy, this.vz)</br>
+            var mtx_c = m4.copy(mtx)</br>
+            mtx_c = m4.zRotate(mtx_c, degToRad(this.facing));
+          </code></br></br>
+          una rotazione ed una traslazione per il movimento dello chassis dell'auto.
+          </br></br>
+          <code>
+            var mtx_w2 = m4.copy(this.chassis.getMatrix())</br>
+            mtx_w2 = m4.translate(mtx_w2, this.centerw2[0],this.centerw2[1],this.centerw2[2])</br>
+            mtx_w2 = m4.yRotate(mtx_w2, degToRad(this.mozzo));</br>
+            mtx_w2 = m4.translate(mtx_w2, -this.centerw2[0],-this.centerw2[1],-this.centerw2[2])</br>
+            this.w2.setMatrix(m4.copy(mtx_w2))
+          </code></br></br>
+          una rotazione per simulare il rotolamento delle ruote. Per poter effettuare una rotazione sull'asse
+          si porta prima la ruota nel suo centro di riferimento e poi la si riporta nella posizione iniziale,
+          la matrice di partenza è quella dello chassis, infatti le stesse trasformazioni servono anche per le ruote.
+          </br></br>
+          <code>
+            var mtx_w0 = m4.copy(this.chassis.getMatrix())</br>
+            mtx_w0 = m4.translate(mtx_w0, this.centerw0[0],this.centerw0[1],this.centerw0[2])</br>
+            mtx_w0 = m4.zRotate(mtx_w0, degToRad(this.sterzo*sterzo_multiplier));</br>
+            mtx_w0 = m4.yRotate(mtx_w0, degToRad(this.mozzo));</br>
+            mtx_w0 = m4.translate(mtx_w0, -this.centerw0[0],-this.centerw0[1],-this.centerw0[2])</br>
+            this.w0.setMatrix(m4.copy(mtx_w0))
+          </code></br></br>
+          lo stesso ragionamento vale anche per le ruote anteriori dove, però, bisogna tenere in considerazione
+          la rotazione dello sterzo.
+        </div>
+        <h4 id="obstacle" name="obstacle">Obstacle (obstacle.js)</h4>
+        <div class="content">
+          La classe Obstacle modella l'ostacolo che occorre evitare pena l'abbassamento del punteggio.
+          Il comportamento è quello di un oggetto capace di muoversi in maniera oscillatoria ad una certa
+          velocità e con una certa angolazione, questi parametri vengono definiti a livello di costruttore
+          (<span>multipler</span> e <span>angle</span>).
+          Di seguito la funzione <fun>obstacleStep</fun> che realizza ciò</br></br>
+          <code>
+            var obstacle_mtx = this.obstacle.getMatrix()</br>
+            var value = this.multiplier * Math.sin(degToRad(this.anim_angle))</br>
+            var angle = this.angle</br>
+            obstacle_mtx[12] = this.original_shift[0] + value*Math.cos(degToRad(angle))</br>
+            obstacle_mtx[14] = this.original_shift[2] + value*Math.sin(degToRad(angle))</br>
+            this.obstacle.setMatrix(obstacle_mtx)</br>
+            this.collisionBox.update(this.obstacle.getMatrix())</br>
+            this.anim_angle += 10
+          </code></br></br>
+          L'entità dello spostamento è dato da value che è un numero compreso nell'intervallo <span>
+          [-multiplier, multiplier]</span>, tuttavia questo viene in seguito splittato nelle due componenti orizzontale
+          e verticale a seconda dell'angolo specificato: come casi limite ci sono quelli in cui l'angolo vale
+          0, 90, 180, 270 in cui il contributo viene dato totalmente ad una unica direzione.</br>
+          Il parametro anim_angle è l'angolo che viene utilizzato per calcolare value e viene incrementato ogni volta di 10
+          gradi.
+        </div>
+        <h4 id="boost" name="boost">Boost (boost.js)</h4>
+        <div class="content">
+          Boost è la classe che realizza la mesh tramite il quale il giocatore può ottenere un bonus alla velocità
+          dell'auto. Il comportamento definito dalle funzione boostStep è molto semplice, la mesh non fa altro che
+          ruotare su se stessa, si tratta di un'effetto per lo più grafico.
+          La vera natura di questo oggetto è per lo più interattiva e verrà spiegata quando si parlerà delle collisioni.
+        </div>
+        <h4 id="light" name="light">Light (light.js)</h4>
+        <div class="content">
+          L'esigenza di una vera e propria classe che contenesse la posizione di una sorgente di luce è per motivi
+          di debug principalmente, trattandola come una mesh è possibile visualizzare un qualche oggetto (la sua collision box)
+          in maniera da avere una più chiara visione di dove si trovi.
+        </div>
+      </div>
+      <div id="collision" name="collision">
+        <h3 class="chapter_title">COLLISIONI</h3>
+        <div class="content">
+        Sviluppare un sistema di rilevamento delle collisioni è stato necessario per capire quando la macchina colpisse
+        gli ostacoli oppure i boost. Le caratteristiche che si vogliono ottenere sono molteplici:
+        <ul>
+          <li>Creare un sistema che si incastri bene con l'insieme di oggetti già esistenti;</li>
+          <li>Riuscire a innescare comportamenti diversi per oggetti diversi;</li>
+          <li>Essere in grado di stabilire tra quali oggetti è avvenuta la collisione.</li>
+        </ul>
+        Un metodo, molto utilizzato all'interno dei videogame, è quello di creare un rettangolo che circondi completamente
+        l'oggetto in questione e che sia in grado di capire quando collide con altri rettangoli di altri oggetti.</br>
+        La classe collisionBox <span>(collisionBox.js)</span> tiene traccia dei valori massimi e minimi del rettangolo
+        lungo i tre assi X,Y,Z in quanto questa informazione ci servirà per fare il rilevamento delle collisioni. Quello che
+        si fa è partire da un cubo di lato 2 che viene opportunamente scalato per avvolgere la mesh in questione, in seguito
+        la funzione <fun>updateBox</fun> si occupa di aggiornare i vertici relativi al cubo a seconda dello spostamento subito
+        dall'oggetto a cui la box è attaccata e di ricalcolare i nuovi valori max e min. Per motivi di debug, tale cubo viene
+        visualizzato a schermo in maniera da avere una visione più chiara della situazione.</br>
+        Per rispondere al primo punto, ogni classe viene dotata di un metodo <fun>setCollisionBox</fun> che permette di fare
+        in modo che una determinata mesh sia dotata di collisionBox e quindi sia "soggetta" alle collisioni.
+        </br>
+        Di seguito il codice che realizza la rilevazione delle collisioni:</br></br>
+        <code>
+          var r =  (this.min_X <= box.max_X && this.max_X >= box.min_X) &&</br>
+                 (this.min_Y <= box.max_Y && this.max_Y >= box.min_Y) &&</br>
+                 (this.min_Z <= box.max_Z && this.max_Z >= box.min_Z);</br></br>
+          return r
+        </code></br></br>
+        Dove this fa riferimento al box corrente, mentre box fa riferimento al collisionBox della mesh con cui si sta facendo il
+        confronto. L'operazione consiste in un confronto su 3 segmenti (le proiezioni delle dimensioni sui tre assi), e quindi
+        c'è una collisioni se tutte le proiezioni si intersecano con quelle della seconda box.
+        Il ciclo principale di rendering si occupa, ad ogni iterazione, di controllare se nella scena è avvenuta
+        qualche collisione salvando, nel caso, i riferimenti agli oggetti che hanno colliso</br></br>
+        <code>
+          var collision = game_env[keys[i]].collisionBox.hasCollided(game_env[keys[j]].collisionBox)</br>
+
+          if(collision){</br>
+            temp[i] = "true"</br>
+            temp[j] = "true"</br>
+            collidedWith[i].push(keys[j])</br>
+            collidedWith[j].push(keys[i])</br>
+            console.log("Collided " + game_env[keys[i]].id + " and " + game_env[keys[j]].id)</br>
+          }
+        </code></br></br>
+
+        A questo punto, su ogni oggetto che ha avuto almeno una collisione viene invocato il metodo <fun>onCollision</fun>
+        per ogni oggetto con cui è avvenuta la collisione. Il metodo <fun>onCollision</fun> è definito
+        in ogni classe di modello ed ha una semantica diversa a seconda del tipo di oggetto contro cui è avvenuta
+        l'intersezione: ad esempio la collisione tra ostacolo e auto provoca la scomparsa dell'ostacolo e il decremento
+        del punteggio, menre quella tra ostacolo e boost non ha alcun effetto.</br></br>
+        <code>
+          collidedWith[i].forEach((tag) => {</br>
+            game_env[keys[i]].onCollision(tag)</br>
+          });
+        </code></br></br>
+        </div>
+      </div>
+      <div id="scene" name="scene">
+        <h3 class="chapter_title">INIZIALIZZAZIONE DELLA SCENA</h3>
+        <div class="content">
+          I file <span>init_application.js</span> e <span>scene_loader.js</span> contengono le operazioni preliminari
+          sia a livello di inializzazione della scenografia che di contesto webgl. Il primo imposta le dimensioni
+          del canvas, il programma contenente gli shader e i valori dei parametri di camera</br></br>
+          <code>
+            phi = degToRad(0); theta = degToRad(0); radius = 80</br>
+            cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),</br>
+                              radius*Math.sin(phi)*Math.sin(theta),</br>
+                              radius*Math.cos(phi)]</br>
+            up = [0, 1, 0]</br>
+            target = [0, 0, 0]</br></br>
+
+            ar = canvas.clientWidth/canvas.clientHeight</br>
+            angle = 50</br>
+            near = 1</br>
+            far = 1000
+          </code></br></br>
+          per quanto rigurda quest'ultima si tratta di parametri puramente iniziali che cambieranno non appena l'applicazione
+          entrerà nel suo ciclo principale. In questo file è anche presente il ciclo di rendering principale.</br>
+          Lo scene loader invece si occupa di caricare e posizionare gli oggetti all'interno della scena, viene posizionata
+          l'auto, la pista, i boost e gli ostacoli, questi ultimi inizializzati nella direzione e nella velocità
+          in maniera randomica.
+        </div>
+        <div id="camera" name="camera">
+          <h3 class="chapter_title">CAMERA</h3>
+          <div class="content">
+            Come accennato precedentemente il gioco prevede la possibilità di cambiare tra due tipi di camera
+            <span>visuale alta</span> e <span>visuale posteriore</span> tramite la pressione del tasto centrale
+            del mouse, la prima è quella attiva di default.
+            Le due visuali sono ottenute andando a settare opportunamente le variabili cameraPosition e target
+            <ul>
+              <li>
+                Nella visuale alta il target coincide con il centro dell'auto, questo viene ottenuto
+                applicando al vettore [0, 0, 0, 1] la matrice di trasformazione dell'auto, in questo modo
+                è come se stessimo applicando al centro tutte le trasformazioni che ha subito la macchina in
+                maniera da trovare il vero centro. La cameraPosition è ottenuta sempre dal centro ma allontanato
+                di una certa quantità trovata sperimentalmente.
+              </li>
+              <li>
+                Nella visuale posteriore la camera si abbassa sensibilmente
+                il target coincide un punto anteriore rispetto alla posizione del guidatore ottenuto analogamente
+                al centro del punto precedente. La cameraPosition invece viene posizionata dietro l'auto.
+              </li>
+          </ul>
+          Di seguito un frammento di codice che mostra come vengono trovati i punti di riferimento per il setting
+          della visuale.</br></br>
+          <code>
+            var center = [0,0,0,1]</br>
+            center = (m4.multiply(game_env['car'].chassis.getMatrix(), center)).slice(0, 3);</br>
+          </code>
+          </div>
+        <div id="overlay" name="overlay">
+          <h3 class="chapter_title">OVERLAY 2D E LOADING</h3>
+          <div class="content">
+            L'overlay 2D del gioco contiene tutte le info relativamente a comandi, stato del punteggio e numero
+            di boost a disposizione. A livello realizzativo si è sfruttato il contesto 2D che lo strumento canvas
+            offre, tuttavia, poichè WebGL non permette di usare sia il contesto 2D che quello 3D sullo stesso canvas
+            si è deciso di crearne un altro sovrapponendolo a quello di gioco che rimane sottostante.</br></br>
+            <code>
+              canvas = document.getElementById("my_Canvas")</br>
+              overlay = document.getElementById("overlay_canvas_2d")</br>
+              gl = canvas.getContext("webgl") //contesto 3D dal canvas </br>
+              ctx_2d = overlay.getContext("2d") //contesto 2D dall'overlay </br>
+            </code></br></br>
+
+            Il file <span>overlay.js</span> contiene sia la fase di caricamento di eventuali immagini che vogliamo far apparire
+            sia le funzioni che si occupano di "popolare" la seconda schermata durante il ciclo di attività dell'applicazione
+            Il posizionamento del contenuto è stato fatto in relazione alle dimensioni del canvas in maniera da essere indipendente
+            e coerente su schermi di varie dimensioni (pc piuttosto che smartphone).</br>
+            Come emerso prima il contenuto dell'overlay non è sempre lo stesso, questo perchè si è deciso di sfruttare la presenza
+            della grafica 2D per suddividere l'applicazione in tre fasi:
+            <ul>
+              <li>Fase di loading</li>
+              <li>Fase principale di gioco</li>
+              <li>Fase di game over</li>
+            </ul>
+            Nella prima l'overlay mostra una semplice schermata di caricamento con una percentuale progressiva, in questo modo
+            si aspetta che tutte le risorse usate dall'applicazione (texture, modelli, ecc) vengano pienamente caricati cosi
+            da evitare errori a runtime per risorse mancanti e texture che vengono caricate mentre si gioca: in questa fase il
+            rendering 3D non è abilitato. Per creare la percentuale progressiva si è deciso di tenere traccia (manualmente) del
+            numero di risorse da caricare con un contatore che veniva incrementato ad ogni risorsa effettivamente letta.</br>
+            La schermata di gameover è quasi la stessa cosa, solamente che viene mostrato il punteggio totalizzato e si attiva
+            quando l'auto collide con il traguardo inserito sulla pista: anche qui il rendering 3D viene disabilitato.</br>
+            Infine nella fase principale di gioco sono presenti sia il rendering 3D che 2D, quest'ultimo allo scopo di mostrare
+            le funzioni utente del gioco.
+          </div>
+        </div>
+        <div id="interaction" name="interaction">
+          <h3 class="chapter_title">INTERATTIVIT&Aacute</h3>
+          <div class="content">
+            Il gioco è fruibile sia tramite mouse e tastiera che tramite pulsanti HTML (per facilitare l'uso da altri dispositivi),
+            i file <span>keyboard.js</span> e <span>button.js</span> sfruttano il sistema di eventi che javascript fornisce per
+            realizzare questo tipo di interattività.</br>
+            A livello sono presenti le variabili di sistema <span>key_forward, key_backward, key_left</span>
+            e <span>key_right</span> per lo spostamento
+            dell'auto e che vengono settate in entrambi i file a seconda che venga premuto un bottone o uno dei tasti
+            W, A, S, D. Lo stesso avviene per il cambio camera e l'uso dei boost che sono attivati dal mouseDown e mouseUp
+            in entrambi i casi.</br>
+            Una particolarità consiste nella gestione degli eventi del canvas: visto che sono stati sovrapposti due canvas,
+            quello sottostante non risulterà mai essere in focus, per questo motivo l'aggancio degli eventi è avvenuto
+            sull'overlay piuttosto che sul canvas tradizionale, infatti sarà questo ad essere in evidenza alla pressione
+            dei pulsanti di gioco.
+          </div>
+        </div>
+        <div id="lighting" name="lighting">
+          <h3 class="chapter_title">ILLUMINAZIONE</h3>
+          <div class="content">
+            Per la parte di illuminazione e shading si è deciso di implementare il modello di illuminazione di phong
+            seguito da una parte di environment mapping per aumentare il realismo della scena.</br></br>
+            <code>
+              void main() {</br>
+                gl_Position = u_matrix * a_position;</br></br>
+
+                v_texcoord = a_texcoord;</br></br>
+
+                vec4 vertPos4 = u_modelview * a_position;</br>
+                vertPos = vec3(vertPos4) / vertPos4.w;</br>
+                normalInterp = mat3(u_worldInverseTranspose) * a_normal;</br>
+              }
+            </code></br></br>
+            Il codice del vertex shader è piuttosto breve, ai fini delle operazioni di lighting interessano le ultime
+            righe dove si calcola prima il vertice 3D nello spazio e in seguito si orienta la normale secondo la matrice
+            di modello invertita, questo per fare in modo che anche la normale sia posizionata correttamente relativamente
+            ad eventuali trasformazioni che il vertice potrebbe aver subito.</br>
+            Il fragment shader (che non viene riportato per lunghezza) lavora tramite le normali che sono state
+            interpolate e che vanno normalizzate nuovamente, segue un ciclo che itera su tutte le sorgenti luce
+            presenti nella scena e per le quali calcola le componenti diffuse e speculari (la componente ambiente è fissa)
+            Il contributo finale è dato dalla somma di tutte le componenti diffuse e di quelle speculari
+            moltiplicate per il colore texture della specifica mesh.</br></br>
+            <code>
+              vec4 temp = texture2D(u_texture, v_texcoord);</br>
+              gl_FragColor.rgb = vec3(u_ka * u_ambientColor +</br>
+                                  u_kd * lambertian2 * u_lightColor2 +</br>
+                                  sum_lambertian +</br>
+                                  u_ks * specular2 * u_specularColor2 +</br>
+                                  sum_specular) * temp.rgb * env_color.rgb;  </br>
+            </code></br></br>
+            Il contributo dei termini che contengono lambertian2 e specular2 sono dovuti ai calcoli effettuati su un'altra
+            sorgente luce che vuole simulare i fari dell'auto. Per questa luce è stato settato un colore giallo e un limite
+            di azione pari a 10, come si vede dal codice sotto</br></br>
+            <code>
+              vec3 L2 = normalize(u_lightWorldPosition2 - vertPos);</br>
+              float lambertian2 = 0.0;</br>
+              if(length(u_lightWorldPosition2 - vertPos) < 10.0){</br>
+                lambertian2 = 2.0*max(dot(N, L2), 0.0);</br>
+              }
+            </code></br></br>
+
+            Infine segue l'ultima parte, quella di environment mapping. Per raggiungere l'effetto desiderato è stato creata
+            una textureCube con uno skybox predefinito, i calcoli effettuati sono simili a quella per l'illuminazione tradizionale
+            solamente che come posizione della luce si considera la posizione corrente della camera e a partire da questa
+            si calcola la direzione riflessa che verrà usata per indicizzare il texel corretto dello skybox.</br>
+            L'environment mapping non viene calcolato per ogni oggetti, ma può essere settato attraverso la variabile
+            environment presente in ogni mesh, questo per fare in modo che l'effetto riflettente fosse presente solamente
+            sugli oggetti lucidi tipo l'auto e gli ostacoli che si suppongono siano fatti di metallo.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
