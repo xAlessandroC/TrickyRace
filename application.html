@@ -58,6 +58,9 @@
 
         <input type="checkbox" id="activeLighting" name="activeLighting" value="active" checked>
         <label for="activeLighting"> Attiva Illuminazione</label>
+
+        <input type="checkbox" id="activeEnvironmentMap" name="activeEnvironmentMap" value="active" checked>
+        <label for="activeEnvironmentMap"> Attiva Environment mapping</label>
       <div>
       <div id="left_zone">
         <button id="forward_button">Avanti</button>
@@ -127,6 +130,7 @@
 
       uniform vec3 u_cameraPosition;
       uniform int u_enabled;
+      uniform int u_environmentMapping;
       uniform float u_skybox;
       uniform mat4 u_viewDirectionProjectionInverse;
       varying vec4 v_position;
@@ -174,7 +178,7 @@
 
         //environment
         vec4 env_color = vec4(1.0,1.0,1.0,1.0);
-        if(u_enabled == 1){
+        if(u_enabled == 1 && u_environmentMapping == 1){
           vec3 eyeToSurfaceDir = normalize(vertPos - u_cameraPosition);
           vec3 direction = reflect(eyeToSurfaceDir,N);
           env_color = textureCube(u_textureCube, direction);

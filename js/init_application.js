@@ -30,6 +30,7 @@ var startPlayed = false
 var finished = false
 var activeBox = false
 var activeEnvironmentBox = false
+var activeEnvironmentMap = true
 var activeLighting = true
 
 ///////////////////////// INIT FUNCTIONS /////////////////////////////////////////////////
@@ -82,6 +83,7 @@ function init_canvas(){
   document.getElementById("activeCollisionBox").addEventListener('click', function(e){activeBox = !activeBox})
   document.getElementById("activeEnvironmentBox").addEventListener('click', function(e){activeEnvironmentBox = !activeEnvironmentBox})
   document.getElementById("activeLighting").addEventListener('click', function(e){activeLighting = !activeLighting})
+  document.getElementById("activeEnvironmentMap").addEventListener('click', function(e){activeEnvironmentMap = !activeEnvironmentMap})
 }
 
 const FRAMES_PER_SECOND = 30;

@@ -113,6 +113,7 @@ class GL_Mesh{
       u_skybox: 1,
       u_enabled : 1,
       u_lightingEnabled : (activeLighting === true) ? 1 : 0,
+      u_environmentMapping : (activeEnvironmentMap === true) ? 1 : 0
     };
 
     return uniforms
