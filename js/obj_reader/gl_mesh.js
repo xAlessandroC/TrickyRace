@@ -87,6 +87,10 @@ class GL_Mesh{
     var diffuses = (keys.map(x => game_env[x].diffuse)).flat()
     var speculars = (keys.map(x => game_env[x].specular)).flat()
 
+    var reference = [game_env['car'].width/2+20, 0, game_env['car'].height/2, 1.0]
+    reference = (m4.multiply(game_env['car'].chassis.getMatrix(), reference)).slice(0, 3);
+    // game_env['carlight'].update(temp_l)
+
     var uniforms = {
       u_matrix: res,
       u_viewDirectionProjectionInverse: m4.inverse(res),
@@ -95,6 +99,7 @@ class GL_Mesh{
       u_world: this.getMatrix(),
       u_worldInverseTranspose: worldInverseTransposeMatrix,
       u_lightWorldPosition2: game_env['carlight'].light,
+      u_reference: reference,
       u_lights: lightPos,
       u_viewWorldPosition: cameraPosition,
       u_color: [0.2, 1, 0.2, 1],
