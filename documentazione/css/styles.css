@@ -2,6 +2,10 @@ span{
   font-weight: bold;
 }
 
+code{
+  background-color: rgb(173,216,230);
+}
+
 fun{
   font-style: italic;
 }
@@ -46,4 +50,5 @@ fun{
   margin-bottom: 1%;
   border-bottom-style: solid;
   border-bottom-color: black;
+  background-color: rgb(255,215,0);
 }

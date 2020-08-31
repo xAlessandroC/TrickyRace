@@ -40,7 +40,7 @@
         <h3 class="chapter_title">CONCEPT</h3>
         <div class="content">
           Tricky Race è un gioco di corsa il cui scopo è quello di finire un giro di pista nel minor
-          tempo possibile cercando di colpire il numero minore possibile di ostacoli. Durante il percorso possono
+          tempo possibile cercando di colpire il minor numero possibile di ostacoli. Durante il percorso possono
           essere trovati dei boost che permettono di far andare la macchina più
           veloce per una breve frazione di tempo.
           L'ambientazione cerca di riprodurre una classica pista di formula 1.
@@ -53,9 +53,10 @@
             <li>Il movimento avviene tramite i tasti <span>W, A, S, D</span> per muoversi rispettivamente <span>avanti, sinistra, indietro, destra</span>;</li>
             <li>Il <span>tasto centrale del mouse</span> viene usato per cambiare visuale. Ci sono due camere diverse: <span>visuale alta</span> e <span>visuale posteriore</span>;</li>
             <li>Il <span>tasto sinistro</span> serve per attivare i boost quando disponibili;</li>
-            <li>I boost vengono aggiunti al totale posseduti quando li si tocca;</li>
-            <li>Il punteggio parte da 10000 e scende con lo scorrere del tempo, quando si tocca un ostacolo si subisce una penalità
+            <li>I <span>boost</span> vengono aggiunti al totale posseduti quando li si tocca;</li>
+            <li>Il punteggio parte da 9999 e scende con lo scorrere del tempo, quando si tocca un <span>ostacolo</span> si subisce una penalità
             di ulteriori 900 punti;</li>
+            <li>Il giro finisce quando si tocca il <span>traguardo</span>;</li>
             <li>Lo scopo è completare il giro con il maggior punteggio possibile.</li>
           </ul>
         </div>
@@ -256,12 +257,14 @@
           Boost è la classe che realizza la mesh tramite il quale il giocatore può ottenere un bonus alla velocità
           dell'auto. Il comportamento definito dalle funzione boostStep è molto semplice, la mesh non fa altro che
           ruotare su se stessa, si tratta di un'effetto per lo più grafico.
-          La vera natura di questo oggetto è per lo più interattiva e verrà spiegata quando si parlerà delle collisioni.
+          La vera natura di questo oggetto è interattiva e verrà spiegata quando si parlerà delle collisioni.
         </div>
         <h4 id="light" name="light">Light (light.js)</h4>
         <div class="content">
-          L'esigenza di una vera e propria classe che contenesse la posizione di una sorgente di luce è per motivi
-          di debug principalmente, trattandola come una mesh è possibile visualizzare un qualche oggetto (la sua collision box)
+          L'esigenza di una vera e propria classe Light è per motivi
+          di debug principalmente, al suo interno troviamo sia la posizione, ma anche il colore della luce
+          e delle riflessioni speculari. Il motivo che ha portato alla sua creazione sta nel fatto che
+          trattandola come una mesh è possibile visualizzare un qualche oggetto (la sua collision box)
           in maniera da avere una più chiara visione di dove si trovi.
         </div>
       </div>
@@ -270,11 +273,19 @@
         <div class="content">
         Sviluppare un sistema di rilevamento delle collisioni è stato necessario per capire quando la macchina colpisse
         gli ostacoli oppure i boost. Le caratteristiche che si vogliono ottenere sono molteplici:
-        <ul>
-          <li>Creare un sistema che si incastri bene con l'insieme di oggetti già esistenti;</li>
-          <li>Riuscire a innescare comportamenti diversi per oggetti diversi;</li>
-          <li>Essere in grado di stabilire tra quali oggetti è avvenuta la collisione.</li>
-        </ul>
+        <div>
+          <div style="float:left;">
+            <ul>
+              <li>Creare un sistema che si incastri bene con l'insieme di oggetti già esistenti;</li>
+              <li>Riuscire a innescare comportamenti diversi per oggetti diversi;</li>
+              <li>Essere in grado di stabilire tra quali oggetti è avvenuta la collisione.</li>
+            </ul>
+          </div>
+          <div style="float:right;">
+            <img src="./resources/collisionBox.png" width = 400, height = 250>
+          </div>
+        </div>
+        <div style="clear: left;clear: right;padding-bottom:10px;"></div>
         Un metodo, molto utilizzato all'interno dei videogame, è quello di creare un rettangolo che circondi completamente
         l'oggetto in questione e che sia in grado di capire quando collide con altri rettangoli di altri oggetti.</br>
         La classe collisionBox <span>(collisionBox.js)</span> tiene traccia dei valori massimi e minimi del rettangolo
@@ -295,7 +306,7 @@
         </code></br></br>
         Dove this fa riferimento al box corrente, mentre box fa riferimento al collisionBox della mesh con cui si sta facendo il
         confronto. L'operazione consiste in un confronto su 3 segmenti (le proiezioni delle dimensioni sui tre assi), e quindi
-        c'è una collisioni se tutte le proiezioni si intersecano con quelle della seconda box.
+        c'è una collisione se tutte le proiezioni si intersecano con quelle della seconda box.
         Il ciclo principale di rendering si occupa, ad ogni iterazione, di controllare se nella scena è avvenuta
         qualche collisione salvando, nel caso, i riferimenti agli oggetti che hanno colliso</br></br>
         <code>
@@ -313,8 +324,8 @@
         A questo punto, su ogni oggetto che ha avuto almeno una collisione viene invocato il metodo <fun>onCollision</fun>
         per ogni oggetto con cui è avvenuta la collisione. Il metodo <fun>onCollision</fun> è definito
         in ogni classe di modello ed ha una semantica diversa a seconda del tipo di oggetto contro cui è avvenuta
-        l'intersezione: ad esempio la collisione tra ostacolo e auto provoca la scomparsa dell'ostacolo e il decremento
-        del punteggio, menre quella tra ostacolo e boost non ha alcun effetto.</br></br>
+        l'intersezione: ad esempio la collisione tra boost e auto provoca la scomparsa del boost e l'aumento del numero
+        totale posseduti, mentre quella tra ostacolo e boost non ha alcun effetto.</br></br>
         <code>
           collidedWith[i].forEach((tag) => {</br>
             game_env[keys[i]].onCollision(tag)</br>
@@ -374,7 +385,19 @@
             var center = [0,0,0,1]</br>
             center = (m4.multiply(game_env['car'].chassis.getMatrix(), center)).slice(0, 3);</br>
           </code>
+
+          <div style="padding-top:10px;">
+            <div style="float:left;">
+              <img src="./resources/visualeAlta.png" width = 300, height = 250>
+            </div>
+            <div style="float:right;">
+              <img src="./resources/visualePosteriore.png" width = 300, height = 250>
+            </div>
           </div>
+          <div style="clear: left;clear: right;"></div>
+          Nelle due immagini sopra si può vedere dove viene considerato il target in entrambe le visuali,
+          la camera, ovviamente, è nella posizione da cui si sta guardando.</br></br>
+        </div>
         <div id="overlay" name="overlay">
           <h3 class="chapter_title">OVERLAY 2D E LOADING</h3>
           <div class="content">
@@ -472,6 +495,17 @@
               }
             </code></br></br>
 
+            <div>
+              <div style="float:left;">
+                <img src="./resources/senzaFaro.png" width = 500, height = 300>
+              </div>
+              <div style="float:right;">
+                <img src="./resources/conFaro.png" width = 500, height = 300>
+              </div>
+            </div>
+            <div style="clear: left;clear: right; padding-bottom:10px;"></div>
+            Nelle due immagini sopra possiamo notare l'effetto sull'obstacle del faro, a sinistra il faro non colpisce
+            l'oggetto, a destra si ed infatti il colore è più giallo.</br></br>
             Infine segue l'ultima parte, quella di environment mapping. Per raggiungere l'effetto desiderato è stato creata
             una textureCube con uno skybox predefinito, i calcoli effettuati sono simili a quella per l'illuminazione tradizionale
             solamente che come posizione della luce si considera la posizione corrente della camera e a partire da questa
