@@ -5,11 +5,11 @@ function initScene(){
   loadSkyBox()
 
 
-  loadLight("light1", 0, 100, 300)
-  loadLight("light2", -250, 100, 0)
-  loadLight("light3", 0, 100, -300)
-  loadLight("light4", 250, 100, 0)
-  loadLight("carlight", 0, 100, 0)
+  loadLight("light1", [0, 100, 300], [1.0,1.0,1.0], [1.0,1.0,1.0])
+  loadLight("light2", [-250, 100, 0], [1.0,1.0,1.0], [1.0,1.0,1.0])
+  loadLight("light3", [0, 100, -300], [1.0,1.0,1.0], [1.0,1.0,1.0])
+  // loadLight("light4", [250, 100, 0], [1.0,1.0,1.0], [1.0,1.0,1.0])
+  loadLight("carlight", [0, 100, 0], [1.0, 0.75, 0.0], [1.0, 0.75, 0.0])
 
   //obstacle
   loadObstacle(Math.random(333)*360, Math.random(333)*20, -6, 20, "obstacle1")
@@ -119,38 +119,38 @@ function loadTrack(){
 
     console.log("finish caricato")
     incrementLoading()
-    return readMesh('track/s1.obj')
-  })
-  .then((mesh)=>{
-    game_env['s1'] = new GenericObj(mesh, 's1')
-
-    var mesh_mtx = game_env['s1'].track.getMatrix()
-    mesh_mtx = m4.translate(mesh_mtx, -80.0, -2.0, 170.0)
-    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-65))
-    mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
-    game_env['s1'].track.setMatrix(mesh_mtx)
-
-    console.log("s1 caricato")
-    incrementLoading()
-    return readMesh('track/s1.obj')
-  })
-  .then((mesh)=>{
-    game_env['s2'] = new GenericObj(mesh, 's2')
-
-    var mesh_mtx = game_env['s2'].track.getMatrix()
-    mesh_mtx = m4.translate(mesh_mtx, 150.0, -2.0, -180.0)
-    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-86))
-    mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
-    game_env['s2'].track.setMatrix(mesh_mtx)
-
-    console.log("s2 caricato")
-    incrementLoading()
     return readMesh('track/adv.obj')
   })
+  // .then((mesh)=>{
+  //   game_env['s1'] = new GenericObj(mesh, 's1')
+  //
+  //   var mesh_mtx = game_env['s1'].track.getMatrix()
+  //   mesh_mtx = m4.translate(mesh_mtx, -80.0, -2.0, 170.0)
+  //   mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
+  //   mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-65))
+  //   mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
+  //   mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
+  //   game_env['s1'].track.setMatrix(mesh_mtx)
+  //
+  //   console.log("s1 caricato")
+  //   incrementLoading()
+  //   return readMesh('track/s1.obj')
+  // })
+  // .then((mesh)=>{
+  //   game_env['s2'] = new GenericObj(mesh, 's2')
+  //
+  //   var mesh_mtx = game_env['s2'].track.getMatrix()
+  //   mesh_mtx = m4.translate(mesh_mtx, 150.0, -2.0, -180.0)
+  //   mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
+  //   mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-86))
+  //   mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
+  //   mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
+  //   game_env['s2'].track.setMatrix(mesh_mtx)
+  //
+  //   console.log("s2 caricato")
+  //   incrementLoading()
+  //   return readMesh('track/adv.obj')
+  // })
   .then((mesh)=>{
     game_env['adv1'] = new GenericObj(mesh, 'adv1')
     // game_env['adv1'].setEnvironment()
@@ -221,8 +221,8 @@ function loadBoost(translation1, translation2, angle, name){
   })
 }
 
-function loadLight(name, x, y, z){
-  game_env[name] = new Light(x, y, z)
+function loadLight(name, position, diffuse, specular){
+  game_env[name] = new Light(position, diffuse, specular, name)
   game_env[name].setCollisionBox()
 }
 

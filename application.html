@@ -114,15 +114,15 @@
       uniform vec3 u_ka;
       uniform vec3 u_kd;
       uniform vec3 u_ks;
-      uniform vec3 u_lightColor;
-      uniform vec3 u_ambientColor;
-      uniform vec3 u_specularColor;
       uniform vec3 u_lightColor2;
       uniform vec3 u_specularColor2;
       uniform int u_mode;
 
       uniform vec3 u_lightWorldPosition2;
       uniform vec3 u_lights[3];
+      uniform vec3 u_ambientColor;
+      uniform vec3 u_lightColor[3];
+      uniform vec3 u_specularColor[3];
       uniform int u_lightingEnabled;
 
       uniform vec3 u_cameraPosition;
@@ -154,8 +154,8 @@
           specular = pow(specAngle, u_shininess);
           }
 
-          sum_lambertian += vec3(u_kd * lambertian * u_lightColor);
-          sum_specular += vec3(u_ks * specular * u_specularColor);
+          sum_lambertian += vec3(u_kd * lambertian * u_lightColor[i]);
+          sum_specular += vec3(u_ks * specular * u_specularColor[i]);
         }
 
         vec3 L2 = normalize(u_lightWorldPosition2 - vertPos);
