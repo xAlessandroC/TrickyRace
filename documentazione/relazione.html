@@ -59,6 +59,13 @@
             <li>Il giro finisce quando si tocca il <span>traguardo</span>;</li>
             <li>Lo scopo è completare il giro con il maggior punteggio possibile.</li>
           </ul>
+          Nella schermata è anche possibile trovare alcune checkbox che abilitano/disabilitano delle opzioni grafiche
+          <ul>
+            <li>Checkbox per la visualizzazione delle collision box;</li>
+            <li>Checkbox per la visualizzazione dell'environment box;</li>
+            <li>Checkbox per l'attivazione dell'illuminazione;</li>
+            <li>Checkbox per l'attivazione dell'environment mapping.</li>
+          </ul>
         </div>
       </div>
       <div id="obj" name="obj">
@@ -416,7 +423,7 @@
             sia le funzioni che si occupano di "popolare" la seconda schermata durante il ciclo di attività dell'applicazione
             Il posizionamento del contenuto è stato fatto in relazione alle dimensioni del canvas in maniera da essere indipendente
             e coerente su schermi di varie dimensioni (pc piuttosto che smartphone).</br>
-            Come emerso prima il contenuto dell'overlay non è sempre lo stesso, questo perchè si è deciso di sfruttare la presenza
+            Come emerso prima, il contenuto dell'overlay non è sempre lo stesso, questo perchè si è deciso di sfruttare la presenza
             della grafica 2D per suddividere l'applicazione in tre fasi:
             <ul>
               <li>Fase di loading</li>
@@ -485,16 +492,31 @@
                                   sum_specular) * temp.rgb * env_color.rgb;  </br>
             </code></br></br>
             Il contributo dei termini che contengono lambertian2 e specular2 sono dovuti ai calcoli effettuati su un'altra
-            sorgente luce che vuole simulare i fari dell'auto. Per questa luce è stato settato un colore giallo e un limite
-            di azione pari a 10, come si vede dal codice sotto</br></br>
-            <code>
-              vec3 L2 = normalize(u_lightWorldPosition2 - vertPos);</br>
-              float lambertian2 = 0.0;</br>
-              if(length(u_lightWorldPosition2 - vertPos) < 10.0){</br>
-                lambertian2 = 2.0*max(dot(N, L2), 0.0);</br>
-              }
-            </code></br></br>
-
+            sorgente luce che vuole simulare i fari dell'auto. Per creare un effetto più realistico l'azione della luce
+            è stata limitata ad una lunghezza 20 e per un cono avanti l'auto ben preciso</br></br>
+            <div>
+              <div style="float:left;">
+                <code>
+                  vec3 L2 = normalize(u_lightWorldPosition2 - vertPos);</br>
+                  float lambertian2 = 0.0;</br>
+                  vec3 referenceVec = normalize(u_reference - u_lightWorldPosition2);</br>
+                  vec3 objVec = normalize(vertPos - u_lightWorldPosition2);</br>
+                  float dotP = dot(referenceVec, objVec);</br>
+                  if(length(u_lightWorldPosition2 - vertPos) < 20.0 && dotP >= 0.1 && dotP <= 1.0){</br>
+                    lambertian2 = 2.0*max(dot(N, L2), 0.0);</br>
+                  }
+                </code></br></br>
+              </div>
+              <div style="float:right;">
+                <img src="./resources/lighting_scheme.png" width = 300, height = 300>
+              </div>
+            </div>
+            <div style="clear: left;clear: right; padding-bottom:10px;"></div>
+            Facendo riferimento allo schema sopra, si è preso un punto di riferimento avanti l'auto in maniera
+            da creare il vettore A che rimane fisso e serve per indicare quale sia la parte anteriore, il vettore
+            B è invece quello che collega la luce con il punto 3D attualmente considerato. Quando i due vettori
+            coincideranno il loro prodotto scalare sarà pari a 1 andando poi a diminuire quando ci si allontana, inserendo
+            quindi un limite sul valore che questo può assumere si va a modellare l'area colpita dal faro.
             <div>
               <div style="float:left;">
                 <img src="./resources/senzaFaro.png" width = 500, height = 300>
@@ -504,7 +526,8 @@
               </div>
             </div>
             <div style="clear: left;clear: right; padding-bottom:10px;"></div>
-            Nelle due immagini sopra possiamo notare l'effetto sull'obstacle del faro, a sinistra il faro non colpisce
+            Nelle due immagini sopra possiamo notare sia la forma a "cono" del faro sia
+            l'effetto che ha sull'obstacle, a sinistra non colpisce
             l'oggetto, a destra si ed infatti il colore è più giallo.</br></br>
             Infine segue l'ultima parte, quella di environment mapping. Per raggiungere l'effetto desiderato è stato creata
             una textureCube con uno skybox predefinito, i calcoli effettuati sono simili a quella per l'illuminazione tradizionale
@@ -512,7 +535,20 @@
             si calcola la direzione riflessa che verrà usata per indicizzare il texel corretto dello skybox.</br>
             L'environment mapping non viene calcolato per ogni oggetti, ma può essere settato attraverso la variabile
             environment presente in ogni mesh, questo per fare in modo che l'effetto riflettente fosse presente solamente
-            sugli oggetti lucidi tipo l'auto e gli ostacoli che si suppongono siano fatti di metallo.
+            sugli oggetti lucidi tipo l'auto e gli ostacoli che si suppongono siano fatti di metallo.</br>
+            La stessa texture usata per creare l'environment mapping è stata usata per l'environmentBox che, di fatto,
+            è semplicemente un cubo texturizzato con le 6 immagini trovate e allargato fino a ricoprire l'intera scena,
+            il tutto per rendere l'ambientazione un po' più realistica. Questa soluzone funziona ma presenta alcune limitazioni,
+            tra cui quella di essere soggetta al clipping sul far plane nel momento in cui ci sia allontana troppo dalla scena.
+            <div>
+              <div style="float:left;">
+                <img src="./resources/senzaEnvironment.png" width = 500, height = 300>
+              </div>
+              <div style="float:right;">
+                <img src="./resources/conEnvironment.png" width = 500, height = 300>
+              </div>
+            </div>
+            <div style="clear: left;clear: right; padding-bottom:10px;"></div>
           </div>
         </div>
       </div>

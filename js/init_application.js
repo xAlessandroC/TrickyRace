@@ -10,13 +10,8 @@ var game_env
 var speedBoost_number = 0
 var score = 9999
 
-// var a=-15,b=116,c=18
-// var a=-40,b=24,c=6
 var a=-7,b=56,c=-45
-// -40/24/6
-// OK -7/56/-45
-// FIRST PERSON 0 0 -1
-//b=116
+
 
 var l_x = 0, l_y = 100, l_z = 0;
 var step_x = 10, step_y = 10, step_z = 10;
@@ -24,7 +19,6 @@ var step_x = 10, step_y = 10, step_z = 10;
 var light = [l_x, l_y, l_z]
 
 // settings
-var free_view = false
 var third_person = false
 var startPlayed = false
 var finished = false

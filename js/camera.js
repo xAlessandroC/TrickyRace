@@ -1,5 +1,5 @@
 function setCamera(){
-  if(game_env['car'] === undefined || free_view === true){
+  if(game_env['car'] === undefined){
     cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                       radius*Math.sin(phi)*Math.sin(theta),
                       radius*Math.cos(phi)]
