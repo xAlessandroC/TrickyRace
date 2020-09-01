@@ -11,6 +11,9 @@ Per poter avviare il gioco occorre avviare un web server all'interno della carte
 ```
 python -m http.server [porta]
 ```
+e andare sull'URL
+```
+localhost:[porta]/application.html
+```
 
-Il file principale di gioco è application.html.</br>
 All'interno della cartella è possibile trovare la documentazione nella relativa cartella.
