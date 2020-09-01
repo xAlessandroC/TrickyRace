@@ -38,7 +38,6 @@ class Car {
     if (key_backward === true){
       this.vx -= (this.acceleration/1.2)
     }
-    document.getElementById("acceleration").innerHTML = "acc " + this.acceleration
 
     if (key_left === true)
       this.sterzo += this.vsterzo;
@@ -145,6 +144,7 @@ class Car {
     this.w2.draw(view_mtx, projection_matrix, mode, 0)
     this.w3.draw(view_mtx, projection_matrix, mode, 0)
 
-    this.collisionBox.draw(view_mtx, projection_matrix, mode, 0)
+    if(this.hasCollisionBox() === true && activeBox === true)
+      this.collisionBox.draw(view_mtx, projection_matrix, mode, 0)
   }
 }

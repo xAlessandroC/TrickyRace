@@ -1,5 +1,5 @@
 function setCamera(){
-  if(game_env['car'] === undefined || free_view === true){
+  if(game_env['car'] === undefined){
     cameraPosition = [radius*Math.sin(phi)*Math.cos(theta),
                       radius*Math.sin(phi)*Math.sin(theta),
                       radius*Math.cos(phi)]
@@ -19,9 +19,9 @@ function setCamera(){
       target = center
     }
 
-    var temp_l = [game_env['car'].width/2, 0, game_env['car'].height/2, 1.0]
+    var temp_l = [game_env['car'].width/2-3, 0, game_env['car'].height/2, 1.0]
     temp_l = (m4.multiply(game_env['car'].chassis.getMatrix(), temp_l)).slice(0, 3);
-    game_env['carlight'].update(temp_l[0],temp_l[1]+1.5,temp_l[2])
+    game_env['carlight'].update(temp_l)
 
   }
 }

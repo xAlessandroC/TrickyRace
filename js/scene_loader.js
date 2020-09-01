@@ -2,41 +2,40 @@ function initScene(){
   loadTrack()
   loadF1()
 
-  // game_env['skybox'] = new EnvironmentCube('skybox')
   loadSkyBox()
 
 
-  loadLight("light1", 0, 100, 300)
-  loadLight("light2", -250, 100, 0)
-  loadLight("light3", 0, 100, -300)
-  loadLight("light4", 250, 100, 0)
-  loadLight("carlight", 0, 100, 0)
+  loadLight("light1", [0, 100, 300], [1.0,1.0,1.0], [1.0,1.0,1.0])
+  loadLight("light2", [-250, 100, 0], [1.0,1.0,1.0], [1.0,1.0,1.0])
+  loadLight("light3", [0, 100, -300], [1.0,1.0,1.0], [1.0,1.0,1.0])
+  // loadLight("light4", [250, 100, 0], [1.0,1.0,1.0], [1.0,1.0,1.0])
+  loadLight("carlight", [0, 100, 0], [1.0, 0.75, 0.0], [1.0, 0.75, 0.0])
 
   //obstacle
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -6, 20, "obstacle1")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -6, 35, "obstacle2")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -9, 45, "obstacle3")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -20, 77, "obstacle4")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -37, 138, "obstacle5")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -13, 115, "obstacle6")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -8, 99, "obstacle7")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -3, 83, "obstacle8")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 30, 22, "obstacle9")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 15, 5, "obstacle10")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 35, -10, "obstacle11")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 63, -30, "obstacle12")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 63, -40, "obstacle13")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 66, -60, "obstacle14")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 66, -70, "obstacle15")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 55, -100, "obstacle16")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 44, -108, "obstacle17")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, 33, -109, "obstacle18")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -10, -84, "obstacle19")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -18, -95, "obstacle20")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -40, -115, "obstacle21")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -55, -85, "obstacle22")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -52, -25, "obstacle23")
-  loadObstacle(Math.random(333)*360, Math.random(333)*20*0, -44, -45, "obstacle24")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -6, 20, "obstacle1")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -6, 35, "obstacle2")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -9, 45, "obstacle3")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -20, 77, "obstacle4")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -37, 138, "obstacle5")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -13, 115, "obstacle6")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -8, 99, "obstacle7")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -3, 83, "obstacle8")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 30, 22, "obstacle9")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 15, 5, "obstacle10")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 35, -10, "obstacle11")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 63, -30, "obstacle12")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 63, -40, "obstacle13")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 66, -60, "obstacle14")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 66, -70, "obstacle15")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 55, -100, "obstacle16")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 44, -108, "obstacle17")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, 33, -109, "obstacle18")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -10, -84, "obstacle19")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -18, -95, "obstacle20")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -40, -115, "obstacle21")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -55, -85, "obstacle22")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -52, -25, "obstacle23")
+  loadObstacle(Math.random(333)*360, Math.random(333)*20, -44, -45, "obstacle24")
 
   //boost
   loadBoost(-39, 175, 0, "boost1")
@@ -120,38 +119,38 @@ function loadTrack(){
 
     console.log("finish caricato")
     incrementLoading()
-    return readMesh('track/s1.obj')
-  })
-  .then((mesh)=>{
-    game_env['s1'] = new GenericObj(mesh, 's1')
-
-    var mesh_mtx = game_env['s1'].track.getMatrix()
-    mesh_mtx = m4.translate(mesh_mtx, -80.0, -2.0, 170.0)
-    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-65))
-    mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
-    game_env['s1'].track.setMatrix(mesh_mtx)
-
-    console.log("s1 caricato")
-    incrementLoading()
-    return readMesh('track/s1.obj')
-  })
-  .then((mesh)=>{
-    game_env['s2'] = new GenericObj(mesh, 's2')
-
-    var mesh_mtx = game_env['s2'].track.getMatrix()
-    mesh_mtx = m4.translate(mesh_mtx, 150.0, -2.0, -180.0)
-    mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-86))
-    mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
-    game_env['s2'].track.setMatrix(mesh_mtx)
-
-    console.log("s2 caricato")
-    incrementLoading()
     return readMesh('track/adv.obj')
   })
+  // .then((mesh)=>{
+  //   game_env['s1'] = new GenericObj(mesh, 's1')
+  //
+  //   var mesh_mtx = game_env['s1'].track.getMatrix()
+  //   mesh_mtx = m4.translate(mesh_mtx, -80.0, -2.0, 170.0)
+  //   mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
+  //   mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-65))
+  //   mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
+  //   mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
+  //   game_env['s1'].track.setMatrix(mesh_mtx)
+  //
+  //   console.log("s1 caricato")
+  //   incrementLoading()
+  //   return readMesh('track/s1.obj')
+  // })
+  // .then((mesh)=>{
+  //   game_env['s2'] = new GenericObj(mesh, 's2')
+  //
+  //   var mesh_mtx = game_env['s2'].track.getMatrix()
+  //   mesh_mtx = m4.translate(mesh_mtx, 150.0, -2.0, -180.0)
+  //   mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
+  //   mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-86))
+  //   mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
+  //   mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
+  //   game_env['s2'].track.setMatrix(mesh_mtx)
+  //
+  //   console.log("s2 caricato")
+  //   incrementLoading()
+  //   return readMesh('track/adv.obj')
+  // })
   .then((mesh)=>{
     game_env['adv1'] = new GenericObj(mesh, 'adv1')
     // game_env['adv1'].setEnvironment()
@@ -222,8 +221,8 @@ function loadBoost(translation1, translation2, angle, name){
   })
 }
 
-function loadLight(name, x, y, z){
-  game_env[name] = new Light(x, y, z)
+function loadLight(name, position, diffuse, specular){
+  game_env[name] = new Light(position, diffuse, specular, name)
   game_env[name].setCollisionBox()
 }
 

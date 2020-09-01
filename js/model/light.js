@@ -1,12 +1,15 @@
 class Light {
-  constructor(x, y, z, name) {
-    this.update(x, y, z)
+  constructor(position, diffuse, specular, name) {
+    this.name = name
+    this.update(position)
+    this.diffuse = diffuse
+    this.specular = specular
   }
 
-  update(x, y, z){
-    this.light = [x,y,z]
-    this.mtx = m4.translate(m4.identity(), x, y, z)
-    
+  update(position){
+    this.light = position
+    this.mtx = m4.translate(m4.identity(), position[0], position[1], position[2])
+
     if(this.collisionBox !== undefined){
       this.collisionBox.update(this.mtx)
     }
@@ -28,7 +31,7 @@ class Light {
   }
 
   draw(view_mtx, projection_matrix, mode){
-    if(this.collisionBox !== undefined)
+    if(this.hasCollisionBox() === true && activeBox === true)
       this.collisionBox.draw(view_mtx, projection_matrix, mode)
   }
 }

@@ -8,15 +8,10 @@ var game_env
 
 
 var speedBoost_number = 0
-var score = 10000
+var score = 9999
 
-// var a=-15,b=116,c=18
-// var a=-40,b=24,c=6
 var a=-7,b=56,c=-45
-// -40/24/6
-// OK -7/56/-45
-// FIRST PERSON 0 0 -1
-//b=116
+
 
 var l_x = 0, l_y = 100, l_z = 0;
 var step_x = 10, step_y = 10, step_z = 10;
@@ -24,24 +19,13 @@ var step_x = 10, step_y = 10, step_z = 10;
 var light = [l_x, l_y, l_z]
 
 // settings
-var free_view = false
 var third_person = false
 var startPlayed = false
 var finished = false
-
-// function render(){
-//   clear()
-//
-//   for (const [type, mesh] of Object.entries(game_env)) {
-//
-//     setCamera()
-//
-//     var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
-//     var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
-//
-//     mesh.draw(matrix, projectionMatrix)
-//   }
-// }
+var activeBox = false
+var activeEnvironmentBox = false
+var activeEnvironmentMap = true
+var activeLighting = true
 
 ///////////////////////// INIT FUNCTIONS /////////////////////////////////////////////////
 function init_gl(){
@@ -90,19 +74,10 @@ function init_canvas(){
   // Inizializzo game environment
   game_env = {}
 
-  webglLessonsUI.setupSlider("#button_a", {value: a, slide: updateA, min: -100, max: 100});
-  webglLessonsUI.setupSlider("#button_b", {value: b, slide: updateB, min: -100, max: 100});
-  webglLessonsUI.setupSlider("#button_c", {value: c, slide: updateC, min: -100, max: 100});
-
-  webglLessonsUI.setupSlider("#button_x", {value: l_x, slide: updateX, min: -100, max: 100});
-  webglLessonsUI.setupSlider("#button_y", {value: l_y, slide: updateY, min: -100, max: 100});
-  webglLessonsUI.setupSlider("#button_z", {value: l_z, slide: updateZ, min: -100, max: 100});
-
-  webglLessonsUI.setupSlider("#button_phi", {value: phi, slide: updatePhi, min: -360, max: 360});
-  webglLessonsUI.setupSlider("#button_theta", {value: theta, slide: updateTheta, min: -360, max: 360});
-  webglLessonsUI.setupSlider("#button_r", {value: radius, slide: updateR, min: -360, max: 360});
-
-  webglLessonsUI.setupSlider("#button_F", {value: angle, slide: updateF, min: -360, max: 360});
+  document.getElementById("activeCollisionBox").addEventListener('click', function(e){activeBox = !activeBox})
+  document.getElementById("activeEnvironmentBox").addEventListener('click', function(e){activeEnvironmentBox = !activeEnvironmentBox})
+  document.getElementById("activeLighting").addEventListener('click', function(e){activeLighting = !activeLighting})
+  document.getElementById("activeEnvironmentMap").addEventListener('click', function(e){activeEnvironmentMap = !activeEnvironmentMap})
 }
 
 const FRAMES_PER_SECOND = 30;
@@ -114,12 +89,10 @@ function update(time){
       window.requestAnimationFrame(update);
       if(completion === toComplete && startPlayed === true && finished === false)
         score = Math.floor( score * 0.9999 )
-      document.getElementById("score").innerHTML = "score " + score
       return;
     }
     lastFrameTime = time;
     render();
-    document.getElementById("n_boost").innerHTML = "boost " + speedBoost_number
     window.requestAnimationFrame(update);
 }
 

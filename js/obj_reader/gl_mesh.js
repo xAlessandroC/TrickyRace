@@ -84,6 +84,12 @@ class GL_Mesh{
     //lights
     var keys = (Object.keys(game_env)).filter(x => {if (x.startsWith("light")) return x})
     var lightPos = (keys.map(x => game_env[x].light)).flat()
+    var diffuses = (keys.map(x => game_env[x].diffuse)).flat()
+    var speculars = (keys.map(x => game_env[x].specular)).flat()
+
+    var reference = [game_env['car'].width/2+20, 0, game_env['car'].height/2, 1.0]
+    reference = (m4.multiply(game_env['car'].chassis.getMatrix(), reference)).slice(0, 3);
+    // game_env['carlight'].update(temp_l)
 
     var uniforms = {
       u_matrix: res,
@@ -93,6 +99,7 @@ class GL_Mesh{
       u_world: this.getMatrix(),
       u_worldInverseTranspose: worldInverseTransposeMatrix,
       u_lightWorldPosition2: game_env['carlight'].light,
+      u_reference: reference,
       u_lights: lightPos,
       u_viewWorldPosition: cameraPosition,
       u_color: [0.2, 1, 0.2, 1],
@@ -100,16 +107,18 @@ class GL_Mesh{
       u_ka: [1.0, 1.0, 1.0],
       u_kd: [1.0, 1.0, 1.0],
       u_ks: [1.0, 1.0, 1.0],
-      u_lightColor: m4.normalize([1.0, 1.0, 1.0]),
+      u_lightColor: diffuses,
       u_ambientColor: m4.normalize([1.0, 1.0, 1.0]),
-      u_specularColor: m4.normalize([1.0, 1.0, 1.0]),
-      u_lightColor2: m4.normalize([1.0, 0.75, 0.0]),
-      u_specularColor2: m4.normalize([1.0, 0.75, 0.0]),
+      u_specularColor: speculars,
+      u_lightColor2: game_env['carlight'].diffuse,
+      u_specularColor2: game_env['carlight'].specular,
       u_texture: this.texture[0],
       u_textureCube: environment_texture,
       u_mode: 1,
       u_skybox: 1,
-      u_enabled : 1
+      u_enabled : 1,
+      u_lightingEnabled : (activeLighting === true) ? 1 : 0,
+      u_environmentMapping : (activeEnvironmentMap === true) ? 1 : 0
     };
 
     return uniforms

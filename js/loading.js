@@ -1,5 +1,5 @@
 var completion = 0
-var toComplete = 99
+var toComplete = 93
 
 function clear(){
   ctx_2d.clearRect(0, 0, overlay.width, overlay.height);
@@ -23,14 +23,18 @@ function render(){
       drawGameOverlay()
 
       // webgl rendering
+      setCamera()
+      var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
+      var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
+
       for (const [type, mesh] of Object.entries(game_env)) {
 
-        setCamera()
+        if(type !== 'skybox')
+          mesh.draw(matrix, projectionMatrix)
+      }
 
-        var matrix = m4.inverse(m4.lookAt(cameraPosition, target, up))
-        var projectionMatrix = m4.perspective(degToRad(angle), ar, near, far);
-
-        mesh.draw(matrix, projectionMatrix)
+      if(activeEnvironmentBox === true){
+        game_env['skybox'].draw(matrix, projectionMatrix)
       }
 
     }else{
