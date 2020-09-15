@@ -22,40 +22,22 @@ localhost:[port]/application.html
 You should see a loading screen like this
 
 <p align="center">
-  <img width=500px src="./resources/readme/loading.gif">
+  <img width=500px src="./resources/readme/loading2.gif">
 </p>
 
 ## Features
 
-<div>
-  <div style="float:left; width:50%">
-    Finish the lap in the minor possible time.
-  </div>
-  <div style="float:right">
-  <p align="center">
-  <img width=220px src="./resources/readme/feature_finish.png">
-  </p>
-  </div>
-<div>
-<div style="clear: left;clear: right; padding-bottom:10px;"></div>
-<div>
-  <div style="float:left">
-    <p align="center">
-    <img width=220px src="./resources/readme/features_obstacle.png">
-    </p>
-  </div>
-  <div style="float:right; width:50%;padding:10px">
-    Pay attention to the obstacles.
-  </div>
-<div>
-<div style="clear: right;clear: left; padding-bottom:10px;"></div>
-<div>
-  <div style="float:left; width:50%;padding:10px">
-    Pick and use boost for speed up you car.
-  </div>
-  <div style="float:right">
-    <p align="center">
-    <img width=220px src="./resources/readme/features_boost.png">
-    </p>
-  </div>
-<div>
+Finish the lap in the minor possible time.
+<p align="center">
+<img width=300px src="./resources/readme/feature_finish.png">
+</p>
+
+Pay attention to the obstacles.
+<p align="center">
+<img width=300px src="./resources/readme/features_obstacle.png">
+</p>
+
+Pick and use boost for speed up you car.
+<p align="center">
+<img width=300px src="./resources/readme/features_boost.png">
+</p>
