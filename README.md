@@ -22,7 +22,7 @@ localhost:[port]/application.html
 You should see a loading screen like this
 
 <p align="center">
-  <img width=500px src="./resources/readme/loading.gif">
+  <img width=500px src="./resources/readme/loading2.gif">
 </p>
 
 ## Features
