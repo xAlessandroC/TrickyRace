@@ -28,12 +28,12 @@ function drawGameOverlay(){
   ctx_2d.textAlign = "start";
   ctx_2d.fillRect(overlay.width*0.008, overlay.height*0.74, overlay.width*0.30, overlay.height*0.25);
   ctx_2d.fillStyle = "white"
-  ctx_2d.fillText("Tasto centrale del mouse: cambio camera", overlay.width*0.01, overlay.height*0.76);
-  ctx_2d.fillText("Tasto sinistro del mouse: attivazione boost", overlay.width*0.01, overlay.height*0.80);
-  ctx_2d.fillText("W: movimento in avanti", overlay.width*0.01, overlay.height*0.84);
-  ctx_2d.fillText("S: movimento indietro", overlay.width*0.01, overlay.height*0.88);
-  ctx_2d.fillText("D: sterzo a destra", overlay.width*0.01, overlay.height*0.92);
-  ctx_2d.fillText("A: sterzo a sinistra", overlay.width*0.01, overlay.height*0.96);
+  ctx_2d.fillText("Mouse Wheel: change camera", overlay.width*0.01, overlay.height*0.76);
+  ctx_2d.fillText("LMB: activate boost", overlay.width*0.01, overlay.height*0.80);
+  ctx_2d.fillText("W: forward", overlay.width*0.01, overlay.height*0.84);
+  ctx_2d.fillText("S: backward", overlay.width*0.01, overlay.height*0.88);
+  ctx_2d.fillText("D: turn right", overlay.width*0.01, overlay.height*0.92);
+  ctx_2d.fillText("A: turn left", overlay.width*0.01, overlay.height*0.96);
 
 
   // numero speedBoost

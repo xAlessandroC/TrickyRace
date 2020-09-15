@@ -119,52 +119,6 @@ function loadTrack(){
 
     console.log("finish caricato")
     incrementLoading()
-    return readMesh('track/adv.obj')
-  })
-  // .then((mesh)=>{
-  //   game_env['s1'] = new GenericObj(mesh, 's1')
-  //
-  //   var mesh_mtx = game_env['s1'].track.getMatrix()
-  //   mesh_mtx = m4.translate(mesh_mtx, -80.0, -2.0, 170.0)
-  //   mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
-  //   mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-65))
-  //   mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
-  //   mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
-  //   game_env['s1'].track.setMatrix(mesh_mtx)
-  //
-  //   console.log("s1 caricato")
-  //   incrementLoading()
-  //   return readMesh('track/s1.obj')
-  // })
-  // .then((mesh)=>{
-  //   game_env['s2'] = new GenericObj(mesh, 's2')
-  //
-  //   var mesh_mtx = game_env['s2'].track.getMatrix()
-  //   mesh_mtx = m4.translate(mesh_mtx, 150.0, -2.0, -180.0)
-  //   mesh_mtx = m4.zRotate(mesh_mtx, degToRad(-90))
-  //   mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-86))
-  //   mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
-  //   mesh_mtx = m4.scale(mesh_mtx, 2.0, 3.0, 2.0)
-  //   game_env['s2'].track.setMatrix(mesh_mtx)
-  //
-  //   console.log("s2 caricato")
-  //   incrementLoading()
-  //   return readMesh('track/adv.obj')
-  // })
-  .then((mesh)=>{
-    game_env['adv1'] = new GenericObj(mesh, 'adv1')
-    // game_env['adv1'].setEnvironment()
-
-    var mesh_mtx = game_env['adv1'].track.getMatrix()
-    mesh_mtx = m4.translate(mesh_mtx, -100.0, 4.0, 450.0)
-    mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-90))
-    // mesh_mtx = m4.xRotate(mesh_mtx, degToRad(-86))
-    // mesh_mtx = m4.yRotate(mesh_mtx, degToRad(-90))
-    mesh_mtx = m4.scale(mesh_mtx, 0.5, 0.5, 0.5)
-    game_env['adv1'].track.setMatrix(mesh_mtx)
-
-    console.log("adv1 caricato")
-    incrementLoading()
   })
 }
 

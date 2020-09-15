@@ -31,9 +31,10 @@
       }
       #canvasDiv{
         position: absolute;
-        width: 75%;
+        width: 90%;
         height: 90%;
-        left: 12.5%;
+        /* left: 12.5%; */
+        left: 5.0%;
       }
 
       #overlay_canvas_2d{
@@ -51,34 +52,34 @@
     <div id="container">
       <div style="padding-bottom:10px;">
         <input type="checkbox" id="activeCollisionBox" name="activeCollisionBox" value="active">
-        <label for="activeCollisionBox"> Attiva Collision Box</label>
+        <label for="activeCollisionBox"> Collision Box</label>
 
         <input type="checkbox" id="activeEnvironmentBox" name="activeEnvironmentBox" value="active">
-        <label for="activeEnvironmentBox"> Attiva Environment Box</label>
+        <label for="activeEnvironmentBox"> Environment Box</label>
 
         <input type="checkbox" id="activeLighting" name="activeLighting" value="active" checked>
-        <label for="activeLighting"> Attiva Illuminazione</label>
+        <label for="activeLighting"> Lighting</label>
 
         <input type="checkbox" id="activeEnvironmentMap" name="activeEnvironmentMap" value="active" checked>
-        <label for="activeEnvironmentMap"> Attiva Environment mapping</label>
+        <label for="activeEnvironmentMap"> Environment mapping</label>
       <div>
-      <div id="left_zone">
-        <button id="forward_button">Avanti</button>
+      <!-- <div id="left_zone">
+        <button id="forward_button">Forward</button>
         <p></p>
-        <button id="backward_button">Indietro</button>
-      </div>
+        <button id="backward_button">Backward</button>
+      </div> -->
       <div id="canvasDiv">
         <canvas width="500" height="500" id="my_Canvas" tabindex="0"></canvas>
         <canvas width="500" height="500" id="overlay_canvas_2d" ></canvas>
       </div>
-      <div id="right_zone">
-        <button id="left_button" style="padding-right: 10px;">Sinistra</button>
-        <button id="right_button">Destra</button>
+      <!-- <div id="right_zone">
+        <button id="left_button" style="padding-right: 10px;">Turn Left</button>
+        <button id="right_button">Turn right</button>
         <p></p>
-        <button id="camera_button">Cambio camera</button>
+        <button id="camera_button">Change camera</button>
         <p></p>
         <button id="boost_button">Boost</button>
-      </div>
+      </div> -->
     </div>
 
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
