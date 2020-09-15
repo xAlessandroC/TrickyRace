@@ -22,22 +22,22 @@ localhost:[port]/application.html
 You should see a loading screen like this
 
 <p align="center">
-  <img width=500px src="./resources/readme/loading2.gif">
+  <img width=800px src="./resources/readme/loading2.gif">
 </p>
 
 ## Features
 
 Finish the lap in the minor possible time.
-<p align="center">
+<p>
 <img width=300px src="./resources/readme/feature_finish.png">
 </p>
 
 Pay attention to the obstacles.
-<p align="center">
+<p>
 <img width=300px src="./resources/readme/features_obstacle.png">
 </p>
 
 Pick and use boost for speed up you car.
-<p align="center">
+<p>
 <img width=300px src="./resources/readme/features_boost.png">
 </p>
