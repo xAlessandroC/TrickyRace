@@ -2,6 +2,10 @@
 
 TrickyRace is a race game made entirely with javascript and WebGL. The objective is to complete a whole lap trying to avoid the obstacle and obtain the maximum score. To help you, along all the track there are some speed boost that will make your car faster for a small amount of time. <b>Enjoy!</b>
 
+### Playing
+The GitHub Page to try the game is active at
+https://xalessandroc.github.io/TrickyRace/application.html
+
 ### Set Up
 Clone the repository on a local folder<br>
 ```
